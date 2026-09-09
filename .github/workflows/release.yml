@@ -1,0 +1,143 @@
+name: Automated Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag name (e.g. v1.0.0)'
+        required: true
+        type: string
+      draft:
+        description: 'Create as draft release'
+        required: false
+        type: boolean
+        default: false
+      prerelease:
+        description: 'Mark as pre-release'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  backend-verify:
+    name: Verify Backend Tests & Code Style
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, dom, fileinfo, sqlite3, pdo_sqlite, bcmath
+          coverage: none
+
+      - name: Install Composer Dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Run Laravel Pint Lint Check
+        run: vendor/bin/pint --test
+
+      - name: Run Test Suite
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: ':memory:'
+        run: |
+          cp .env.example .env.testing
+          php artisan key:generate --env=testing
+          php artisan test --env=testing
+
+  frontend-verify:
+    name: Verify Frontend Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install NPM Dependencies
+        run: npm ci
+
+      - name: Verify Vite Production Build
+        run: npm run build
+
+  publish-release:
+    name: Publish GitHub Release
+    needs: [backend-verify, frontend-verify]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine Version Tag
+        id: version
+        run: |
+          if [ -n "${{ github.event.inputs.tag_name }}" ]; then
+            TAG="${{ github.event.inputs.tag_name }}"
+          else
+            TAG="${GITHUB_REF#refs/tags/}"
+          fi
+          # Strip leading 'v' for changelog matching (e.g. v1.0.0 -> 1.0.0)
+          CLEAN_VER="${TAG#v}"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "clean_ver=$CLEAN_VER" >> $GITHUB_OUTPUT
+
+      - name: Extract Release Notes from CHANGELOG.md
+        id: changelog
+        run: |
+          VERSION="${{ steps.version.outputs.clean_ver }}"
+          echo "Extracting release notes for version: $VERSION"
+
+          if [ -f CHANGELOG.md ]; then
+            # Extract section between current version header and next header
+            NOTES=$(awk -v ver="$VERSION" '
+              BEGIN { capture = 0; found = 0 }
+              $0 ~ "^## \\[" ver "\\]" || $0 ~ "^## \\[v" ver "\\]" { capture = 1; found = 1; next }
+              capture && /^## \[/ { capture = 0 }
+              capture { print }
+              END { if (!found) exit 1 }
+            ' CHANGELOG.md) || true
+
+            if [ -n "$NOTES" ]; then
+              echo "Found matching release notes in CHANGELOG.md"
+              # Export multiline string to GITHUB_OUTPUT safely
+              {
+                echo "notes<<EOF"
+                echo "$NOTES"
+                echo "EOF"
+              } >> $GITHUB_OUTPUT
+            else
+              echo "No matching notes found in CHANGELOG.md for $VERSION. Fallback to auto-generation."
+              echo "notes=" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "CHANGELOG.md not found. Fallback to auto-generation."
+            echo "notes=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: ${{ steps.version.outputs.tag }}
+          body: ${{ steps.changelog.outputs.notes }}
+          draft: ${{ github.event.inputs.draft || false }}
+          prerelease: ${{ github.event.inputs.prerelease || false }}
+          generate_release_notes: ${{ steps.changelog.outputs.notes == '' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,29 @@
+{
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "vite build",
+        "dev": "vite",
+        "lint": "composer lint",
+        "format": "composer format"
+    },
+    "devDependencies": {
+        "@headlessui/react": "^2.2.0",
+        "@inertiajs/react": "^2.0.0",
+        "@tailwindcss/forms": "^0.5.10",
+        "@vitejs/plugin-react": "^4.3.4",
+        "autoprefixer": "^10.4.20",
+        "concurrently": "^9.1.2",
+        "laravel-vite-plugin": "^1.2.0",
+        "postcss": "^8.5.3",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
+        "tailwindcss": "^3.4.17",
+        "vite": "^6.2.0",
+        "ziggy-js": "^2.4.2"
+    },
+    "dependencies": {
+        "axios": "^1.20.0",
+        "lucide-react": "^1.43.0"
+    }
+}
