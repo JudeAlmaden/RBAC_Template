@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { Link } from '@inertiajs/react';
 import {
+    Eye,
     Edit2,
     Trash2,
     ArrowRightLeft,
@@ -108,6 +110,16 @@ export default function UserRowActions({
             style={menuStyle}
             className="bg-white dark:bg-[#1E1E26] border border-[#E8E8EC] dark:border-[#2E2E38] rounded-xl shadow-2xl overflow-hidden py-1 animate-in fade-in zoom-in-95 duration-75"
         >
+            {/* View Profile */}
+            <Link
+                href={route('users.show', user.id)}
+                onClick={() => setOpen(false)}
+                className="w-full flex items-center gap-3 px-4 py-2 text-xs text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#28282E] transition text-left"
+            >
+                <Eye className="w-3.5 h-3.5 text-gray-400" />
+                View Profile & Audit
+            </Link>
+
             {/* Edit */}
             {user.can.update && (
                 <button
@@ -119,14 +131,27 @@ export default function UserRowActions({
                 </button>
             )}
 
-            {/* Activate Account (Only shown when user is currently deactivated) */}
-            {!user.is_active && user.can.toggleStatus && (
+            {/* Activate / Deactivate Account */}
+            {user.can.toggleStatus && (
                 <button
                     onClick={() => act(onToggleStatus)}
-                    className="w-full flex items-center gap-3 px-4 py-2 text-xs text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 transition text-left"
+                    className={`w-full flex items-center gap-3 px-4 py-2 text-xs transition text-left ${
+                        user.is_active
+                            ? 'text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/30'
+                            : 'text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/30'
+                    }`}
                 >
-                    <UserCheck className="w-3.5 h-3.5" />
-                    Activate account
+                    {user.is_active ? (
+                        <>
+                            <UserX className="w-3.5 h-3.5" />
+                            Deactivate account
+                        </>
+                    ) : (
+                        <>
+                            <UserCheck className="w-3.5 h-3.5" />
+                            Activate account
+                        </>
+                    )}
                 </button>
             )}
 
@@ -163,8 +188,8 @@ export default function UserRowActions({
                 </button>
             )}
 
-            {/* Remove Account (Merged action: evaluates on-demand for delete vs deactivation) */}
-            {(user.can.delete || user.can.toggleStatus) && (
+            {/* Remove Account */}
+            {user.can.delete && (
                 <>
                     <div className="border-t border-[#E8E8EC] dark:border-[#2E2E38] my-1" />
                     <button

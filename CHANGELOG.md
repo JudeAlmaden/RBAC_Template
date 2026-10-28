@@ -5,6 +5,51 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [1.1.0] - 2026-10-28
+
+### Added
+- **Grouped Effective Permissions Matrix by Role** — `UserPermissionsMatrix` renders permissions dynamically segmented per assigned role with role badges/icons (`Crown`, `Shield`, `User`, `Sparkles`), permission counts, Super Admin wildcard banner, and distinct PBAC direct overrides.
+- **Modular User Profile Architecture** — Extracted `Show.jsx` into focused sub-components: `UserProfileCard`, `UserProfileActions`, `UserPermissionsMatrix`, and `UserActivitySection`.
+- **Audit & Activity Logs Module** — New `ActivityLogController` with paginated, filterable log index (`GET /activity-logs`) and CSV export (`GET /activity-logs/export`). Supports filtering by search keyword, action type, subject type, and date range.
+- **Audit Logs Nav Link** — Added "Audit Logs" entry with `History` icon to the authenticated sidebar, visible to users with `viewLogs` permission.
+- **User Profile & Audit Page** — New `resources/js/Pages/Users/Show.jsx` full-page profile view with tabbed activity log (actions _by_ the user and actions _on_ the user), role/status summary, and metadata inspector modal.
+- **View Profile & Audit action** — "View Profile & Audit" shortcut added to the `UserRowActions` dropdown menu on the Users page.
+- **Clickable User Names in Users Table** — User names in `/users` now link directly to their profile/audit page, consistent with the Actor column in Activity Logs.
+- **Seed Activity Logs** — `DatabaseSeeder` now seeds representative `ActivityLog` entries for the bootstrap event and initial user creations.
+- **Starter Kit Landing Page** — Redesigned `resources/js/Pages/Welcome.jsx` into a clean, unopinionated developer starter kit homepage featuring modular capability cards and copyable terminal quickstart commands.
+- **Pre-Seeded Credentials Cards** — Interactive copyable test credentials for `superadmin@example.com`, `admin@example.com`, and `user@example.com` on the homepage.
+- **Unified CI & Auto-Release Pipeline** — Consolidated GitHub Actions workflows into `.github/workflows/ci.yml` with automated tag checking, changelog extraction, and release publishing on pushes to `main`.
+- **Pipeline Concurrency Controls** — Added concurrency group cancellation (`ci-${{ github.ref }}`) to automatically terminate superseded workflow runs.
+
+### Changed
+- **User Profile Card Redesign** — Streamlined profile overview with inline account ID (`#id`), subtle non-intrusive status dot (`• Active` / `• Deactivated`), top-right anchored `Actions ▾` dropdown, and a structured 4-column key-value metrics grid (`Member Since`, `Email Status`, `Actions Executed`, `Changes Received`).
+- **Table Row Deactivate / Activate Actions** — Attached direct Deactivate and Activate account options in `UserRowActions` on the Users directory table, cleanly distinguishing reversible status toggling from permanent account deletion.
+- **Role Editing Guardrails** — Added locked indicator in `EditUserModal` preventing non-Super Admins from revoking or assigning the Super Admin role.
+- **`UserController::show`** — Now returns `roles_with_permissions` mapping each role to its assigned permissions for grouped display.
+- **`ActivityLog` Model** — Extended with `$fillable`, cast definitions, and helper accessors for human-readable timestamps.
+- **`User` Model** — Added `activityLogsBy()` and `activityLogsOn()` relationship helpers used by the Show page.
+- **`UserController`** — Added `show()` action to load a user's profile data, role assignments, and paginated audit logs for `users.show`.
+- **`HandleInertiaRequests`** — Exposes `can.viewLogs` to the Inertia shared props for sidebar visibility gating.
+- **`activity_logs` migration** — Added `subject_name` and `actor_name` string columns for tombstone-safe display after account deletion.
+- **Login button state** — Login `<PrimaryButton>` is now disabled when email or password fields are empty, preventing redundant submit attempts.
+- **Node.js Environment** — Upgraded GitHub Actions runners to Node 22 (LTS with npm 11) for stable dependency resolution.
+- **NPM Package Configuration** — Added `"version": "1.1.0"` and `npm test` script to `package.json`.
+
+### Removed
+- **Redundant Release Workflow** — Removed `.github/workflows/release.yml` in favor of the consolidated pipeline.
+- **AI Design Artifacts** — Removed artificial blurred gradients, pulsing skeleton mockups, and marketing copy from the welcome page.
+
+### Fixed
+- **Dependabot Peer Dependency Breakage** — Added ignore rules for major version bumps of `@vitejs/plugin-react` in `.github/dependabot.yml` to prevent peer dependency conflicts with Vite 6.
+- **NPM Arborist Tree Solver Crashes** — Configured `legacy-peer-deps=true` in `.npmrc` to prevent `edgesOut` null reference errors during CI installations.
+
+### Technical
+- New: `.agents/Agents.md`, `app/Http/Controllers/ActivityLogController.php`, `resources/js/Pages/ActivityLogs/Index.jsx`, `resources/js/Pages/Users/Show.jsx`, `resources/js/Pages/Users/Partials/UserProfileCard.jsx`, `resources/js/Pages/Users/Partials/UserProfileActions.jsx`, `resources/js/Pages/Users/Partials/UserPermissionsMatrix.jsx`, `resources/js/Pages/Users/Partials/UserActivitySection.jsx`
+- Modified: `CHANGELOG.md`, `.github/dependabot.yml`, `.github/workflows/ci.yml`, `.gitignore`, `.npmrc`, `package.json`, `resources/js/Pages/Welcome.jsx`, `app/Http/Controllers/UserController.php`, `app/Http/Middleware/HandleInertiaRequests.php`, `app/Models/ActivityLog.php`, `app/Models/User.php`, `database/migrations/2026_09_09_004538_create_activity_logs_table.php`, `database/seeders/DatabaseSeeder.php`, `resources/js/Layouts/AuthenticatedLayout.jsx`, `resources/js/Pages/Auth/Login.jsx`, `resources/js/Pages/Roles/Index.jsx`, `resources/js/Pages/Users/Index.jsx`, `resources/js/Pages/Users/Partials/EditUserModal.jsx`, `resources/js/Pages/Users/Partials/UserRowActions.jsx`, `resources/js/Pages/Users/Partials/UserTable.jsx`, `routes/web.php`
+- Deleted: `.github/workflows/release.yml`
+
+---
+
 ## [1.0.0] - 2026-09-09
 
 ### Added

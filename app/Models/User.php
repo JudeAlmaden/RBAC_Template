@@ -114,6 +114,15 @@ class User extends Authenticatable
         }
     }
 
+    public function canViewLogs(): bool
+    {
+        try {
+            return $this->can('view logs') || $this->canManageUsers() || $this->canManageRoles();
+        } catch (\Throwable) {
+            return false;
+        }
+    }
+
     public function canAssignRoles(): bool
     {
         try {

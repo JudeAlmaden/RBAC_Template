@@ -105,7 +105,7 @@ export default function Login({ status, canResetPassword }) {
                         </Link>
                     )}
 
-                    <PrimaryButton className="ms-4" disabled={processing}>
+                    <PrimaryButton className="ms-4" disabled={processing || !data.email.trim() || !data.password}>
                         Log in
                     </PrimaryButton>
                 </div>

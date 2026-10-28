@@ -1,25 +1,24 @@
-name: Continuous Integration
+name: CI & Release
 
 on:
   push:
-    branches:
-      - main
-      - develop
-      - 'release/**'
+    branches: [main, develop]
   pull_request:
-    branches:
-      - main
-      - develop
-  workflow_dispatch:
+    branches: [main, develop]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  ci:
-    name: Build & Test (PHP 8.4 & Node 20.x)
+  verify:
+    name: Lint, Test & Build
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -28,38 +27,99 @@ jobs:
           extensions: mbstring, dom, fileinfo, sqlite3, pdo_sqlite, bcmath
           coverage: none
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
-          cache: 'npm'
+          node-version: 22
+          cache: npm
 
-      - name: Get Composer Cache Directory
-        id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache Composer Dependencies
+      - name: Cache Composer
         uses: actions/cache@v4
         with:
-          path: ${{ steps.composer-cache.outputs.dir }}
+          path: ${{ runner.tool_cache }}/composer
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: |
           composer install --prefer-dist --no-interaction --no-progress
           npm ci
 
-      - name: Check Code Style (Laravel Pint)
+      - name: Lint (Laravel Pint)
         run: vendor/bin/pint --test
 
-      - name: Build Frontend Assets
+      - name: Build frontend
         run: npm run build
 
-      - name: Prepare Database
+      - name: Prepare SQLite database
         run: |
           mkdir -p database
           touch database/database.sqlite
 
-      - name: Run PHPUnit Tests
+      - name: Run Tests
         run: php artisan test
+
+  release:
+    name: Publish Release
+    needs: verify
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Read version from package.json
+        id: ver
+        run: echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Check if version tag exists
+        id: version_check
+        run: |
+          VERSION="${{ steps.ver.outputs.version }}"
+          if git tag --list "v$VERSION" | grep -q .; then
+            echo "Tag v$VERSION already exists — skipping release."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Extract changelog for this version
+        if: steps.version_check.outputs.skip != 'true'
+        id: changelog
+        run: |
+          node -e '
+            const fs = require("fs");
+            const ver = process.argv[1];
+            const text = fs.readFileSync("CHANGELOG.md", "utf8");
+            const startHeader = "## [" + ver + "]";
+            const startIndex = text.indexOf(startHeader);
+            let result = "";
+            if (startIndex !== -1) {
+              const afterStart = text.slice(startIndex + startHeader.length);
+              const nextHeaderIndex = afterStart.search(/\n## \[/);
+              const section = nextHeaderIndex === -1 ? afterStart : afterStart.slice(0, nextHeaderIndex);
+              result = section.replace(/^[^\n]*\n+/, "").trim();
+            }
+            const output = [
+              "content<<EOF",
+              result || ("Release v" + ver),
+              "EOF"
+            ].join("\n");
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, output + "\n");
+          ' "${{ steps.ver.outputs.version }}"
+
+      - name: Create GitHub Release
+        if: steps.version_check.outputs.skip != 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "v${{ steps.ver.outputs.version }}"
+          name: "v${{ steps.ver.outputs.version }}"
+          body: ${{ steps.changelog.outputs.content }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

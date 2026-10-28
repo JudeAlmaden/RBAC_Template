@@ -19,6 +19,7 @@ import {
     Moon,
     AlertTriangle,
     MoreHorizontal,
+    History,
 } from 'lucide-react';
 
 /* ─── Dark mode hook ──────────────────────────────────────────────────── */
@@ -199,6 +200,13 @@ function LayoutInner({ header, children }) {
             active: route().current('roles.*'),
             icon: ShieldCheck,
             show: Boolean(can.manageRoles),
+        },
+        {
+            name: 'Audit Logs',
+            href: route('activity-logs.index'),
+            active: route().current('activity-logs.*'),
+            icon: History,
+            show: Boolean(can.viewLogs),
         },
     ];
 

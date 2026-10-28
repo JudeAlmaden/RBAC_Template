@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ActivityLog;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -26,6 +27,7 @@ class DatabaseSeeder extends Seeder
         $transferSuperAdmin = Permission::firstOrCreate(['name' => 'transfer super admin']);
         $manageRoles = Permission::firstOrCreate(['name' => 'manage roles']);
         $assignRoles = Permission::firstOrCreate(['name' => 'assign roles']);
+        $viewLogs = Permission::firstOrCreate(['name' => 'view logs']);
 
         // 2. Create Roles and sync permissions
         $superAdminRole = Role::firstOrCreate(['name' => 'super_admin']);
@@ -38,12 +40,14 @@ class DatabaseSeeder extends Seeder
             $transferSuperAdmin,
             $manageRoles,
             $assignRoles,
+            $viewLogs,
         ]);
 
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
         $adminRole->syncPermissions([
             $manageUsers,
             $assignRoles,
+            $viewLogs,
         ]);
 
         $userRole = Role::firstOrCreate(['name' => 'user']);
@@ -81,5 +85,59 @@ class DatabaseSeeder extends Seeder
             ]
         );
         $basicUser->syncRoles(['user']);
+
+        // 6. Seed Initial Activity Logs
+        ActivityLog::firstOrCreate(
+            [
+                'action' => 'system_init',
+                'subject_type' => 'System',
+            ],
+            [
+                'actor_id' => $superAdmin->id,
+                'actor_name' => $superAdmin->name,
+                'subject_name' => 'RBAC System Architecture',
+                'metadata' => [
+                    'environment' => config('app.env', 'production'),
+                    'note' => 'Initial platform bootstrap and role hierarchy configuration completed.',
+                ],
+                'ip_address' => '127.0.0.1',
+            ]
+        );
+
+        ActivityLog::firstOrCreate(
+            [
+                'action' => 'created_user',
+                'subject_type' => 'User',
+                'subject_id' => $admin->id,
+            ],
+            [
+                'actor_id' => $superAdmin->id,
+                'actor_name' => $superAdmin->name,
+                'subject_name' => $admin->name,
+                'metadata' => [
+                    'assigned_role' => 'admin',
+                    'email' => $admin->email,
+                ],
+                'ip_address' => '127.0.0.1',
+            ]
+        );
+
+        ActivityLog::firstOrCreate(
+            [
+                'action' => 'created_user',
+                'subject_type' => 'User',
+                'subject_id' => $basicUser->id,
+            ],
+            [
+                'actor_id' => $admin->id,
+                'actor_name' => $admin->name,
+                'subject_name' => $basicUser->name,
+                'metadata' => [
+                    'assigned_role' => 'user',
+                    'email' => $basicUser->email,
+                ],
+                'ip_address' => '127.0.0.1',
+            ]
+        );
     }
 }

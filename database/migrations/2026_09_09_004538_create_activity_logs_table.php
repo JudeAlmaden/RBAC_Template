@@ -16,8 +16,16 @@ return new class extends Migration
             $table->string('subject_type')->nullable(); // e.g. 'User'
             $table->unsignedBigInteger('subject_id')->nullable();
             $table->string('subject_name')->nullable(); // preserved name
+            $table->string('ip_address', 45)->nullable();
+            $table->text('user_agent')->nullable();
             $table->json('metadata')->nullable();       // any extra context
             $table->timestamps();
+
+            // High-performance compound indexes for scalability
+            $table->index(['subject_type', 'subject_id', 'created_at']);
+            $table->index(['actor_id', 'created_at']);
+            $table->index(['action', 'created_at']);
+            $table->index('created_at');
         });
     }
 

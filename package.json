@@ -1,11 +1,13 @@
 {
     "private": true,
+    "version": "1.1.0",
     "type": "module",
     "scripts": {
         "build": "vite build",
         "dev": "vite",
         "lint": "composer lint",
-        "format": "composer format"
+        "format": "composer format",
+        "test": "composer test"
     },
     "devDependencies": {
         "@headlessui/react": "^2.2.0",

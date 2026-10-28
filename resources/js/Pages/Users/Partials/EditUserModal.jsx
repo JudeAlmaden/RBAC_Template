@@ -5,7 +5,7 @@ import TextInput from '@/Components/TextInput';
 import InputError from '@/Components/InputError';
 import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
-import { Shield, Award, Check } from 'lucide-react';
+import { Shield, Award, Check, Lock } from 'lucide-react';
 
 export default function EditUserModal({
     show,
@@ -31,7 +31,7 @@ export default function EditUserModal({
                 }))
             : []
         ),
-        ...(isSuperAdminUser ? [{ name: 'super_admin', label: 'Super Admin', description: 'Highest executive authority' }] : []),
+        ...(isSuperAdminUser ? [{ name: 'super_admin', label: 'Super Admin', description: 'Highest executive authority', locked: !meta.isSuperAdmin }] : []),
     ];
 
     const currentRoles = Array.isArray(form.data.roles)
@@ -114,6 +114,29 @@ export default function EditUserModal({
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto p-1 border border-[#E8E8EC] dark:border-[#26262D] rounded-lg bg-[#FAFAFC] dark:bg-[#121217]">
                                 {selectableRoles.map((role) => {
                                     const isSelected = currentRoles.includes(role.name);
+                                    const isLocked   = role.locked === true;
+
+                                    // Locked tile — display-only for non-super-admins viewing a super_admin
+                                    if (isLocked) {
+                                        return (
+                                            <div
+                                                key={role.name}
+                                                className="flex items-start gap-2.5 p-2.5 rounded-md border text-xs select-none opacity-60 cursor-not-allowed bg-white/60 dark:bg-[#181820]/60 border-[#E8E8EC] dark:border-[#26262D]"
+                                                title="Only a Super Admin can modify this role"
+                                            >
+                                                <div className="mt-0.5 w-4 h-4 rounded flex items-center justify-center border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#15151A] shrink-0">
+                                                    <Lock className="w-2.5 h-2.5 text-gray-400" />
+                                                </div>
+                                                <div className="min-w-0 flex-1">
+                                                    <div className="font-semibold text-gray-900 dark:text-white flex items-center gap-1.5">
+                                                        <span>{role.label}</span>
+                                                        <Award className="w-3 h-3 text-[#5B5FC7] shrink-0" />
+                                                    </div>
+                                                    <p className="text-[10px] text-gray-400 truncate">{role.description}</p>
+                                                </div>
+                                            </div>
+                                        );
+                                    }
 
                                     return (
                                         <div
@@ -144,9 +167,7 @@ export default function EditUserModal({
                                                         <Shield className="w-3 h-3 text-blue-500 shrink-0" />
                                                     )}
                                                 </div>
-                                                <p className="text-[10px] text-gray-400 truncate">
-                                                    {role.description}
-                                                </p>
+                                                <p className="text-[10px] text-gray-400 truncate">{role.description}</p>
                                             </div>
                                         </div>
                                     );

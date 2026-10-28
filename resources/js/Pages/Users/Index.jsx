@@ -157,8 +157,8 @@ export default function Index({ users, filters, meta, availableRoles = [], activ
             <Head title="Accounts Directory" />
 
             <div className="space-y-6">
-                {/* Tab Bar */}
-                {meta.canCreateUser && (
+                {/* Tab Bar — shown whenever the user has any account management access */}
+                {(meta.canCreateUser || activityLogs !== null) && (
                     <div className="flex items-center gap-1 border-b border-[#E8E8EC] dark:border-[#26262D]">
                         <button
                             onClick={() => setActiveTab('accounts')}
@@ -171,22 +171,24 @@ export default function Index({ users, filters, meta, availableRoles = [], activ
                             <Users className="w-3.5 h-3.5" />
                             Accounts
                         </button>
-                        <button
-                            onClick={() => setActiveTab('history')}
-                            className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition -mb-px ${
-                                activeTab === 'history'
-                                    ? 'border-[#5B5FC7] text-[#5B5FC7] dark:text-[#8A8DE2]'
-                                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
-                            }`}
-                        >
-                            <History className="w-3.5 h-3.5" />
-                            Activity History
-                            {activityLogs?.total > 0 && (
-                                <span className="ml-0.5 px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-[#5B5FC7]/10 text-[#5B5FC7] dark:bg-[#5B5FC7]/20 dark:text-[#8A8DE2]">
-                                    {activityLogs.total}
-                                </span>
-                            )}
-                        </button>
+                        {activityLogs !== null && (
+                            <button
+                                onClick={() => setActiveTab('history')}
+                                className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition -mb-px ${
+                                    activeTab === 'history'
+                                        ? 'border-[#5B5FC7] text-[#5B5FC7] dark:text-[#8A8DE2]'
+                                        : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
+                                }`}
+                            >
+                                <History className="w-3.5 h-3.5" />
+                                Activity History
+                                {activityLogs?.total > 0 && (
+                                    <span className="ml-0.5 px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-[#5B5FC7]/10 text-[#5B5FC7] dark:bg-[#5B5FC7]/20 dark:text-[#8A8DE2]">
+                                        {activityLogs.total}
+                                    </span>
+                                )}
+                            </button>
+                        )}
                     </div>
                 )}
 

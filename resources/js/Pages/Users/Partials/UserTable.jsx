@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from '@inertiajs/react';
 import Avatar from '@/Components/Avatar';
 import Pagination from '@/Components/Pagination';
 import UserRowActions from './UserRowActions';
@@ -47,14 +48,17 @@ export default function UserTable({
                                             <div className="flex items-center gap-3">
                                                 <Avatar name={u.name} size="w-7 h-7" />
                                                 <div>
-                                                    <div className="font-semibold text-gray-900 dark:text-white">
-                                                        {u.name}{' '}
-                                                        {isSelf && (
-                                                            <span className="text-gray-400 font-normal text-[11px]">
-                                                                (You)
-                                                            </span>
-                                                        )}
-                                                    </div>
+                                                    <Link
+                                                        href={route('users.show', u.id)}
+                                                        className="font-semibold text-[#5B5FC7] dark:text-[#8A8DE2] hover:underline"
+                                                    >
+                                                        {u.name}
+                                                    </Link>
+                                                    {isSelf && (
+                                                        <span className="text-gray-400 font-normal text-[11px] ml-1">
+                                                            (You)
+                                                        </span>
+                                                    )}
                                                     <div className="text-gray-400 font-mono text-[11px]">
                                                         {u.email}
                                                     </div>
@@ -72,15 +76,14 @@ export default function UserTable({
                                                     return displayList.map((roleName) => (
                                                         <span
                                                             key={roleName}
-                                                            className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium ${
-                                                                roleName === 'super_admin'
+                                                            className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium ${roleName === 'super_admin'
                                                                     ? 'bg-[#5B5FC7]/10 text-[#5B5FC7] dark:bg-[#5B5FC7]/20 dark:text-[#8A8DE2]'
                                                                     : roleName === 'admin'
-                                                                    ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300'
-                                                                    : roleName === 'user'
-                                                                    ? 'bg-gray-100 text-gray-700 dark:bg-[#202028] dark:text-gray-300'
-                                                                    : 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/30 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/40'
-                                                            }`}
+                                                                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300'
+                                                                        : roleName === 'user'
+                                                                            ? 'bg-gray-100 text-gray-700 dark:bg-[#202028] dark:text-gray-300'
+                                                                            : 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/30 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/40'
+                                                                }`}
                                                         >
                                                             {formatRoleText(roleName)}
                                                         </span>

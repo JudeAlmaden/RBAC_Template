@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, useForm, router } from '@inertiajs/react';
+import { Head, useForm, router, usePage } from '@inertiajs/react';
 import Modal from '@/Components/Modal';
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
@@ -28,6 +28,8 @@ import {
 } from 'lucide-react';
 
 export default function Index({ roles, categorizedPermissions, activityLogs = null, logFilters = {} }) {
+    const { auth } = usePage().props;
+    const can = auth.can || {};
     const [activeTab, setActiveTab]         = useState('roles');
     const [createModalOpen, setCreateModalOpen] = useState(false);
     const [editModalOpen, setEditModalOpen] = useState(false);
@@ -253,18 +255,20 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
                 {activeTab === 'roles' && (
                     <>
                         {/* Header Action */}
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-4">
-                            <button
-                                onClick={() => {
-                                    createForm.reset();
-                                    setCreateModalOpen(true);
-                                }}
-                                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#5B5FC7] hover:bg-[#484CB8] text-white text-xs font-semibold shadow-sm transition"
-                            >
-                                <Plus className="w-4 h-4" />
-                                Create Custom Role
-                            </button>
-                        </div>
+                        {can.manageRoles && (
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-4">
+                                <button
+                                    onClick={() => {
+                                        createForm.reset();
+                                        setCreateModalOpen(true);
+                                    }}
+                                    className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#5B5FC7] hover:bg-[#484CB8] text-white text-xs font-semibold shadow-sm transition"
+                                >
+                                    <Plus className="w-4 h-4" />
+                                    Create Custom Role
+                                </button>
+                            </div>
+                        )}
 
                         {/* Roles Table */}
                         <div className="bg-white dark:bg-[#15151A] rounded-xl border border-[#E8E8EC] dark:border-[#26262D] shadow-sm overflow-hidden">
@@ -367,14 +371,21 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
 
                                             <td className="py-4 px-5 text-right">
                                                 <div className="flex items-center justify-end">
-                                                    <button
-                                                        onClick={() => handleOpenEdit(role)}
-                                                        className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-[#22222C] hover:bg-gray-200 dark:hover:bg-[#2A2A38] transition"
-                                                        title="Configure Permissions"
-                                                    >
-                                                        <Sliders className="w-3.5 h-3.5 text-gray-400" />
-                                                        Configure
-                                                    </button>
+                                                    {(!role.isProtected || can.isSuperAdmin) ? (
+                                                        <button
+                                                            onClick={() => handleOpenEdit(role)}
+                                                            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-[#22222C] hover:bg-gray-200 dark:hover:bg-[#2A2A38] transition"
+                                                            title="Configure Permissions"
+                                                        >
+                                                            <Sliders className="w-3.5 h-3.5 text-gray-400" />
+                                                            Configure
+                                                        </button>
+                                                    ) : (
+                                                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-gray-400 dark:text-gray-500 cursor-not-allowed" title="System-protected role">
+                                                            <Lock className="w-3.5 h-3.5" />
+                                                            Protected
+                                                        </span>
+                                                    )}
                                                 </div>
                                             </td>
                                         </tr>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
@@ -47,6 +48,10 @@ Route::middleware(['auth', 'verified', 'force.password.change'])->group(function
     Route::resource('roles', RoleController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::patch('roles/{role}/toggle-status', [RoleController::class, 'toggleStatus'])
         ->name('roles.toggle-status');
+
+    // Audit & Activity Logs
+    Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
+    Route::get('/activity-logs/export', [ActivityLogController::class, 'export'])->name('activity-logs.export');
 
     // Notifications
     Route::get('/notifications/feed', [NotificationController::class, 'feed'])->name('notifications.feed');

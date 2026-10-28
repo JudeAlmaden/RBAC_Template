@@ -125,6 +125,135 @@ class UserController extends Controller
     }
 
     /**
+     * Display the specified user profile, permissions, and dual audit trail.
+     */
+    public function show(Request $request, User $user): Response
+    {
+        $currentUser = $request->user();
+
+        if (! $currentUser->canManageUsers() && $currentUser->id !== $user->id) {
+            abort(403, 'Unauthorized access to user profile.');
+        }
+
+        $user->load('roles.permissions', 'permissions');
+
+        $bySearch = $request->input('by_search');
+        $onSearch = $request->input('on_search');
+
+        // 1. Actions performed BY this user (Actor)
+        $logsBy = ActivityLog::where('actor_id', $user->id)
+            ->when($bySearch, function ($q, $s) {
+                $q->where(function ($sub) use ($s) {
+                    $sub->where('action', 'like', "%{$s}%")
+                        ->orWhere('subject_name', 'like', "%{$s}%");
+                });
+            })
+            ->latest()
+            ->paginate(15, ['*'], 'by_page')
+            ->withQueryString()
+            ->through(fn ($log) => [
+                'id' => $log->id,
+                'action' => $log->action,
+                'subject_type' => $log->subject_type,
+                'subject_id' => $log->subject_id,
+                'subject_name' => $log->subject_name,
+                'ip_address' => $log->ip_address,
+                'metadata' => $log->metadata,
+                'created_at_human' => $log->created_at?->diffForHumans(),
+                'created_at_date' => $log->created_at?->format('M d, Y g:i A'),
+            ]);
+
+        // 2. Actions performed ON this user (Subject)
+        $logsOn = ActivityLog::where('subject_type', 'User')
+            ->where('subject_id', $user->id)
+            ->when($onSearch, function ($q, $s) {
+                $q->where(function ($sub) use ($s) {
+                    $sub->where('actor_name', 'like', "%{$s}%")
+                        ->orWhere('action', 'like', "%{$s}%");
+                });
+            })
+            ->latest()
+            ->paginate(15, ['*'], 'on_page')
+            ->withQueryString()
+            ->through(fn ($log) => [
+                'id' => $log->id,
+                'actor_id' => $log->actor_id,
+                'actor_name' => $log->actor_name,
+                'action' => $log->action,
+                'ip_address' => $log->ip_address,
+                'metadata' => $log->metadata,
+                'created_at_human' => $log->created_at?->diffForHumans(),
+                'created_at_date' => $log->created_at?->format('M d, Y g:i A'),
+            ]);
+
+        // Permissions breakdown
+        $rolePermissions = $user->getPermissionsViaRoles()->pluck('name')->unique()->values();
+        $directPermissions = $user->getDirectPermissions()->pluck('name')->values();
+        $allPermissions = $user->getAllPermissions()->pluck('name')->unique()->values();
+
+        // Metrics for this user
+        $userMetrics = [
+            'actions_performed' => ActivityLog::where('actor_id', $user->id)->count(),
+            'changes_received' => ActivityLog::where('subject_type', 'User')->where('subject_id', $user->id)->count(),
+        ];
+
+        $superAdminCount = User::role('super_admin')->count();
+        $availableRoles = Role::where('is_active', true)->orderBy('name')->get(['id', 'name']);
+
+        return Inertia::render('Users/Show', [
+            'profileUser' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'is_active' => (bool) $user->is_active,
+                'email_verified' => ! is_null($user->email_verified_at),
+                'email_verified_at' => $user->email_verified_at?->format('M d, Y g:i A'),
+                'created_at' => $user->created_at?->format('M d, Y g:i A'),
+                'created_at_human' => $user->created_at?->diffForHumans(),
+                'roles' => $user->roles->pluck('name'),
+                'roles_with_permissions' => $user->roles->map(fn ($r) => [
+                    'id' => $r->id,
+                    'name' => $r->name,
+                    'permissions' => $r->permissions->pluck('name')->values(),
+                ]),
+                'is_super_admin' => $user->isSuperAdmin(),
+                'is_admin' => $user->isAdmin(),
+                'is_user' => $user->isUser(),
+                'role_permissions' => $rolePermissions,
+                'direct_permissions' => $directPermissions,
+                'all_permissions' => $allPermissions,
+                'can' => [
+                    'update' => $currentUser->can('update', $user),
+                    'delete' => $currentUser->can('delete', $user),
+                    'toggleStatus' => $currentUser->can('toggleStatus', $user),
+                    'promoteSuperAdmin' => $currentUser->can('promoteSuperAdmin', $user),
+                    'transferSuperAdmin' => $currentUser->can('transferSuperAdmin', $user),
+                    'demoteSuperAdmin' => $currentUser->can('demoteSuperAdmin', $user),
+                ],
+            ],
+            'logsBy' => $logsBy,
+            'logsOn' => $logsOn,
+            'filters' => [
+                'by_search' => $bySearch ?? '',
+                'on_search' => $onSearch ?? '',
+            ],
+            'metrics' => $userMetrics,
+            'availableRoles' => $availableRoles,
+            'meta' => [
+                'superAdminCount' => $superAdminCount,
+                'canManageUsers' => $currentUser->canManageUsers(),
+                'canManageAdmins' => $currentUser->canManageAdmins(),
+                'canCreateAdmin' => $currentUser->isSuperAdmin(),
+                'canAssignRoles' => $currentUser->canAssignRoles(),
+                'canPromoteSuperAdmin' => $currentUser->canPromoteToSuperAdmin(),
+                'canTransferSuperAdmin' => $currentUser->canTransferSuperAdmin(),
+                'isSuperAdmin' => $currentUser->isSuperAdmin(),
+                'currentUserId' => $currentUser->id,
+            ],
+        ]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreUserRequest $request): RedirectResponse
