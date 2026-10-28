@@ -5,6 +5,34 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [1.1.0] - 2026-10-28
+
+### Added
+- **Starter Kit Landing Page** — Redesigned `resources/js/Pages/Welcome.jsx` into a clean, unopinionated developer starter kit homepage featuring modular capability cards and copyable terminal quickstart commands.
+- **Pre-Seeded Credentials Cards** — Interactive copyable test credentials for `superadmin@example.com`, `admin@example.com`, and `user@example.com` on the homepage.
+- **Unified CI & Auto-Release Pipeline** — Consolidated GitHub Actions workflows into `.github/workflows/ci.yml` with automated tag checking, changelog extraction, and release publishing on pushes to `main`.
+- **Pipeline Concurrency Controls** — Added concurrency group cancellation (`ci-${{ github.ref }}`) to automatically terminate superseded workflow runs.
+
+### Changed
+- **Node.js Environment** — Upgraded GitHub Actions runners to Node 22 (LTS with npm 11) for stable dependency resolution.
+- **NPM Package Configuration** — Added `"version": "1.1.0"` and `npm test` script to `package.json`.
+
+### Removed
+- **Redundant Release Workflow** — Removed `.github/workflows/release.yml` in favor of the consolidated pipeline.
+- **AI Design Artifacts** — Removed artificial blurred gradients, pulsing skeleton mockups, and marketing copy from the welcome page.
+
+### Fixed
+- **Dependabot Peer Dependency Breakage** — Added ignore rules for major version bumps of `@vitejs/plugin-react` in `.github/dependabot.yml` to prevent peer dependency conflicts with Vite 6.
+- **NPM Arborist Tree Solver Crashes** — Configured `legacy-peer-deps=true` in `.npmrc` to prevent `edgesOut` null reference errors during CI installations.
+
+### Technical
+- Modified: `.github/dependabot.yml`, `.github/workflows/ci.yml`, `.gitignore`, `.npmrc`, `package.json`, `resources/js/Pages/Welcome.jsx`
+- New: `.agents/Agents.md`
+- Deleted: `.github/workflows/release.yml`
+- Tests: 71 passing (288 assertions) — lint clean
+
+---
+
 ## [1.0.0] - 2026-09-09
 
 ### Added

@@ -1,35 +1,117 @@
+import React, { useState } from 'react';
 import { Head, Link } from '@inertiajs/react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
-import { ArrowRight, Shield, Users, Activity, Sparkles, Lock, Layers } from 'lucide-react';
+import {
+    ArrowRight,
+    Shield,
+    Users,
+    FileText,
+    Bell,
+    Terminal,
+    Copy,
+    Check,
+    Lock,
+    ExternalLink,
+    Layers,
+    Sliders,
+    Moon,
+} from 'lucide-react';
 
-export default function Welcome({ auth }) {
+export default function Welcome({ auth, laravelVersion, phpVersion }) {
+    const [copiedKey, setCopiedKey] = useState(null);
+
+    const handleCopy = (text, key) => {
+        navigator.clipboard.writeText(text);
+        setCopiedKey(key);
+        setTimeout(() => setCopiedKey(null), 2000);
+    };
+
+    const modules = [
+        {
+            icon: Shield,
+            title: 'RBAC & PBAC',
+            desc: 'Role & permission architecture via Spatie with gate overrides and custom policy guards.',
+        },
+        {
+            icon: Users,
+            title: 'User Management',
+            desc: 'Account directory with role assignments, status toggling, and capacity enforcement.',
+        },
+        {
+            icon: Sliders,
+            title: 'Role View Switcher',
+            desc: 'Simulate any assigned role in session for instant UI and permission testing.',
+        },
+        {
+            icon: FileText,
+            title: 'Activity History',
+            desc: 'Paginated audit logging that retains historical actor and subject names upon deletion.',
+        },
+        {
+            icon: Bell,
+            title: 'Notification System',
+            desc: 'Multi-severity broadcast and targeted alerts with unread feed and toast alerts.',
+        },
+        {
+            icon: Moon,
+            title: 'Theme & Styling',
+            desc: 'Responsive Tailwind CSS interface with seamless light and dark mode support.',
+        },
+    ];
+
+    const seedAccounts = [
+        {
+            role: 'Super Admin',
+            email: 'superadmin@example.com',
+            pass: 'password',
+            badge: 'Full Access',
+            badgeClass: 'bg-purple-500/10 text-purple-700 dark:text-purple-300',
+        },
+        {
+            role: 'Admin',
+            email: 'admin@example.com',
+            pass: 'password',
+            badge: 'User & Role Mgmt',
+            badgeClass: 'bg-blue-500/10 text-blue-700 dark:text-blue-300',
+        },
+        {
+            role: 'User',
+            email: 'user@example.com',
+            pass: 'password',
+            badge: 'Standard Access',
+            badgeClass: 'bg-gray-500/10 text-gray-700 dark:text-gray-300',
+        },
+    ];
+
     return (
-        <div className="min-h-screen bg-[#FBFBFC] dark:bg-[#0D0D12] text-gray-900 dark:text-gray-100 flex flex-col justify-between selection:bg-[#5B5FC7] selection:text-white">
-            <Head title="Welcome" />
+        <div className="min-h-screen bg-[#FBFBFC] dark:bg-[#0D0E12] text-gray-900 dark:text-gray-100 flex flex-col justify-between selection:bg-[#5B5FC7] selection:text-white font-sans">
+            <Head title="Laravel RBAC Starter Kit" />
 
-            {/* Top Navigation */}
-            <header className="h-16 border-b border-[#E8E8EC] dark:border-[#26262D] bg-white/80 dark:bg-[#15151A]/80 backdrop-blur-md sticky top-0 z-30">
-                <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                        <ApplicationLogo className="w-8 h-8" />
-                        <span className="font-bold text-base text-gray-900 dark:text-white tracking-tight">
-                            Template
-                        </span>
+            {/* Navigation */}
+            <header className="h-16 border-b border-gray-200/80 dark:border-white/[0.08] bg-white/70 dark:bg-[#121319]/70 backdrop-blur-md sticky top-0 z-30 transition-colors">
+                <div className="max-w-6xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <ApplicationLogo className="w-8 h-8 rounded-lg" />
+                        <div>
+                            <span className="font-semibold text-sm tracking-tight text-gray-950 dark:text-white">
+                                Laravel RBAC Starter
+                            </span>
+                        </div>
                     </div>
 
                     <nav className="flex items-center gap-3">
                         {auth?.user ? (
                             <Link
                                 href={route('dashboard')}
-                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#5B5FC7] hover:bg-[#484CB8] text-white text-xs font-semibold shadow-sm transition"
+                                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#5B5FC7] hover:bg-[#4E52B8] text-white text-xs font-semibold shadow-xs transition"
                             >
-                                <span>Dashboard</span>
+                                <span>Go to Dashboard</span>
                                 <ArrowRight className="w-3.5 h-3.5" />
                             </Link>
                         ) : (
                             <Link
                                 href={route('login')}
-                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#5B5FC7] hover:bg-[#484CB8] text-white text-xs font-semibold shadow-sm transition"
+                                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#5B5FC7] hover:bg-[#4E52B8] text-white text-xs font-semibold shadow-xs transition"
                             >
                                 <span>Sign In</span>
                                 <ArrowRight className="w-3.5 h-3.5" />
@@ -39,200 +121,194 @@ export default function Welcome({ auth }) {
                 </div>
             </header>
 
-            {/* Main Content Area */}
-            <main className="flex-1">
-                {/* Hero Section */}
-                <section className="pt-16 pb-10 px-4 sm:px-6 lg:px-8 text-center max-w-4xl mx-auto space-y-5">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium bg-[#5B5FC7]/10 text-[#5B5FC7] dark:text-[#8A8DE2] border border-[#5B5FC7]/20">
-                        <Sparkles className="w-3.5 h-3.5" />
-                        <span>Modern Laravel & Inertia React Architecture</span>
+            {/* Main Content */}
+            <main className="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-16">
+                {/* Hero Header */}
+                <div className="max-w-3xl space-y-4">
+                    <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md text-[11px] font-mono font-medium bg-gray-100 dark:bg-white/[0.06] text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-white/[0.08]">
+                        <span>Starter Kit Template</span>
+                        <span className="text-gray-400">·</span>
+                        <span>Laravel {laravelVersion || '12'} · Inertia React</span>
                     </div>
 
-                    <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white leading-tight">
-                        Template Application
+                    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-gray-950 dark:text-white leading-tight">
+                        Role-Based Access Control <br />
+                        Application Template
                     </h1>
 
-                    <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 leading-relaxed max-w-xl mx-auto">
-                        A clean foundation and starter boilerplate for building scalable web applications with advanced RBAC, PBAC authorization, and audit logging.
+                    <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl">
+                        A clean, unopinionated starter kit for Laravel & Inertia.js with pre-configured authentication, 
+                        hierarchical roles and permissions, audit history, and administrative tooling.
                     </p>
 
-                    <div className="pt-2 flex items-center justify-center gap-3">
+                    <div className="pt-2 flex flex-wrap items-center gap-3">
                         {auth?.user ? (
                             <Link
                                 href={route('dashboard')}
-                                className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-[#5B5FC7] hover:bg-[#484CB8] text-white font-semibold text-xs shadow-sm transition"
+                                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#5B5FC7] hover:bg-[#4E52B8] text-white text-xs font-semibold shadow-xs transition"
                             >
-                                <span>Go to Dashboard</span>
-                                <ArrowRight className="w-4 h-4" />
+                                <span>Open Application</span>
+                                <ArrowRight className="w-3.5 h-3.5" />
                             </Link>
                         ) : (
                             <Link
                                 href={route('login')}
-                                className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-[#5B5FC7] hover:bg-[#484CB8] text-white font-semibold text-xs shadow-sm transition"
+                                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#5B5FC7] hover:bg-[#4E52B8] text-white text-xs font-semibold shadow-xs transition"
                             >
-                                <span>Sign In to Continue</span>
-                                <ArrowRight className="w-4 h-4" />
+                                <span>Sign In</span>
+                                <ArrowRight className="w-3.5 h-3.5" />
                             </Link>
                         )}
+
+                        <a
+                            href="#quickstart"
+                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-gray-200 dark:border-white/[0.1] bg-white dark:bg-[#161720] text-gray-700 dark:text-gray-300 hover:text-gray-950 dark:hover:text-white text-xs font-medium transition"
+                        >
+                            <span>Quick Start Guide</span>
+                        </a>
                     </div>
-                </section>
+                </div>
 
-                {/* App Window Preview with Skeletons */}
-                <section className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-                    {/* Ambient Glow */}
-                    <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5 h-64 bg-gradient-to-tr from-[#5B5FC7]/20 via-purple-500/10 to-indigo-500/20 blur-3xl rounded-full pointer-events-none -z-10" />
+                {/* Pre-configured Modules Grid */}
+                <div className="space-y-4">
+                    <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                        Included Modules
+                    </h2>
 
-                    {/* Window Container */}
-                    <div className="rounded-2xl border border-[#E8E8EC] dark:border-[#26262D] bg-white dark:bg-[#15151A] shadow-2xl overflow-hidden">
-                        {/* Chrome Titlebar */}
-                        <div className="h-10 px-4 border-b border-[#E8E8EC] dark:border-[#26262D] bg-[#FAFAFC] dark:bg-[#1C1C24] flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <div className="w-3 h-3 rounded-full bg-red-400/80" />
-                                <div className="w-3 h-3 rounded-full bg-amber-400/80" />
-                                <div className="w-3 h-3 rounded-full bg-emerald-400/80" />
-                            </div>
-                            <div className="w-56 sm:w-72 h-5 rounded-md bg-gray-200/70 dark:bg-[#252532] flex items-center px-2.5 text-[10px] text-gray-400 dark:text-gray-500 font-mono truncate">
-                                app.template.io/dashboard
-                            </div>
-                            <div className="w-8" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+                        {modules.map((m, i) => {
+                            const Icon = m.icon;
+                            return (
+                                <div
+                                    key={i}
+                                    className="p-4 rounded-xl border border-gray-200/80 dark:border-white/[0.08] bg-white dark:bg-[#14151C] shadow-2xs space-y-2"
+                                >
+                                    <div className="w-7 h-7 rounded-lg bg-gray-100 dark:bg-white/[0.06] text-gray-700 dark:text-gray-300 flex items-center justify-center">
+                                        <Icon className="w-4 h-4" />
+                                    </div>
+                                    <h3 className="font-semibold text-xs text-gray-950 dark:text-white">
+                                        {m.title}
+                                    </h3>
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                                        {m.desc}
+                                    </p>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                {/* Seed Accounts & Quickstart Section */}
+                <div id="quickstart" className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-4 border-t border-gray-200/80 dark:border-white/[0.08]">
+                    {/* Default Seeded Accounts */}
+                    <div className="space-y-3">
+                        <div className="space-y-1">
+                            <h2 className="text-sm font-semibold text-gray-950 dark:text-white">
+                                Seeded Test Credentials
+                            </h2>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                                Populated automatically via <code className="font-mono text-gray-700 dark:text-gray-300">DatabaseSeeder</code>. Password is <code className="font-mono font-medium text-gray-900 dark:text-white">password</code> for all accounts.
+                            </p>
                         </div>
 
-                        {/* Skeleton Interface Preview */}
-                        <div className="p-5 sm:p-7 space-y-5 bg-[#FBFBFC]/60 dark:bg-[#111116]/60">
-                            {/* Metric Cards Skeleton */}
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-                                {[1, 2, 3].map((i) => (
-                                    <div
-                                        key={i}
-                                        className="bg-white dark:bg-[#15151A] rounded-xl border border-[#E8E8EC] dark:border-[#26262D] p-4 shadow-xs space-y-3"
+                        <div className="space-y-2">
+                            {seedAccounts.map((acc) => (
+                                <div
+                                    key={acc.email}
+                                    className="p-3 rounded-lg border border-gray-200/80 dark:border-white/[0.08] bg-white dark:bg-[#14151C] flex items-center justify-between text-xs"
+                                >
+                                    <div className="space-y-0.5">
+                                        <div className="flex items-center gap-2">
+                                            <span className="font-semibold text-gray-900 dark:text-white">
+                                                {acc.role}
+                                            </span>
+                                            <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${acc.badgeClass}`}>
+                                                {acc.badge}
+                                            </span>
+                                        </div>
+                                        <div className="font-mono text-[11px] text-gray-500 dark:text-gray-400">
+                                            {acc.email}
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        onClick={() => handleCopy(acc.email, acc.email)}
+                                        title="Copy email"
+                                        className="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-white/[0.06] text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition"
                                     >
-                                        <div className="flex items-center justify-between">
-                                            <div className="w-7 h-7 rounded-lg bg-gray-200 dark:bg-[#22222C] animate-pulse" />
-                                            <div className="w-12 h-3.5 rounded-full bg-gray-100 dark:bg-[#1C1C24] animate-pulse" />
-                                        </div>
-                                        <div className="space-y-1.5">
-                                            <div className="h-5 w-16 rounded bg-gray-200 dark:bg-[#22222C] animate-pulse" />
-                                            <div className="h-2.5 w-24 rounded bg-gray-100 dark:bg-[#1C1C24] animate-pulse" />
-                                        </div>
-                                    </div>
-                                ))}
+                                        {copiedKey === acc.email ? (
+                                            <Check className="w-3.5 h-3.5 text-emerald-500" />
+                                        ) : (
+                                            <Copy className="w-3.5 h-3.5" />
+                                        )}
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Quickstart Setup Commands */}
+                    <div className="space-y-3">
+                        <div className="space-y-1">
+                            <h2 className="text-sm font-semibold text-gray-950 dark:text-white">
+                                Setup & Run Locally
+                            </h2>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                                Standard installation steps to get your local environment running.
+                            </p>
+                        </div>
+
+                        <div className="p-4 rounded-xl border border-gray-200/80 dark:border-white/[0.08] bg-gray-900 text-gray-200 font-mono text-xs space-y-3">
+                            <div className="flex items-center justify-between text-gray-400 border-b border-gray-800 pb-2 text-[11px]">
+                                <span>Terminal setup</span>
+                                <button
+                                    onClick={() =>
+                                        handleCopy(
+                                            'composer install\nnpm install\ncp .env.example .env\nphp artisan key:generate\nphp artisan migrate --seed',
+                                            'all_commands'
+                                        )
+                                    }
+                                    className="hover:text-white transition flex items-center gap-1"
+                                >
+                                    {copiedKey === 'all_commands' ? (
+                                        <span className="text-emerald-400">Copied</span>
+                                    ) : (
+                                        <>
+                                            <Copy className="w-3 h-3" />
+                                            <span>Copy all</span>
+                                        </>
+                                    )}
+                                </button>
                             </div>
 
-                            {/* Middle Analytics Chart & Feed Skeletons */}
-                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                                {/* Chart Skeleton */}
-                                <div className="lg:col-span-2 bg-white dark:bg-[#15151A] rounded-xl border border-[#E8E8EC] dark:border-[#26262D] p-4.5 shadow-xs space-y-4">
-                                    <div className="flex items-center justify-between">
-                                        <div className="space-y-1">
-                                            <div className="h-3.5 w-28 rounded bg-gray-200 dark:bg-[#22222C] animate-pulse" />
-                                            <div className="h-2 w-40 rounded bg-gray-100 dark:bg-[#1C1C24] animate-pulse" />
-                                        </div>
-                                        <div className="flex gap-1">
-                                            <div className="w-10 h-5 rounded bg-gray-100 dark:bg-[#1C1C24] animate-pulse" />
-                                            <div className="w-10 h-5 rounded bg-gray-200 dark:bg-[#22222C] animate-pulse" />
-                                        </div>
-                                    </div>
-                                    <div className="h-32 flex items-end justify-between gap-2 pt-3 px-1 border-b border-[#E8E8EC] dark:border-[#26262D]">
-                                        {[40, 65, 50, 85, 70, 45, 90, 80, 55, 95].map((h, idx) => (
-                                            <div key={idx} className="flex-1 flex justify-center h-full items-end">
-                                                <div
-                                                    style={{ height: `${h}%` }}
-                                                    className="w-full max-w-[20px] rounded-t bg-gray-200/80 dark:bg-[#22222C] animate-pulse"
-                                                />
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                {/* Feed Skeleton */}
-                                <div className="bg-white dark:bg-[#15151A] rounded-xl border border-[#E8E8EC] dark:border-[#26262D] p-4.5 shadow-xs space-y-3.5">
-                                    <div className="flex items-center justify-between">
-                                        <div className="h-3.5 w-24 rounded bg-gray-200 dark:bg-[#22222C] animate-pulse" />
-                                        <div className="h-2.5 w-8 rounded bg-gray-100 dark:bg-[#1C1C24] animate-pulse" />
-                                    </div>
-                                    <div className="space-y-3">
-                                        {[1, 2, 3].map((item) => (
-                                            <div key={item} className="flex items-center gap-2.5">
-                                                <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-[#22222C] animate-pulse shrink-0" />
-                                                <div className="flex-1 space-y-1 min-w-0">
-                                                    <div className="h-2.5 w-3/4 rounded bg-gray-200 dark:bg-[#22222C] animate-pulse" />
-                                                    <div className="h-2 w-1/2 rounded bg-gray-100 dark:bg-[#1C1C24] animate-pulse" />
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Table Skeleton Rows */}
-                            <div className="rounded-xl border border-[#E8E8EC] dark:border-[#26262D] bg-white dark:bg-[#15151A] overflow-hidden">
-                                <div className="p-3 border-b border-[#E8E8EC] dark:border-[#26262D] flex items-center justify-between">
-                                    <div className="w-32 h-6 rounded bg-gray-100 dark:bg-[#1C1C24] animate-pulse" />
-                                    <div className="w-16 h-6 rounded bg-gray-200 dark:bg-[#22222C] animate-pulse" />
-                                </div>
-                                <div className="divide-y divide-[#E8E8EC] dark:divide-[#26262D]">
-                                    {[1, 2, 3].map((row) => (
-                                        <div key={row} className="p-3 px-4 flex items-center justify-between">
-                                            <div className="flex items-center gap-2.5">
-                                                <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-[#22222C] animate-pulse shrink-0" />
-                                                <div className="space-y-1">
-                                                    <div className="h-2.5 w-24 rounded bg-gray-200 dark:bg-[#22222C] animate-pulse" />
-                                                    <div className="h-2 w-32 rounded bg-gray-100 dark:bg-[#1C1C24] animate-pulse" />
-                                                </div>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <div className="w-12 h-4 rounded-full bg-gray-100 dark:bg-[#1C1C24] animate-pulse" />
-                                                <div className="w-14 h-5 rounded bg-gray-100 dark:bg-[#1C1C24] animate-pulse" />
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
+                            <div className="space-y-1.5 text-gray-300">
+                                <p><span className="text-gray-500 select-none">$ </span>composer install</p>
+                                <p><span className="text-gray-500 select-none">$ </span>npm install</p>
+                                <p><span className="text-gray-500 select-none">$ </span>php artisan migrate --seed</p>
+                                <p className="text-gray-500 pt-1"># Start development servers</p>
+                                <p><span className="text-gray-500 select-none">$ </span>php artisan serve</p>
+                                <p><span className="text-gray-500 select-none">$ </span>npm run dev</p>
                             </div>
                         </div>
                     </div>
-                </section>
-
-                {/* Features Highlight Grid */}
-                <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                        <div className="p-5 rounded-2xl border border-[#E8E8EC] dark:border-[#26262D] bg-white dark:bg-[#15151A] shadow-xs space-y-2.5">
-                            <div className="w-9 h-9 rounded-xl bg-[#5B5FC7]/10 text-[#5B5FC7] dark:text-[#8A8DE2] flex items-center justify-center">
-                                <Shield className="w-4 h-4" />
-                            </div>
-                            <h3 className="font-bold text-sm text-gray-900 dark:text-white">Role & Capacity Control</h3>
-                            <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
-                                Fine-grained PBAC system with active user limits, permission scoping, and super admin ownership transfer.
-                            </p>
-                        </div>
-
-                        <div className="p-5 rounded-2xl border border-[#E8E8EC] dark:border-[#26262D] bg-white dark:bg-[#15151A] shadow-xs space-y-2.5">
-                            <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
-                                <Activity className="w-4 h-4" />
-                            </div>
-                            <h3 className="font-bold text-sm text-gray-900 dark:text-white">Audit & Activity Logging</h3>
-                            <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
-                                Automatically logs account creations, role changes, privilege elevations, and status toggles with pagination.
-                            </p>
-                        </div>
-
-                        <div className="p-5 rounded-2xl border border-[#E8E8EC] dark:border-[#26262D] bg-white dark:bg-[#15151A] shadow-xs space-y-2.5">
-                            <div className="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
-                                <Users className="w-4 h-4" />
-                            </div>
-                            <h3 className="font-bold text-sm text-gray-900 dark:text-white">Directory & Accounts</h3>
-                            <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
-                                Filterable directory with modular account creation, role assignment, status management, and instant search.
-                            </p>
-                        </div>
-                    </div>
-                </section>
+                </div>
             </main>
 
-            {/* Minimal Footer */}
-            <footer className="border-t border-[#E8E8EC] dark:border-[#26262D] py-5">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between text-xs text-gray-400 dark:text-gray-500">
-                    <span>Template</span>
-                    <span>Ready for development</span>
+            {/* Clean Footer */}
+            <footer className="border-t border-gray-200/80 dark:border-white/[0.08] py-6 text-xs text-gray-500 dark:text-gray-400">
+                <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <div className="flex items-center gap-2">
+                        <ApplicationLogo className="w-4 h-4 rounded" />
+                        <span className="font-medium text-gray-800 dark:text-gray-200">Laravel RBAC Starter Template</span>
+                    </div>
+
+                    <div className="flex items-center gap-3 font-mono text-[11px]">
+                        <span>PHP {phpVersion || '8.4'}</span>
+                        <span>·</span>
+                        <span>Laravel {laravelVersion || '12'}</span>
+                        <span>·</span>
+                        <span>Tailwind CSS</span>
+                    </div>
                 </div>
             </footer>
         </div>

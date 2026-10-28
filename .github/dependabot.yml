@@ -31,6 +31,9 @@ updates:
     labels:
       - "dependencies"
       - "frontend"
+    ignore:
+      - dependency-name: "@vitejs/plugin-react"
+        update-types: ["version-update:semver-major"]
 
   # Maintain GitHub Actions dependencies (grouped into single PR)
   - package-ecosystem: "github-actions"
