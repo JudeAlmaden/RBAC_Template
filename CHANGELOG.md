@@ -5,6 +5,38 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [1.0.0] - 2026-11-05
+
+### Added
+- **Dedicated Stage View** — Each learning stage in the pipeline now has its own full page (`/topics/{topic}/stages/{stage}`). Features breadcrumb trail (Courses → Course → Module → Topic → Stage), Prev/Next stage pager, hero card with section-type badge + colored metadata, 4-stat grid (Content Blocks, Activities, Layout, Required), and inline Edit Stage modal.
+- **Multi-Stage / Grouped Pipeline Display** — The Pedagogical Learning Pipeline now auto-groups consecutive stages of the same type (e.g., two back-to-back Encode stages) under a collapsible group header showing the type badge and part count. Single-type stages render as before; multi-part groups expand/collapse via a toggle. No schema changes required — multiple stages of the same type are fully supported by the existing position-ordered model.
+- **Modularized Course, Module & Stage Pages** — Decomposed `Courses/Show.jsx`, `Modules/Show.jsx`, and `Stages/Index.jsx` into reusable partials: `CourseHeroCard`, `CourseCurriculumTab`, `CourseLearnersTab`, `ModuleHeroCard`, `ModuleTopicList`, `StageHeroCard`, `StagePipelineList`.
+- **Reusable `Breadcrumbs` Component** — Unified accessible breadcrumb strip with back-arrow button, ChevronRight separators, `aria-current`, and long-label truncation. Shared across Course, Module, and Stage views.
+- **Consistent Hero Card Design** — Course, Module, and Stage views all share the same layout: icon avatar, title + status badge, meta links, 4-stat grid, primary CTA + `ActionDropdown`.
+
+### Changed
+- **Stage Pipeline rows are clickable** — Clicking a stage card navigates to the new dedicated Stage Show page. Reorder (↑↓) and Delete buttons stop event propagation to avoid accidental navigation.
+- **Module rows are clickable** — Clicking a module row in the Course curriculum navigates directly to the Module Show page; removed redundant "View Module" button.
+- **Course rows are clickable** — Clicking a course row in the index navigates to Course Show; action buttons stop propagation.
+- **ActionDropdown** introduced as a reusable portal-based popover for Edit/Delete secondary actions across all resource pages.
+- **Stage Hero Card** — Removed "Generate Preset" button from the hero card top bar; preset generation is now only available from the pipeline's empty state.
+
+### Fixed
+- Breadcrumb inconsistency across Courses / Modules / Topics / Stages resolved with shared `Breadcrumbs` component and consistent `backHref` wiring.
+
+### Technical
+- Modified: `routes/web.php` — added `topics.stages.show` GET route
+- Modified: `app/Http/Controllers/TopicSectionController.php` — added `show()` method with sibling pagination
+- Modified: `app/Http/Controllers/ModuleController.php` — added `show()` with sibling modules
+- New: `resources/js/Pages/Courses/Stages/Show.jsx`
+- New: `resources/js/Pages/Courses/Stages/Partials/StageHeroCard.jsx`, `StagePipelineList.jsx`, `StageFormModal.jsx`
+- New: `resources/js/Pages/Courses/Modules/Partials/ModuleHeroCard.jsx`, `ModuleTopicList.jsx`
+- New: `resources/js/Pages/Courses/Partials/CourseHeroCard.jsx`, `CourseCurriculumTab.jsx`, `CourseLearnersTab.jsx`
+- New: `resources/js/Components/Breadcrumbs.jsx`, `components/ActionDropdown.jsx`
+- Tests: 88 passing — lint/typecheck clean
+
+---
+
 ## [1.1.0] - 2026-10-28
 
 ### Added

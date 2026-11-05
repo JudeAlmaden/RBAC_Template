@@ -24,6 +24,7 @@ export default function UserTable({
                         <tr className="border-b border-[#E8E8EC] dark:border-[#26262D] bg-[#FAFAFC] dark:bg-[#1C1C24] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-[10px]">
                             <th className="py-3.5 px-5">User</th>
                             <th className="py-3.5 px-5">Role</th>
+                            <th className="py-3.5 px-5">Courses</th>
                             <th className="py-3.5 px-5">Status</th>
                             <th className="py-3.5 px-5">Created</th>
                             <th className="py-3.5 px-5 text-right"></th>
@@ -32,7 +33,7 @@ export default function UserTable({
                     <tbody className="divide-y divide-[#E8E8EC] dark:divide-[#26262D] text-gray-700 dark:text-gray-300">
                         {users.data.length === 0 ? (
                             <tr>
-                                <td colSpan="5" className="py-12 text-center text-gray-400">
+                                <td colSpan="6" className="py-12 text-center text-gray-400">
                                     No user accounts match your search.
                                 </td>
                             </tr>
@@ -90,6 +91,22 @@ export default function UserTable({
                                                     ));
                                                 })()}
                                             </div>
+                                        </td>
+
+                                        <td className="py-3.5 px-5">
+                                            {u.assigned_courses_count > 0 ? (
+                                                <Link
+                                                    href={route('users.show', u.id)}
+                                                    className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium bg-[#5B5FC7]/10 text-[#5B5FC7] dark:bg-[#5B5FC7]/20 dark:text-[#8A8DE2] hover:underline"
+                                                >
+                                                    <span>{u.assigned_courses_count}</span>
+                                                    <span className="text-[10px] text-gray-500 dark:text-gray-400">
+                                                        course{u.assigned_courses_count !== 1 ? 's' : ''}
+                                                    </span>
+                                                </Link>
+                                            ) : (
+                                                <span className="text-gray-400 text-[11px]">—</span>
+                                            )}
                                         </td>
 
                                         <td className="py-3.5 px-5">

@@ -9,12 +9,14 @@ import DemoteUserModal from './Partials/DemoteUserModal';
 import UserProfileCard from './Partials/UserProfileCard';
 import UserPermissionsMatrix from './Partials/UserPermissionsMatrix';
 import UserActivitySection from './Partials/UserActivitySection';
+import UserAssignedCourses from './Partials/UserAssignedCourses';
 import { ArrowLeft } from 'lucide-react';
 
 export default function UserShow({
     profileUser,
     logsBy,
     logsOn,
+    assignedCourses = [],
     filters = {},
     metrics = {},
     meta = {},
@@ -150,6 +152,12 @@ export default function UserShow({
                     onTransfer={() => setTransferModalOpen(true)}
                     onDemote={() => setDemoteModalOpen(true)}
                     onDelete={() => setDeleteModalOpen(true)}
+                />
+
+                {/* ── Assigned Courses ──────────────────────────────────────── */}
+                <UserAssignedCourses
+                    profileUser={profileUser}
+                    assignedCourses={assignedCourses}
                 />
 
                 {/* ── Effective Permissions Matrix ──────────────────────────── */}

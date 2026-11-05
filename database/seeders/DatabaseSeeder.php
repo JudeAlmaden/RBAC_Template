@@ -50,6 +50,9 @@ class DatabaseSeeder extends Seeder
             $viewLogs,
         ]);
 
+        $learnerRole = Role::firstOrCreate(['name' => 'learner']);
+        $learnerRole->syncPermissions([]);
+
         $userRole = Role::firstOrCreate(['name' => 'user']);
         $userRole->syncPermissions([]);
 
@@ -75,7 +78,18 @@ class DatabaseSeeder extends Seeder
         );
         $admin->syncRoles(['admin']);
 
-        // 5. Seed a Basic User
+        // 5. Seed Learner User
+        $learner = User::firstOrCreate(
+            ['email' => 'learner@example.com'],
+            [
+                'name' => 'Justine Jude D. Almaden',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(),
+            ]
+        );
+        $learner->syncRoles(['learner']);
+
+        // 6. Seed a Basic User for test compatibility
         $basicUser = User::firstOrCreate(
             ['email' => 'user@example.com'],
             [

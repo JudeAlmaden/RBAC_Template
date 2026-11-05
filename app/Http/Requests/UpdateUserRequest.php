@@ -101,7 +101,7 @@ class UpdateUserRequest extends FormRequest
         if ($this->has('roles') && is_array($this->roles)) {
             $filtered = array_values(array_filter(array_unique($this->roles)));
 
-            return empty($filtered) ? ['user'] : $filtered;
+            return empty($filtered) ? ['learner'] : $filtered;
         }
 
         if ($this->has('role') && ! empty($this->role)) {

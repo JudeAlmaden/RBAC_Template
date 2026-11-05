@@ -6,6 +6,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
@@ -52,11 +53,23 @@ class User extends Authenticatable
             if ($this->hasRole('admin')) {
                 return 'admin';
             }
+            if ($this->hasRole('learner')) {
+                return 'learner';
+            }
             $customRole = $this->roles->firstWhere('name', '!=', 'user');
 
-            return $customRole?->name ?? 'user';
+            return $customRole?->name ?? 'learner';
         } catch (\Throwable) {
-            return 'user';
+            return 'learner';
+        }
+    }
+
+    public function isLearner(): bool
+    {
+        try {
+            return $this->hasRole('learner') || (! $this->isSuperAdmin() && ! $this->isAdmin());
+        } catch (\Throwable) {
+            return true;
         }
     }
 
@@ -185,6 +198,36 @@ class User extends Authenticatable
     public function sentNotifications(): HasMany
     {
         return $this->hasMany(Notification::class, 'sender_id');
+    }
+
+    public function media(): MorphMany
+    {
+        return $this->morphMany(Media::class, 'mediable');
+    }
+
+    public function createdCourses(): HasMany
+    {
+        return $this->hasMany(Course::class, 'created_by');
+    }
+
+    public function courseEnrollments(): HasMany
+    {
+        return $this->hasMany(CourseEnrollment::class);
+    }
+
+    public function courseAssignments(): HasMany
+    {
+        return $this->hasMany(CourseAssignment::class, 'assigned_by');
+    }
+
+    public function activityAttempts(): HasMany
+    {
+        return $this->hasMany(ActivityAttempt::class);
+    }
+
+    public function topicProgress(): HasMany
+    {
+        return $this->hasMany(TopicProgress::class);
     }
 
     /**

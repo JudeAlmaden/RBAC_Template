@@ -30,6 +30,7 @@ class UserController extends Controller
         $roleFilter = $request->input('role');
 
         $query = User::with('roles')
+            ->withCount('courseEnrollments')
             ->when($search, function ($q, $search) {
                 $q->where(function ($sub) use ($search) {
                     $sub->where('name', 'like', "%{$search}%")
@@ -58,6 +59,7 @@ class UserController extends Controller
                 'email' => $user->email,
                 'role' => $user->role,
                 'roles' => $user->roles->pluck('name')->values()->all(),
+                'assigned_courses_count' => $user->course_enrollments_count ?? 0,
                 'is_active' => (bool) $user->is_active,
                 'created_at' => $user->created_at?->format('M d, Y'),
                 'can' => [
@@ -195,7 +197,35 @@ class UserController extends Controller
         $userMetrics = [
             'actions_performed' => ActivityLog::where('actor_id', $user->id)->count(),
             'changes_received' => ActivityLog::where('subject_type', 'User')->where('subject_id', $user->id)->count(),
+            'assigned_courses_count' => $user->courseEnrollments()->count(),
         ];
+
+        // Assigned Courses for this user
+        $assignedCourses = $user->courseEnrollments()
+            ->with(['course.prerequisites:id,title,status', 'assignment:id,due_at,required'])
+            ->latest('enrolled_at')
+            ->get()
+            ->map(function ($enrollment) {
+                return [
+                    'id' => $enrollment->id,
+                    'course_id' => $enrollment->course_id,
+                    'course_title' => $enrollment->course?->title ?? 'Untitled Course',
+                    'course_slug' => $enrollment->course?->slug,
+                    'course_description' => $enrollment->course?->description,
+                    'course_status' => $enrollment->course?->status,
+                    'prerequisites' => $enrollment->course?->prerequisites->map(fn ($p) => [
+                        'id' => $p->id,
+                        'title' => $p->title,
+                        'status' => $p->status,
+                        'auto_enroll' => (bool) ($p->pivot->auto_enroll ?? true),
+                    ])->values()->all() ?? [],
+                    'status' => $enrollment->status,
+                    'progress_percent' => (float) ($enrollment->progress_percent ?? 0),
+                    'enrolled_at' => $enrollment->enrolled_at?->format('M d, Y'),
+                    'due_at' => $enrollment->assignment?->due_at?->format('M d, Y'),
+                    'required' => (bool) ($enrollment->assignment?->required ?? true),
+                ];
+            });
 
         $superAdminCount = User::role('super_admin')->count();
         $availableRoles = Role::where('is_active', true)->orderBy('name')->get(['id', 'name']);
@@ -238,6 +268,7 @@ class UserController extends Controller
                 'on_search' => $onSearch ?? '',
             ],
             'metrics' => $userMetrics,
+            'assignedCourses' => $assignedCourses,
             'availableRoles' => $availableRoles,
             'meta' => [
                 'superAdminCount' => $superAdminCount,

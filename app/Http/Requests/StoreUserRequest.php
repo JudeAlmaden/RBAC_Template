@@ -26,7 +26,7 @@ class StoreUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        $allowedRoles = ['user'];
+        $allowedRoles = ['learner', 'user'];
         if ($this->user()->canAssignRoles() || $this->user()->canManageAdmins()) {
             $allowedRoles = Role::pluck('name')
                 ->reject(fn ($role) => $role === 'super_admin')
@@ -78,13 +78,13 @@ class StoreUserRequest extends FormRequest
         if ($this->has('roles') && is_array($this->roles)) {
             $filtered = array_values(array_filter(array_unique($this->roles)));
 
-            return empty($filtered) ? ['user'] : $filtered;
+            return empty($filtered) ? ['learner'] : $filtered;
         }
 
         if ($this->has('role') && ! empty($this->role)) {
             return [$this->role];
         }
 
-        return ['user'];
+        return ['learner'];
     }
 }

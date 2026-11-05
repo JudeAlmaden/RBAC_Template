@@ -10,4 +10,8 @@ export default defineConfig({
         }),
         react(),
     ],
+    server: {
+        host: 'localhost',
+        cors: true,
+    },
 });

@@ -60,6 +60,7 @@ Use conventional commit prefixes: `feat:`, `fix:`, `chore:`, `refactor:`.
 
 ## General Rules
 
+- **Database Migrations Rule**: Never create or run new migrations or remigrate without explicit user permission. Always check existing schema and table columns (e.g. `settings` JSON columns) before proposing schema changes.
 - Always run `npm run lint` and `npm run test` and verify they pass before committing.
 - Never commit `.env`, `*.db`, or AI scratch files.
 - Conventional commit messages: `feat:`, `fix:`, `chore:`, `docs:`, `refactor:`, `test:`.

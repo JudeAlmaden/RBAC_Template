@@ -21,10 +21,11 @@ export default function RoleSwitcher({ activeRole, switchableRoles = [], isPrevi
     }
 
     const formatRoleText = (role) => {
-        if (!role) return 'Unified (All Roles)';
+        if (!role) return 'Full Access View';
         if (role === 'super_admin') return 'Super Admin';
         if (role === 'admin') return 'Admin';
-        if (role === 'user') return 'Basic User';
+        if (role === 'learner') return 'Learner';
+        if (role === 'user') return 'Learner';
         return role.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
     };
 
@@ -33,7 +34,7 @@ export default function RoleSwitcher({ activeRole, switchableRoles = [], isPrevi
         router.post(route('switch-role'), { role: roleName }, { preserveScroll: true });
     };
 
-    const currentLabel = activeRole ? formatRoleText(activeRole) : 'All Roles';
+    const currentLabel = activeRole ? formatRoleText(activeRole) : 'Full Access View';
 
     return (
         <div className="relative pt-2.5 px-3 pb-0.5" ref={dropdownRef}>
@@ -82,7 +83,7 @@ export default function RoleSwitcher({ activeRole, switchableRoles = [], isPrevi
                     >
                         <div className="flex items-center gap-2">
                             <Layers className="w-3.5 h-3.5 text-gray-400" />
-                            <span>Unified (All Roles)</span>
+                            <span>Full Access View</span>
                         </div>
                         {!activeRole && <Check className="w-3.5 h-3.5 text-[#5B5FC7]" />}
                     </button>
@@ -112,8 +113,8 @@ export default function RoleSwitcher({ activeRole, switchableRoles = [], isPrevi
                                                 ? 'bg-[#5B5FC7]'
                                                 : r === 'admin'
                                                 ? 'bg-blue-500'
-                                                : r === 'user'
-                                                ? 'bg-gray-400'
+                                                : r === 'learner' || r === 'user'
+                                                ? 'bg-[#4A91CC]'
                                                 : 'bg-indigo-500'
                                         }`}
                                     />

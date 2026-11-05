@@ -6,6 +6,7 @@ import {
     Shield,
     Activity,
     Clock,
+    GraduationCap,
 } from 'lucide-react';
 
 function formatDate(dateStr) {
@@ -32,6 +33,7 @@ export default function UserProfileCard({
 }) {
     const actionsCount = metrics.actions_performed ?? 0;
     const changesCount = metrics.changes_received ?? 0;
+    const coursesCount = metrics.assigned_courses_count ?? 0;
 
     return (
         <div className="p-6 rounded-xl bg-white dark:bg-[#15151A] border border-[#E8E8EC] dark:border-[#26262D] shadow-sm">
@@ -98,7 +100,7 @@ export default function UserProfileCard({
             </div>
 
             {/* Bottom Metadata & Metrics Grid: Consistent spacing and typography */}
-            <div className="pt-4 grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="pt-4 grid grid-cols-2 sm:grid-cols-5 gap-4">
                 <div className="flex items-center gap-2.5">
                     <div className="w-8 h-8 rounded-lg bg-gray-50 dark:bg-[#1E1E24] border border-[#E8E8EC] dark:border-[#2A2A32] flex items-center justify-center shrink-0">
                         <Calendar className="w-4 h-4 text-gray-400 dark:text-[#9F9FA4]" />
@@ -109,6 +111,20 @@ export default function UserProfileCard({
                         </span>
                         <span className="text-xs font-semibold text-gray-800 dark:text-[#F8F9FD] truncate block mt-0.5">
                             {formatDate(profileUser.created_at)}
+                        </span>
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-gray-50 dark:bg-[#1E1E24] border border-[#E8E8EC] dark:border-[#2A2A32] flex items-center justify-center shrink-0">
+                        <GraduationCap className="w-4 h-4 text-[#5B5FC7]" />
+                    </div>
+                    <div className="min-w-0">
+                        <span className="text-[10px] uppercase font-medium text-gray-400 dark:text-[#9F9FA4] block">
+                            Assigned Courses
+                        </span>
+                        <span className="text-xs font-semibold text-gray-800 dark:text-[#F8F9FD] truncate block mt-0.5">
+                            {coursesCount} {coursesCount === 1 ? 'course' : 'courses'}
                         </span>
                     </div>
                 </div>

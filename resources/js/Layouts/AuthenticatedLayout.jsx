@@ -20,6 +20,14 @@ import {
     AlertTriangle,
     MoreHorizontal,
     History,
+    Crosshair,
+    BookOpen,
+    Award,
+    Settings,
+    HelpCircle,
+    MessageSquareWarning,
+    Sparkles,
+    GraduationCap,
 } from 'lucide-react';
 
 /* ─── Dark mode hook ──────────────────────────────────────────────────── */
@@ -36,9 +44,11 @@ function useDarkMode() {
         const root = document.documentElement;
         if (dark) {
             root.classList.add('dark');
+            root.setAttribute('data-theme', 'dark');
             localStorage.setItem('theme', 'dark');
         } else {
             root.classList.remove('dark');
+            root.setAttribute('data-theme', 'light');
             localStorage.setItem('theme', 'light');
         }
     }, [dark]);
@@ -52,7 +62,6 @@ function UserMenu({ user, dark, setDark, formatRole, roleContext }) {
     const [open, setOpen] = useState(false);
     const ref = useRef(null);
 
-    // Close on outside click
     useEffect(() => {
         function handleClick(e) {
             if (ref.current && !ref.current.contains(e.target)) setOpen(false);
@@ -69,16 +78,16 @@ function UserMenu({ user, dark, setDark, formatRole, roleContext }) {
 
     return (
         <div className="px-3 pb-3 pt-1.5 relative" ref={ref}>
-            <div className="p-3 rounded-xl bg-gray-50 dark:bg-[#1A1A22] border border-gray-100 dark:border-[#2A2A35]">
+            <div className="p-2.5 rounded-xl bg-white/5 border border-white/10">
                 {/* User identity row */}
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2.5 min-w-0">
                         <Avatar name={user.name} size="w-7 h-7" />
                         <div className="min-w-0">
-                            <div className="text-xs font-semibold text-gray-900 dark:text-gray-100 truncate">
+                            <div className="text-xs font-semibold text-white truncate">
                                 {user.name}
                             </div>
-                            <div className="text-[10px] text-gray-500 dark:text-gray-400 truncate" title={roleLabel}>
+                            <div className="text-[10px] text-[#8BADC7] truncate" title={roleLabel}>
                                 {roleLabel}
                             </div>
                         </div>
@@ -89,8 +98,8 @@ function UserMenu({ user, dark, setDark, formatRole, roleContext }) {
                         onClick={() => setOpen((o) => !o)}
                         className={`p-1.5 rounded-lg transition flex-shrink-0 ${
                             open
-                                ? 'bg-gray-200 dark:bg-[#2A2A35] text-gray-800 dark:text-gray-100'
-                                : 'text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#2A2A35]'
+                                ? 'bg-white/15 text-white'
+                                : 'text-[#8BADC7] hover:text-white hover:bg-white/10'
                         }`}
                         title="Account menu"
                     >
@@ -100,15 +109,15 @@ function UserMenu({ user, dark, setDark, formatRole, roleContext }) {
 
                 {/* Popover panel — slides up above the card */}
                 {open && (
-                    <div className="absolute left-3 right-3 bottom-[calc(100%-8px)] mb-2 bg-white dark:bg-[#1E1E26] border border-[#E8E8EC] dark:border-[#2E2E38] rounded-xl shadow-xl overflow-hidden z-50 animate-in">
+                    <div className="absolute left-3 right-3 bottom-[calc(100%-8px)] mb-2 bg-[#1D2B3B] border border-[#2B3A4B] rounded-xl shadow-2xl overflow-hidden z-50">
                         {/* Dark mode toggle */}
                         <button
                             onClick={() => { setDark(!dark); setOpen(false); }}
-                            className="w-full flex items-center gap-3 px-4 py-2.5 text-xs text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#28282E] transition text-left"
+                            className="w-full flex items-center gap-3 px-4 py-2.5 text-xs text-[#A7B5C5] hover:bg-white/5 hover:text-white transition text-left"
                         >
                             {dark
-                                ? <Sun className="w-3.5 h-3.5 text-gray-400" />
-                                : <Moon className="w-3.5 h-3.5 text-gray-400" />
+                                ? <Sun className="w-3.5 h-3.5 text-[#65A9E3]" />
+                                : <Moon className="w-3.5 h-3.5 text-[#65A9E3]" />
                             }
                             {dark ? 'Light mode' : 'Dark mode'}
                         </button>
@@ -117,13 +126,13 @@ function UserMenu({ user, dark, setDark, formatRole, roleContext }) {
                         <Link
                             href={route('profile.edit')}
                             onClick={() => setOpen(false)}
-                            className="w-full flex items-center gap-3 px-4 py-2.5 text-xs text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#28282E] transition"
+                            className="w-full flex items-center gap-3 px-4 py-2.5 text-xs text-[#A7B5C5] hover:bg-white/5 hover:text-white transition"
                         >
-                            <SlidersHorizontal className="w-3.5 h-3.5 text-gray-400" />
+                            <SlidersHorizontal className="w-3.5 h-3.5 text-[#65A9E3]" />
                             Profile Settings
                         </Link>
 
-                        <div className="border-t border-[#E8E8EC] dark:border-[#2E2E38]" />
+                        <div className="border-t border-white/10 my-0.5" />
 
                         {/* Logout */}
                         <Link
@@ -131,7 +140,7 @@ function UserMenu({ user, dark, setDark, formatRole, roleContext }) {
                             method="post"
                             as="button"
                             onClick={() => setOpen(false)}
-                            className="w-full flex items-center gap-3 px-4 py-2.5 text-xs text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition"
+                            className="w-full flex items-center gap-3 px-4 py-2.5 text-xs text-red-400 hover:bg-red-500/10 hover:text-red-300 transition"
                         >
                             <LogOut className="w-3.5 h-3.5" />
                             Log out
@@ -139,6 +148,59 @@ function UserMenu({ user, dark, setDark, formatRole, roleContext }) {
                     </div>
                 )}
             </div>
+        </div>
+    );
+}
+
+/* ─── Sidebar nav link ────────────────────────────────────────────────── */
+
+function NavItem({ item, onNavigate }) {
+    const Icon = item.icon;
+    return (
+        <Link
+            href={item.href}
+            onClick={onNavigate}
+            className={`group flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all duration-150 ${
+                item.active
+                    ? 'bg-[#4A91CC]/20 text-white font-semibold'
+                    : 'text-[#8BADC7] hover:bg-white/5 hover:text-white font-medium'
+            }`}
+        >
+            <div className="flex items-center gap-3">
+                <Icon
+                    className={`w-4 h-4 shrink-0 ${
+                        item.active ? 'text-[#65A9E3]' : 'text-[#6B8FA8] group-hover:text-[#8BADC7]'
+                    }`}
+                />
+                <span className="truncate">{item.name}</span>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+                {item.badge && (
+                    <span className="min-w-[18px] h-4 px-1.5 rounded-full bg-[#4A91CC] text-white text-[10px] font-bold flex items-center justify-center leading-none">
+                        {item.badge}
+                    </span>
+                )}
+                {item.active && (
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#65A9E3]" />
+                )}
+            </div>
+        </Link>
+    );
+}
+
+/* ─── Sidebar nav group ───────────────────────────────────────────────── */
+
+function NavGroup({ label, items, onNavigate }) {
+    const visible = items.filter((i) => i.show);
+    if (visible.length === 0) return null;
+    return (
+        <div className="space-y-0.5">
+            <div className="px-3 pt-4 pb-1 text-[10px] font-bold uppercase tracking-widest text-[#4F6D82]">
+                {label}
+            </div>
+            {visible.map((item) => (
+                <NavItem key={item.name} item={item} onNavigate={onNavigate} />
+            ))}
         </div>
     );
 }
@@ -164,14 +226,15 @@ function LayoutInner({ header, children }) {
     }, [flash?.success, flash?.error, flash?.warning]);
 
     const formatRole = (role) => {
-        if (!role) return 'User';
+        if (!role) return 'Learner';
         if (role === 'super_admin') return 'Super Admin';
         if (role === 'admin') return 'Admin';
-        if (role === 'user') return 'User';
+        if (role === 'learner') return 'Learner';
+        if (role === 'user') return 'Learner';
         return role.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
     };
 
-    const navItems = [
+    const learnerNav = [
         {
             name: 'Dashboard',
             href: route('dashboard'),
@@ -179,6 +242,30 @@ function LayoutInner({ header, children }) {
             icon: LayoutDashboard,
             show: true,
         },
+        {
+            name: 'Cyber Range',
+            href: route('learner.cyber-range'),
+            active: route().current('learner.cyber-range'),
+            icon: Crosshair,
+            show: true,
+        },
+        {
+            name: 'TALA',
+            href: route('learner.tala'),
+            active: route().current('learner.tala'),
+            icon: Sparkles,
+            show: true,
+        },
+        {
+            name: 'Glossary',
+            href: route('learner.glossary'),
+            active: route().current('learner.glossary'),
+            icon: BookOpen,
+            show: true,
+        },
+    ];
+
+    const otherNav = [
         {
             name: 'Notifications',
             href: route('notifications.index'),
@@ -188,10 +275,48 @@ function LayoutInner({ header, children }) {
             badge: unreadNotificationsCount > 0 ? (unreadNotificationsCount > 99 ? '99+' : unreadNotificationsCount) : null,
         },
         {
+            name: 'My Credentials',
+            href: route('learner.credentials'),
+            active: route().current('learner.credentials'),
+            icon: Award,
+            show: true,
+        },
+        {
+            name: 'Settings',
+            href: route('profile.edit'),
+            active: route().current('profile.edit'),
+            icon: Settings,
+            show: true,
+        },
+        {
+            name: 'FAQ',
+            href: route('learner.faq'),
+            active: route().current('learner.faq'),
+            icon: HelpCircle,
+            show: true,
+        },
+        {
+            name: 'Report a Problem',
+            href: route('learner.report'),
+            active: route().current('learner.report'),
+            icon: MessageSquareWarning,
+            show: true,
+        },
+    ];
+
+    const adminNav = [
+        {
             name: 'Accounts',
             href: route('users.index'),
             active: route().current('users.*'),
             icon: Users,
+            show: Boolean(can.manageUsers),
+        },
+        {
+            name: 'Courses',
+            href: route('courses.index'),
+            active: route().current('courses.*'),
+            icon: GraduationCap,
             show: Boolean(can.manageUsers),
         },
         {
@@ -210,79 +335,61 @@ function LayoutInner({ header, children }) {
         },
     ];
 
+    const hasAdminNav = adminNav.some((i) => i.show);
+
     return (
-        <div className="min-h-screen bg-[#FBFBFC] dark:bg-[#0D0D12] text-[#111111] dark:text-[#F8F9FD] font-sans antialiased flex">
+        <div className="min-h-screen bg-[#F4F7FB] dark:bg-[#0F1722] text-[#1F2937] dark:text-[#E8EEF5] font-sans antialiased flex">
             {/* MOBILE SIDEBAR BACKDROP */}
             {sidebarOpen && (
                 <div
                     onClick={() => setSidebarOpen(false)}
-                    className="fixed inset-0 bg-black/40 z-40 lg:hidden backdrop-blur-sm transition-opacity"
+                    className="fixed inset-0 bg-black/50 z-40 lg:hidden backdrop-blur-sm"
                 />
             )}
 
             {/* SIDEBAR */}
             <aside
-                className={`fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-[#15151A] border-r border-[#E8E8EC] dark:border-[#26262D] flex flex-col justify-between transition-transform duration-300 lg:translate-x-0 ${
+                className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#102746] dark:bg-[#0C1B2D] flex flex-col justify-between transition-transform duration-300 lg:translate-x-0 ${
                     sidebarOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
                 }`}
             >
-                <div>
+                <div className="flex flex-col min-h-0 flex-1">
                     {/* Brand Header */}
-                    <div className="h-16 px-6 flex items-center justify-between border-b border-[#E8E8EC] dark:border-[#26262D]">
+                    <div className="h-16 px-5 flex items-center justify-between border-b border-white/10 shrink-0">
                         <Link href={route('dashboard')} className="flex items-center gap-3">
                             <ApplicationLogo className="w-8 h-8" />
-                            <span className="font-bold text-base tracking-tight text-gray-900 dark:text-white">
-                                Template
+                            <div className="flex flex-col leading-tight">
+                                <span className="text-[11px] font-bold uppercase tracking-widest text-[#8BADC7]">
+                                    FusionNode
+                                </span>
+                                <span className="text-sm font-extrabold tracking-tight text-white leading-none">
+                                    ACADEMY
+                                </span>
+                            </div>
+                            <span className="ml-1 px-1.5 py-0.5 rounded text-[9px] font-bold tracking-widest bg-[#4A91CC]/20 text-[#65A9E3] border border-[#4A91CC]/30 uppercase">
+                                NEXUS
                             </span>
                         </Link>
                         <button
                             onClick={() => setSidebarOpen(false)}
-                            className="lg:hidden p-1.5 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                            className="lg:hidden p-1.5 rounded-lg text-[#8BADC7] hover:text-white hover:bg-white/10"
                         >
                             <X className="w-5 h-5" />
                         </button>
                     </div>
 
-                    {/* Navigation Links */}
-                    <div className="px-3 py-6 space-y-1">
-                        <div className="px-3 pb-2 text-[10px] font-bold uppercase tracking-wider text-gray-400 font-mono">
-                            Navigation
-                        </div>
-                        {navItems.filter(item => item.show).map((item) => {
-                            const Icon = item.icon;
-                            return (
-                                <Link
-                                    key={item.name}
-                                    href={item.href}
-                                    onClick={() => setSidebarOpen(false)}
-                                    className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 ${
-                                        item.active
-                                            ? 'bg-[#5B5FC7]/10 text-[#5B5FC7] dark:bg-[#5B5FC7]/20 dark:text-[#8A8DE2] font-semibold'
-                                            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#1F1F26] hover:text-gray-900 dark:hover:text-gray-100'
-                                    }`}
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <Icon className={`w-4 h-4 ${item.active ? 'text-[#5B5FC7] dark:text-[#8A8DE2]' : 'text-gray-400'}`} />
-                                        <span>{item.name}</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        {item.badge && (
-                                            <span className="min-w-[18px] h-4 px-1.5 rounded-full bg-[#5B5FC7] text-white text-[10px] font-bold flex items-center justify-center leading-none">
-                                                {item.badge}
-                                            </span>
-                                        )}
-                                        {item.active && (
-                                            <div className="w-1.5 h-1.5 rounded-full bg-[#5B5FC7] dark:bg-[#8A8DE2]" />
-                                        )}
-                                    </div>
-                                </Link>
-                            );
-                        })}
+                    {/* Navigation Links — scrollable */}
+                    <div className="flex-1 overflow-y-auto px-3 py-3 space-y-0.5">
+                        <NavGroup label="Learner" items={learnerNav} onNavigate={() => setSidebarOpen(false)} />
+                        {hasAdminNav && (
+                            <NavGroup label="Administration" items={adminNav} onNavigate={() => setSidebarOpen(false)} />
+                        )}
+                        <NavGroup label="Others" items={otherNav} onNavigate={() => setSidebarOpen(false)} />
                     </div>
                 </div>
 
-                {/* Bottom Section: Role View Switcher & User Menu */}
-                <div className="border-t border-[#E8E8EC] dark:border-[#26262D]">
+                {/* Bottom: Role Switcher + User Menu + Footer */}
+                <div className="shrink-0 border-t border-white/10">
                     <RoleSwitcher
                         activeRole={activeRole}
                         switchableRoles={switchableRoles}
@@ -291,6 +398,19 @@ function LayoutInner({ header, children }) {
                         isSuperAdmin={Boolean(can?.isSuperAdmin || user?.roles?.includes('super_admin'))}
                     />
                     <UserMenu user={user} dark={dark} setDark={setDark} formatRole={formatRole} roleContext={roleContext} />
+
+                    {/* Footer links */}
+                    <div className="px-5 py-3 flex items-center justify-between border-t border-white/10">
+                        <div className="flex items-center gap-3 text-[10px] text-[#4F6D82]">
+                            <span className="hover:text-[#8BADC7] cursor-pointer transition">About</span>
+                            <span className="hover:text-[#8BADC7] cursor-pointer transition">Terms</span>
+                            <span className="hover:text-[#8BADC7] cursor-pointer transition">Privacy</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 text-[10px] text-[#4F6D82]">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
+                            <span>Online</span>
+                        </div>
+                    </div>
                 </div>
             </aside>
 
@@ -302,19 +422,29 @@ function LayoutInner({ header, children }) {
                 )}
 
                 {/* Top Bar */}
-                <header className="h-16 bg-white dark:bg-[#15151A] border-b border-[#E8E8EC] dark:border-[#26262D] sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6 lg:px-8">
+                <header className="h-14 bg-white dark:bg-[#172331] border-b border-[#E2E8F0] dark:border-[#2B3A4B] sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6">
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => setSidebarOpen(true)}
-                            className="lg:hidden p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800"
+                            className="lg:hidden p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-[#1D2B3B]"
                         >
                             <Menu className="w-5 h-5" />
                         </button>
                         <div>{header}</div>
                     </div>
-                    {/* Bell */}
-                    <div className="relative">
-                        <NotificationPanel />
+                    <div className="flex items-center gap-2">
+                        {/* Theme toggle */}
+                        <button
+                            onClick={() => setDark(!dark)}
+                            className="p-2 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-[#1D2B3B] transition"
+                            title={dark ? 'Switch to light mode' : 'Switch to dark mode'}
+                        >
+                            {dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                        </button>
+                        {/* Notification Bell */}
+                        <div className="relative">
+                            <NotificationPanel />
+                        </div>
                     </div>
                 </header>
 

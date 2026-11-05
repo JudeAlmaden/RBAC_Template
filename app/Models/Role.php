@@ -29,6 +29,7 @@ class Role extends SpatieRole
     public const PROTECTED_ROLES = [
         'super_admin',
         'admin',
+        'learner',
         'user',
     ];
 

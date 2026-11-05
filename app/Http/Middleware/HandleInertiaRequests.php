@@ -60,6 +60,7 @@ class HandleInertiaRequests extends Middleware
             if ($user->isSuperAdmin()) {
                 try {
                     $switchableRoles = Role::where('is_active', true)
+                        ->where('name', '!=', 'user')
                         ->orderBy('name')
                         ->pluck('name')
                         ->all();
@@ -67,7 +68,7 @@ class HandleInertiaRequests extends Middleware
                     $switchableRoles = $user->roles->pluck('name')->all();
                 }
             } elseif ($user->roles->count() > 1) {
-                $switchableRoles = $user->roles->pluck('name')->all();
+                $switchableRoles = $user->roles->pluck('name')->reject(fn ($r) => $r === 'user')->values()->all();
             }
         }
 
