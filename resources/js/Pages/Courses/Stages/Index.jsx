@@ -14,7 +14,6 @@ export default function StagesIndex({ topic, availableSectionTypes = [], availab
 
     const form = useForm({
         section_type: 'activate',
-        layout_type: 'single_column',
         title: '',
         instructions: '',
         is_required: true,
@@ -24,7 +23,6 @@ export default function StagesIndex({ topic, availableSectionTypes = [], availab
     const openCreate = () => {
         form.setData({
             section_type: 'activate',
-            layout_type: 'single_column',
             title: 'Activate: Warm-up & Context',
             instructions: '',
             is_required: true,
@@ -48,7 +46,6 @@ export default function StagesIndex({ topic, availableSectionTypes = [], availab
         setSelectedStage(stage);
         form.setData({
             section_type: stage.section_type,
-            layout_type: stage.layout_type,
             title: stage.title,
             instructions: stage.instructions || '',
             is_required: stage.is_required,

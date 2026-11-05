@@ -39,7 +39,6 @@ function StageRow({ stage, flatIdx, totalSections, topic, onMove, onDelete, isGr
         badge: 'bg-gray-100 text-gray-700',
         desc: '',
     };
-    const layoutLabel = LAYOUT_TYPE_DETAILS[stage.layout_type]?.label || stage.layout_type;
 
     return (
         <div
@@ -116,11 +115,6 @@ function StageRow({ stage, flatIdx, totalSections, topic, onMove, onDelete, isGr
                         )}
 
                         <div className="flex items-center gap-3 text-[10px] text-gray-400 pt-1">
-                            <span className="flex items-center gap-1 font-medium">
-                                <Layout className="w-3 h-3 text-gray-400" />
-                                {layoutLabel}
-                            </span>
-                            <span>•</span>
                             <span className="flex items-center gap-1">
                                 <Boxes className="w-3 h-3 text-gray-400" />
                                 {stage.blocks_count || 0} Content Blocks

@@ -54,7 +54,7 @@ export default function ModuleTopicList({
                                     <div className="min-w-0">
                                         <div className="flex items-center gap-2">
                                             <span className="font-semibold text-xs text-gray-900 dark:text-white group-hover/topic:text-[#4A91CC] transition truncate">
-                                                {currentIndex + 1}.{tIdx + 1} {t.title}
+                                                {t.title}
                                             </span>
                                             <span
                                                 className={`inline-flex items-center px-1.5 py-0.2 rounded text-[9px] font-semibold ${

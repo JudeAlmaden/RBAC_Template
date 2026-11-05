@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, router } from '@inertiajs/react';
 import {
+    Folder,
     FolderPlus,
     Layers,
     Plus,
@@ -89,8 +90,8 @@ export default function CourseCurriculumTab({
                                                 <ChevronRight className="w-4 h-4" />
                                             )}
                                         </button>
-                                        <div className="w-6 h-6 rounded bg-[#4A91CC]/10 dark:bg-[#4A91CC]/20 flex items-center justify-center font-bold text-xs text-[#4A91CC] shrink-0">
-                                            {mIdx + 1}
+                                        <div className="w-6 h-6 rounded bg-[#4A91CC]/10 dark:bg-[#4A91CC]/20 flex items-center justify-center shrink-0">
+                                            <Folder className="w-3.5 h-3.5 text-[#4A91CC]" />
                                         </div>
                                         <div className="min-w-0">
                                             <div className="flex items-center gap-2">
@@ -182,7 +183,7 @@ export default function CourseCurriculumTab({
                                                         <div className="min-w-0">
                                                             <div className="flex items-center gap-2">
                                                                 <span className="font-semibold text-xs text-gray-900 dark:text-white truncate group-hover/topic:text-[#4A91CC] transition">
-                                                                    {mIdx + 1}.{tIdx + 1} {t.title}
+                                                                    {t.title}
                                                                 </span>
                                                                 <span
                                                                     className={`inline-flex items-center px-1.5 py-0.2 rounded text-[9px] font-semibold ${

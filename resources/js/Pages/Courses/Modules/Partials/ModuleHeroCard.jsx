@@ -25,8 +25,8 @@ export default function ModuleHeroCard({
         <div className="bg-white dark:bg-[#15151A] rounded-xl border border-[#E8E8EC] dark:border-[#26262D] p-6 shadow-xs">
             <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
                 <div className="flex items-start gap-4">
-                    <div className="w-14 h-14 rounded-xl bg-[#4A91CC]/10 dark:bg-[#4A91CC]/20 flex items-center justify-center font-bold text-lg text-[#4A91CC] shrink-0">
-                        {currentIndex + 1}
+                    <div className="w-14 h-14 rounded-xl bg-[#4A91CC]/10 dark:bg-[#4A91CC]/20 flex items-center justify-center shrink-0">
+                        <Folder className="w-7 h-7 text-[#4A91CC] dark:text-[#6BA3D6]" />
                     </div>
                     <div className="space-y-1">
                         <div className="flex flex-wrap items-center gap-2.5">

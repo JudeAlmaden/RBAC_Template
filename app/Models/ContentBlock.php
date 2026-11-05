@@ -12,7 +12,7 @@ class ContentBlock extends Model
     use HasFactory;
 
     protected $fillable = [
-        'topic_section_id',
+        'section_page_id',
         'block_type',
         'display_variant',
         'layout_slot',
@@ -37,11 +37,11 @@ class ContentBlock extends Model
     }
 
     /**
-     * The parent topic section.
+     * The parent container page.
      */
-    public function section(): BelongsTo
+    public function page(): BelongsTo
     {
-        return $this->belongsTo(TopicSection::class, 'topic_section_id');
+        return $this->belongsTo(SectionPage::class, 'section_page_id');
     }
 
     /**

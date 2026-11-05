@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class TopicSection extends Model
@@ -16,7 +17,6 @@ class TopicSection extends Model
     protected $fillable = [
         'topic_id',
         'section_type',
-        'layout_type',
         'title',
         'instructions',
         'content',
@@ -53,11 +53,19 @@ class TopicSection extends Model
     }
 
     /**
-     * Normalized display content blocks within this section.
+     * Container pages within this stage.
      */
-    public function blocks(): HasMany
+    public function pages(): HasMany
     {
-        return $this->hasMany(ContentBlock::class)->orderBy('position');
+        return $this->hasMany(SectionPage::class, 'topic_section_id')->orderBy('position');
+    }
+
+    /**
+     * Normalized display content blocks across all pages within this section.
+     */
+    public function blocks(): HasManyThrough
+    {
+        return $this->hasManyThrough(ContentBlock::class, SectionPage::class, 'topic_section_id', 'section_page_id');
     }
 
     /**
@@ -82,14 +90,6 @@ class TopicSection extends Model
     public function scopeOfType(Builder $query, string $sectionType): Builder
     {
         return $query->where('section_type', $sectionType);
-    }
-
-    /**
-     * Scope to filter by layout type.
-     */
-    public function scopeWithLayout(Builder $query, string $layoutType): Builder
-    {
-        return $query->where('layout_type', $layoutType);
     }
 
     /**

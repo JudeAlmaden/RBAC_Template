@@ -76,12 +76,11 @@ return new class extends Migration
             $table->unique(['module_id', 'slug']);
         });
 
-        // 5. Topic Sections
+        // 5. Topic Sections (stages)
         Schema::create('topic_sections', function (Blueprint $table) {
             $table->id();
             $table->foreignId('topic_id')->constrained('topics')->cascadeOnDelete();
             $table->string('section_type', 64);
-            $table->string('layout_type', 64)->default('single_column')->index();
             $table->string('title');
             $table->text('instructions')->nullable();
             $table->json('content')->nullable();
@@ -96,10 +95,25 @@ return new class extends Migration
             $table->index(['topic_id', 'section_type']);
         });
 
-        // 6. Content Blocks (Normalized display items)
-        Schema::create('content_blocks', function (Blueprint $table) {
+        // 6. Section Pages (containers within a stage — each has its own layout)
+        Schema::create('section_pages', function (Blueprint $table) {
             $table->id();
             $table->foreignId('topic_section_id')->constrained('topic_sections')->cascadeOnDelete();
+            $table->string('title')->nullable();
+            $table->string('layout_type', 64)->default('single_column')->index();
+            $table->unsignedInteger('position')->default(0);
+            $table->boolean('is_visible')->default(true);
+            $table->json('settings')->nullable();
+            $table->timestamps();
+
+            $table->unique(['topic_section_id', 'position']);
+            $table->index(['topic_section_id', 'layout_type']);
+        });
+
+        // 7. Content Blocks (components within a page)
+        Schema::create('content_blocks', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('section_page_id')->constrained('section_pages')->cascadeOnDelete();
             $table->string('block_type', 64)->index();
             $table->string('display_variant', 64)->default('default');
             $table->string('layout_slot', 32)->default('main');
@@ -109,11 +123,11 @@ return new class extends Migration
             $table->boolean('is_visible')->default(true);
             $table->timestamps();
 
-            $table->unique(['topic_section_id', 'position']);
-            $table->index(['topic_section_id', 'layout_slot']);
+            $table->unique(['section_page_id', 'position']);
+            $table->index(['section_page_id', 'layout_slot']);
         });
 
-        // 7. Learning Activities
+        // 8. Learning Activities
         Schema::create('learning_activities', function (Blueprint $table) {
             $table->id();
             $table->foreignId('topic_section_id')->constrained('topic_sections')->cascadeOnDelete();
@@ -136,7 +150,7 @@ return new class extends Migration
             $table->index(['topic_section_id', 'activity_type']);
         });
 
-        // 8. Activity Questions
+        // 9. Activity Questions
         Schema::create('activity_questions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('learning_activity_id')->constrained('learning_activities')->cascadeOnDelete();
@@ -164,6 +178,7 @@ return new class extends Migration
         Schema::dropIfExists('activity_questions');
         Schema::dropIfExists('learning_activities');
         Schema::dropIfExists('content_blocks');
+        Schema::dropIfExists('section_pages');
         Schema::dropIfExists('topic_sections');
         Schema::dropIfExists('topics');
         Schema::dropIfExists('modules');

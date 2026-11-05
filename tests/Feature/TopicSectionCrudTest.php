@@ -86,7 +86,6 @@ class TopicSectionCrudTest extends TestCase
         // 1. Store
         $storeResponse = $this->actingAs($this->admin)->post(route('topics.stages.store', $this->topic->id), [
             'section_type' => 'encode',
-            'layout_type' => 'split_two_column',
             'title' => 'Encode: Volatility Framework Basics',
             'instructions' => 'Understand process memory dumping.',
             'is_required' => true,
@@ -97,7 +96,6 @@ class TopicSectionCrudTest extends TestCase
         $this->assertDatabaseHas('topic_sections', [
             'topic_id' => $this->topic->id,
             'section_type' => 'encode',
-            'layout_type' => 'split_two_column',
             'title' => 'Encode: Volatility Framework Basics',
             'position' => 1,
             'is_required' => true,
@@ -106,10 +104,16 @@ class TopicSectionCrudTest extends TestCase
 
         $stage = TopicSection::where('topic_id', $this->topic->id)->firstOrFail();
 
+        // Check that initial page container was created
+        $this->assertDatabaseHas('section_pages', [
+            'topic_section_id' => $stage->id,
+            'position' => 1,
+            'layout_type' => 'single_column',
+        ]);
+
         // 2. Update
         $updateResponse = $this->actingAs($this->admin)->put(route('topics.stages.update', [$this->topic->id, $stage->id]), [
             'section_type' => 'encode',
-            'layout_type' => 'cinema_focus',
             'title' => 'Encode: Volatility 3 Analysis',
             'instructions' => 'Updated instructions.',
             'is_required' => true,
@@ -119,7 +123,6 @@ class TopicSectionCrudTest extends TestCase
         $updateResponse->assertRedirect();
         $this->assertDatabaseHas('topic_sections', [
             'id' => $stage->id,
-            'layout_type' => 'cinema_focus',
             'title' => 'Encode: Volatility 3 Analysis',
             'is_published' => false,
         ]);
@@ -130,6 +133,9 @@ class TopicSectionCrudTest extends TestCase
         $deleteResponse->assertRedirect();
         $this->assertDatabaseMissing('topic_sections', [
             'id' => $stage->id,
+        ]);
+        $this->assertDatabaseMissing('section_pages', [
+            'topic_section_id' => $stage->id,
         ]);
     }
 
@@ -164,14 +170,12 @@ class TopicSectionCrudTest extends TestCase
     {
         $stage1 = $this->topic->sections()->create([
             'section_type' => 'activate',
-            'layout_type' => 'single_column',
             'title' => 'Stage 1',
             'position' => 1,
         ]);
 
         $stage2 = $this->topic->sections()->create([
             'section_type' => 'encode',
-            'layout_type' => 'single_column',
             'title' => 'Stage 2',
             'position' => 2,
         ]);
@@ -185,5 +189,54 @@ class TopicSectionCrudTest extends TestCase
 
         $this->assertEquals(1, $stage2->fresh()->position);
         $this->assertEquals(2, $stage1->fresh()->position);
+    }
+
+    public function test_admin_can_manage_section_pages(): void
+    {
+        $stage = $this->topic->sections()->create([
+            'section_type' => 'encode',
+            'title' => 'Encode Stage',
+            'position' => 1,
+        ]);
+
+        // 1. Store Page
+        $storeResponse = $this->actingAs($this->admin)->post(route('stages.pages.store', $stage->id), [
+            'title' => 'Concept Overview',
+            'layout_type' => 'split_two_column',
+            'is_visible' => true,
+        ]);
+
+        $storeResponse->assertRedirect();
+        $this->assertDatabaseHas('section_pages', [
+            'topic_section_id' => $stage->id,
+            'title' => 'Concept Overview',
+            'layout_type' => 'split_two_column',
+            'position' => 1,
+        ]);
+
+        $page = $stage->pages()->firstOrFail();
+
+        // 2. Update Page
+        $updateResponse = $this->actingAs($this->admin)->put(route('stages.pages.update', [$stage->id, $page->id]), [
+            'title' => 'Updated Overview',
+            'layout_type' => 'cinema_focus',
+            'is_visible' => false,
+        ]);
+
+        $updateResponse->assertRedirect();
+        $this->assertDatabaseHas('section_pages', [
+            'id' => $page->id,
+            'title' => 'Updated Overview',
+            'layout_type' => 'cinema_focus',
+            'is_visible' => false,
+        ]);
+
+        // 3. Delete Page
+        $deleteResponse = $this->actingAs($this->admin)->delete(route('stages.pages.destroy', [$stage->id, $page->id]));
+
+        $deleteResponse->assertRedirect();
+        $this->assertDatabaseMissing('section_pages', [
+            'id' => $page->id,
+        ]);
     }
 }

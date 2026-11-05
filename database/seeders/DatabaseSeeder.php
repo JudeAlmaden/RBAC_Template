@@ -153,5 +153,8 @@ class DatabaseSeeder extends Seeder
                 'ip_address' => '127.0.0.1',
             ]
         );
+
+        // 7. Seed Curriculum: CYB-100, CSS-200, THR-300 with Modules & Stages
+        $this->call(CourseCurriculumSeeder::class);
     }
 }

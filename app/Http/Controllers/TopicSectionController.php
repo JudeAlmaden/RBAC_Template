@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SectionPage;
 use App\Models\Topic;
 use App\Models\TopicSection;
 use Illuminate\Http\RedirectResponse;
@@ -24,12 +25,7 @@ class TopicSectionController extends Controller
         'custom',
     ];
 
-    public const VALID_LAYOUT_TYPES = [
-        'single_column',
-        'split_two_column',
-        'cinema_focus',
-        'tabbed_stepper',
-    ];
+    public const VALID_LAYOUT_TYPES = SectionPage::VALID_LAYOUT_TYPES;
 
     /**
      * Display the dedicated view for a single stage.
@@ -44,6 +40,9 @@ class TopicSectionController extends Controller
 
         $topic->load(['module.course:id,title,slug']);
 
+        $stage->load([
+            'pages' => fn ($q) => $q->orderBy('position')->withCount('blocks'),
+        ]);
         $stage->loadCount(['blocks', 'activities']);
 
         $siblingStages = $topic->sections()
@@ -74,7 +73,6 @@ class TopicSectionController extends Controller
                 'id' => $stage->id,
                 'topic_id' => $stage->topic_id,
                 'section_type' => $stage->section_type,
-                'layout_type' => $stage->layout_type,
                 'title' => $stage->title,
                 'instructions' => $stage->instructions,
                 'position' => $stage->position,
@@ -82,6 +80,15 @@ class TopicSectionController extends Controller
                 'is_published' => (bool) $stage->is_published,
                 'blocks_count' => $stage->blocks_count,
                 'activities_count' => $stage->activities_count,
+                'pages' => $stage->pages->map(fn (SectionPage $p) => [
+                    'id' => $p->id,
+                    'topic_section_id' => $p->topic_section_id,
+                    'title' => $p->title,
+                    'layout_type' => $p->layout_type,
+                    'position' => $p->position,
+                    'is_visible' => (bool) $p->is_visible,
+                    'blocks_count' => $p->blocks_count,
+                ]),
             ],
             'prevStage' => $prevStage ? [
                 'id' => $prevStage->id,
@@ -131,7 +138,6 @@ class TopicSectionController extends Controller
                     'id' => $s->id,
                     'topic_id' => $s->topic_id,
                     'section_type' => $s->section_type,
-                    'layout_type' => $s->layout_type,
                     'title' => $s->title,
                     'instructions' => $s->instructions,
                     'position' => $s->position,
@@ -155,7 +161,6 @@ class TopicSectionController extends Controller
 
         $validated = $request->validate([
             'section_type' => ['required', 'string', Rule::in(self::VALID_SECTION_TYPES)],
-            'layout_type' => ['required', 'string', Rule::in(self::VALID_LAYOUT_TYPES)],
             'title' => ['required', 'string', 'max:255'],
             'instructions' => ['nullable', 'string', 'max:5000'],
             'is_required' => ['boolean'],
@@ -164,14 +169,21 @@ class TopicSectionController extends Controller
 
         $maxPosition = (int) $topic->sections()->max('position');
 
-        $topic->sections()->create([
+        $stage = $topic->sections()->create([
             'section_type' => $validated['section_type'],
-            'layout_type' => $validated['layout_type'],
             'title' => $validated['title'],
             'instructions' => $validated['instructions'] ?? null,
             'position' => $maxPosition + 1,
             'is_required' => $validated['is_required'] ?? true,
             'is_published' => $validated['is_published'] ?? false,
+        ]);
+
+        // Automatically provision an initial single-column page container for the new stage
+        $stage->pages()->create([
+            'title' => 'Page 1',
+            'layout_type' => 'single_column',
+            'position' => 1,
+            'is_visible' => true,
         ]);
 
         return back()->with('success', "Stage '{$validated['title']}' added successfully.");
@@ -190,7 +202,6 @@ class TopicSectionController extends Controller
 
         $validated = $request->validate([
             'section_type' => ['required', 'string', Rule::in(self::VALID_SECTION_TYPES)],
-            'layout_type' => ['required', 'string', Rule::in(self::VALID_LAYOUT_TYPES)],
             'title' => ['required', 'string', 'max:255'],
             'instructions' => ['nullable', 'string', 'max:5000'],
             'is_required' => ['boolean'],
@@ -261,22 +272,22 @@ class TopicSectionController extends Controller
 
         $presets = [
             'standard_pedagogical' => [
-                ['section_type' => 'activate', 'layout_type' => 'single_column', 'title' => 'Activate: Warm-up & Context', 'instructions' => 'Prime your prior knowledge with a quick review.'],
-                ['section_type' => 'encode', 'layout_type' => 'split_two_column', 'title' => 'Encode: Concept Walkthrough', 'instructions' => 'Study the core concept principles and guided media.'],
-                ['section_type' => 'retrieve', 'layout_type' => 'single_column', 'title' => 'Retrieve: Active Recall Check', 'instructions' => 'Test your immediate retention with low-stakes comprehension checks.'],
-                ['section_type' => 'anchor', 'layout_type' => 'split_two_column', 'title' => 'Anchor: Real-World Scenario', 'instructions' => 'Apply concepts to a realistic industry scenario.'],
-                ['section_type' => 'deepen', 'layout_type' => 'single_column', 'title' => 'Deepen: Advanced Challenges & Synthesis', 'instructions' => 'Explore edge cases, advanced defense variations, and architectural tradeoffs.'],
-                ['section_type' => 'assessment', 'layout_type' => 'single_column', 'title' => 'Assessment: Mastery Checkpoint', 'instructions' => 'Verify mastery of this topic before continuing.'],
+                ['section_type' => 'activate', 'default_layout' => 'single_column', 'title' => 'Activate: Warm-up & Context', 'instructions' => 'Prime your prior knowledge with a quick review.'],
+                ['section_type' => 'encode', 'default_layout' => 'split_two_column', 'title' => 'Encode: Concept Walkthrough', 'instructions' => 'Study the core concept principles and guided media.'],
+                ['section_type' => 'retrieve', 'default_layout' => 'single_column', 'title' => 'Retrieve: Active Recall Check', 'instructions' => 'Test your immediate retention with low-stakes comprehension checks.'],
+                ['section_type' => 'anchor', 'default_layout' => 'split_two_column', 'title' => 'Anchor: Real-World Scenario', 'instructions' => 'Apply concepts to a realistic industry scenario.'],
+                ['section_type' => 'deepen', 'default_layout' => 'single_column', 'title' => 'Deepen: Advanced Challenges & Synthesis', 'instructions' => 'Explore edge cases, advanced defense variations, and architectural tradeoffs.'],
+                ['section_type' => 'assessment', 'default_layout' => 'single_column', 'title' => 'Assessment: Mastery Checkpoint', 'instructions' => 'Verify mastery of this topic before continuing.'],
             ],
             'hands_on_lab' => [
-                ['section_type' => 'activate', 'layout_type' => 'single_column', 'title' => 'Activate: Lab Objectives', 'instructions' => 'Review the lab environment setup and requirements.'],
-                ['section_type' => 'encode', 'layout_type' => 'split_two_column', 'title' => 'Encode: Guided Walkthrough', 'instructions' => 'Follow the step-by-step instructional guide.'],
-                ['section_type' => 'lab', 'layout_type' => 'cinema_focus', 'title' => 'Lab: Hands-on Execution', 'instructions' => 'Perform the exercise in the interactive sandbox or terminal.'],
-                ['section_type' => 'deepen', 'layout_type' => 'single_column', 'title' => 'Deepen: Challenge & Reflection', 'instructions' => 'Analyze edge cases and review defense recommendations.'],
+                ['section_type' => 'activate', 'default_layout' => 'single_column', 'title' => 'Activate: Lab Objectives', 'instructions' => 'Review the lab environment setup and requirements.'],
+                ['section_type' => 'encode', 'default_layout' => 'split_two_column', 'title' => 'Encode: Guided Walkthrough', 'instructions' => 'Follow the step-by-step instructional guide.'],
+                ['section_type' => 'lab', 'default_layout' => 'cinema_focus', 'title' => 'Lab: Hands-on Execution', 'instructions' => 'Perform the exercise in the interactive sandbox or terminal.'],
+                ['section_type' => 'deepen', 'default_layout' => 'single_column', 'title' => 'Deepen: Challenge & Reflection', 'instructions' => 'Analyze edge cases and review defense recommendations.'],
             ],
             'assessment_only' => [
-                ['section_type' => 'encode', 'layout_type' => 'single_column', 'title' => 'Encode: Overview & Instructions', 'instructions' => 'Review evaluation guidelines and grading rubric.'],
-                ['section_type' => 'assessment', 'layout_type' => 'single_column', 'title' => 'Assessment: Summative Evaluation', 'instructions' => 'Complete all required evaluation questions.'],
+                ['section_type' => 'encode', 'default_layout' => 'single_column', 'title' => 'Encode: Overview & Instructions', 'instructions' => 'Review evaluation guidelines and grading rubric.'],
+                ['section_type' => 'assessment', 'default_layout' => 'single_column', 'title' => 'Assessment: Summative Evaluation', 'instructions' => 'Complete all required evaluation questions.'],
             ],
         ];
 
@@ -286,14 +297,21 @@ class TopicSectionController extends Controller
         DB::transaction(function () use ($topic, $stages, &$currentMax) {
             foreach ($stages as $stageData) {
                 $currentMax++;
-                $topic->sections()->create([
+                $stage = $topic->sections()->create([
                     'section_type' => $stageData['section_type'],
-                    'layout_type' => $stageData['layout_type'],
                     'title' => $stageData['title'],
                     'instructions' => $stageData['instructions'],
                     'position' => $currentMax,
                     'is_required' => true,
                     'is_published' => false,
+                ]);
+
+                // Create initial page container for the preset stage
+                $stage->pages()->create([
+                    'title' => 'Page 1',
+                    'layout_type' => $stageData['default_layout'] ?? 'single_column',
+                    'position' => 1,
+                    'is_visible' => true,
                 ]);
             }
         });

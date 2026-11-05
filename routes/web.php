@@ -10,6 +10,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RoleSwitchController;
+use App\Http\Controllers\SectionPageController;
 use App\Http\Controllers\TopicController;
 use App\Http\Controllers\TopicSectionController;
 use App\Http\Controllers\UserController;
@@ -75,6 +76,12 @@ Route::middleware(['auth', 'verified', 'force.password.change'])->group(function
     Route::delete('topics/{topic}/stages/{stage}', [TopicSectionController::class, 'destroy'])->name('topics.stages.destroy');
     Route::post('topics/{topic}/stages/reorder', [TopicSectionController::class, 'reorder'])->name('topics.stages.reorder');
     Route::post('topics/{topic}/stages/preset', [TopicSectionController::class, 'applyPreset'])->name('topics.stages.preset');
+
+    // Stage Container Pages
+    Route::post('stages/{stage}/pages', [SectionPageController::class, 'store'])->name('stages.pages.store');
+    Route::put('stages/{stage}/pages/{page}', [SectionPageController::class, 'update'])->name('stages.pages.update');
+    Route::delete('stages/{stage}/pages/{page}', [SectionPageController::class, 'destroy'])->name('stages.pages.destroy');
+    Route::post('stages/{stage}/pages/reorder', [SectionPageController::class, 'reorder'])->name('stages.pages.reorder');
 
     // Friendly Aliases for FAQ and Settings
     Route::get('/faq', fn () => redirect()->route('learner.faq'))->name('faq');
