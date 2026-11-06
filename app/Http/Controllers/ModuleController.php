@@ -17,7 +17,7 @@ class ModuleController extends Controller
      */
     public function show(Request $request, Course $course, Module $module): Response
     {
-        $this->authorizeAdmin($request);
+        $this->authorizeCurriculumEdit($request);
 
         if ((int) $module->course_id !== (int) $course->id) {
             abort(404);
@@ -77,7 +77,7 @@ class ModuleController extends Controller
      */
     public function store(Request $request, Course $course): RedirectResponse
     {
-        $this->authorizeAdmin($request);
+        $this->authorizeCurriculumEdit($request);
 
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
@@ -102,7 +102,7 @@ class ModuleController extends Controller
      */
     public function update(Request $request, Course $course, Module $module): RedirectResponse
     {
-        $this->authorizeAdmin($request);
+        $this->authorizeCurriculumEdit($request);
 
         if ((int) $module->course_id !== (int) $course->id) {
             abort(404);
@@ -124,7 +124,7 @@ class ModuleController extends Controller
      */
     public function destroy(Request $request, Course $course, Module $module): RedirectResponse
     {
-        $this->authorizeAdmin($request);
+        $this->authorizeCurriculumEdit($request);
 
         if ((int) $module->course_id !== (int) $course->id) {
             abort(404);
@@ -141,7 +141,7 @@ class ModuleController extends Controller
      */
     public function reorder(Request $request, Course $course): RedirectResponse
     {
-        $this->authorizeAdmin($request);
+        $this->authorizeCurriculumEdit($request);
 
         $validated = $request->validate([
             'module_ids' => ['required', 'array'],
@@ -169,10 +169,9 @@ class ModuleController extends Controller
     /**
      * Authorize that the current user is an admin or super admin.
      */
-    private function authorizeAdmin(Request $request): void
+    private function authorizeCurriculumEdit(Request $request): void
     {
-        $user = $request->user();
-        if (! $user->isAdmin() && ! $user->isSuperAdmin()) {
+        if (! $request->user()?->can('manage curriculum')) {
             abort(403, 'Unauthorized.');
         }
     }

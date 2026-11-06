@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ContentBlock;
 use App\Models\SectionPage;
 use App\Models\Topic;
 use App\Models\TopicSection;
@@ -32,7 +33,7 @@ class TopicSectionController extends Controller
      */
     public function show(Request $request, Topic $topic, TopicSection $stage): Response
     {
-        $this->authorizeAdmin($request);
+        $this->authorizeCurriculumEdit($request);
 
         if ((int) $stage->topic_id !== (int) $topic->id) {
             abort(404);
@@ -41,7 +42,9 @@ class TopicSectionController extends Controller
         $topic->load(['module.course:id,title,slug']);
 
         $stage->load([
-            'pages' => fn ($q) => $q->orderBy('position')->withCount('blocks'),
+            'pages' => fn ($q) => $q->orderBy('position')
+                ->with(['blocks' => fn ($bq) => $bq->orderBy('position')])
+                ->withCount('blocks'),
         ]);
         $stage->loadCount(['blocks', 'activities']);
 
@@ -88,6 +91,17 @@ class TopicSectionController extends Controller
                     'position' => $p->position,
                     'is_visible' => (bool) $p->is_visible,
                     'blocks_count' => $p->blocks_count,
+                    'blocks' => $p->blocks->map(fn (ContentBlock $b) => [
+                        'id' => $b->id,
+                        'section_page_id' => $b->section_page_id,
+                        'block_type' => $b->block_type,
+                        'display_variant' => $b->display_variant,
+                        'layout_slot' => $b->layout_slot,
+                        'content' => $b->content,
+                        'media_id' => $b->media_id,
+                        'position' => $b->position,
+                        'is_visible' => (bool) $b->is_visible,
+                    ]),
                 ]),
             ],
             'prevStage' => $prevStage ? [
@@ -110,7 +124,7 @@ class TopicSectionController extends Controller
      */
     public function index(Request $request, Topic $topic): Response
     {
-        $this->authorizeAdmin($request);
+        $this->authorizeCurriculumEdit($request);
 
         $topic->load([
             'module.course:id,title,slug',
@@ -157,7 +171,7 @@ class TopicSectionController extends Controller
      */
     public function store(Request $request, Topic $topic): RedirectResponse
     {
-        $this->authorizeAdmin($request);
+        $this->authorizeCurriculumEdit($request);
 
         $validated = $request->validate([
             'section_type' => ['required', 'string', Rule::in(self::VALID_SECTION_TYPES)],
@@ -194,7 +208,7 @@ class TopicSectionController extends Controller
      */
     public function update(Request $request, Topic $topic, TopicSection $stage): RedirectResponse
     {
-        $this->authorizeAdmin($request);
+        $this->authorizeCurriculumEdit($request);
 
         if ((int) $stage->topic_id !== (int) $topic->id) {
             abort(404);
@@ -218,7 +232,7 @@ class TopicSectionController extends Controller
      */
     public function destroy(Request $request, Topic $topic, TopicSection $stage): RedirectResponse
     {
-        $this->authorizeAdmin($request);
+        $this->authorizeCurriculumEdit($request);
 
         if ((int) $stage->topic_id !== (int) $topic->id) {
             abort(404);
@@ -235,7 +249,7 @@ class TopicSectionController extends Controller
      */
     public function reorder(Request $request, Topic $topic): RedirectResponse
     {
-        $this->authorizeAdmin($request);
+        $this->authorizeCurriculumEdit($request);
 
         $validated = $request->validate([
             'stage_ids' => ['required', 'array'],
@@ -264,7 +278,7 @@ class TopicSectionController extends Controller
      */
     public function applyPreset(Request $request, Topic $topic): RedirectResponse
     {
-        $this->authorizeAdmin($request);
+        $this->authorizeCurriculumEdit($request);
 
         $validated = $request->validate([
             'preset' => ['required', 'string', Rule::in(['standard_pedagogical', 'hands_on_lab', 'assessment_only'])],
@@ -322,10 +336,9 @@ class TopicSectionController extends Controller
     /**
      * Authorize that the current user is an admin or super admin.
      */
-    private function authorizeAdmin(Request $request): void
+    private function authorizeCurriculumEdit(Request $request): void
     {
-        $user = $request->user();
-        if (! $user->isAdmin() && ! $user->isSuperAdmin()) {
+        if (! $request->user()?->can('manage curriculum')) {
             abort(403, 'Unauthorized.');
         }
     }

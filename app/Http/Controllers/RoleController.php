@@ -32,6 +32,17 @@ class RoleController extends Controller
             ],
             'Roles & Permissions' => [
                 'manage roles' => 'Access roles & permissions management, create custom roles, and assign permissions',
+                'assign roles' => 'Assign roles to users when creating or editing accounts',
+            ],
+            'Course Management' => [
+                'manage courses' => 'Create, edit, publish, and archive courses, and assign learners to them',
+            ],
+            'Curriculum & Content' => [
+                'manage curriculum' => 'Build modules, topics, stages, pages, and content blocks',
+            ],
+            'Audit & Platform' => [
+                'view logs' => 'View and export platform activity and audit logs',
+                'view admin dashboard' => 'View the administrator overview dashboard',
             ],
         ];
 
@@ -236,7 +247,16 @@ class RoleController extends Controller
 
         // Safeguard super_admin: cannot remove core super admin permissions
         if ($role->name === 'super_admin') {
-            $essential = ['manage users', 'manage admins', 'promote super admin', 'transfer super admin', 'manage roles'];
+            $essential = [
+                'manage users',
+                'manage admins',
+                'promote super admin',
+                'transfer super admin',
+                'manage roles',
+                'manage courses',
+                'manage curriculum',
+                'view admin dashboard',
+            ];
             $newPermissions = array_unique(array_merge($newPermissions, $essential));
         }
 

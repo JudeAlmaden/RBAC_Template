@@ -28,6 +28,9 @@ class DatabaseSeeder extends Seeder
         $manageRoles = Permission::firstOrCreate(['name' => 'manage roles']);
         $assignRoles = Permission::firstOrCreate(['name' => 'assign roles']);
         $viewLogs = Permission::firstOrCreate(['name' => 'view logs']);
+        $manageCourses = Permission::firstOrCreate(['name' => 'manage courses']);
+        $manageCurriculum = Permission::firstOrCreate(['name' => 'manage curriculum']);
+        $viewAdminDashboard = Permission::firstOrCreate(['name' => 'view admin dashboard']);
 
         // 2. Create Roles and sync permissions
         $superAdminRole = Role::firstOrCreate(['name' => 'super_admin']);
@@ -41,6 +44,9 @@ class DatabaseSeeder extends Seeder
             $manageRoles,
             $assignRoles,
             $viewLogs,
+            $manageCourses,
+            $manageCurriculum,
+            $viewAdminDashboard,
         ]);
 
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
@@ -48,6 +54,9 @@ class DatabaseSeeder extends Seeder
             $manageUsers,
             $assignRoles,
             $viewLogs,
+            $manageCourses,
+            $manageCurriculum,
+            $viewAdminDashboard,
         ]);
 
         $learnerRole = Role::firstOrCreate(['name' => 'learner']);

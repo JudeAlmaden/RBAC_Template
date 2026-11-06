@@ -11,6 +11,49 @@ class ContentBlock extends Model
 {
     use HasFactory;
 
+    /**
+     * Canonical block types available in the stage builder palette.
+     */
+    public const VALID_BLOCK_TYPES = [
+        'rich_text',
+        'video',
+        'audio',
+        'code',
+        'callout',
+        'download',
+        'embed',
+    ];
+
+    /**
+     * Display variants that control how a block renders inside its layout.
+     */
+    public const VALID_DISPLAY_VARIANTS = [
+        'default',
+        'card',
+        'banner',
+        'hero',
+        'accordion',
+        'callout_tip',
+        'heading',
+        'divider',
+        'terminal',
+        'objectives',
+        'checklist',
+        'table',
+        'steps',
+    ];
+
+    /**
+     * Layout slots a block can occupy within its parent page layout.
+     */
+    public const VALID_LAYOUT_SLOTS = [
+        'main',
+        'left',
+        'right',
+        'sidebar',
+        'full',
+    ];
+
     protected $fillable = [
         'section_page_id',
         'block_type',

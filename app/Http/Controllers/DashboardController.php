@@ -16,7 +16,7 @@ class DashboardController extends Controller
         $enrollments = null;
 
         if ($user->isLearner() && ! $user->isAdmin() && ! $user->isSuperAdmin()) {
-            $enrollments = CourseEnrollment::with(['course:id,title,description,status', 'assignment:id,due_at'])
+            $enrollments = CourseEnrollment::with(['course:id,title,slug,description,status', 'assignment:id,due_at'])
                 ->where('user_id', $user->id)
                 ->whereHas('course', fn ($q) => $q->where('status', 'published'))
                 ->orderBy('enrolled_at', 'desc')
@@ -24,6 +24,7 @@ class DashboardController extends Controller
                 ->map(fn (CourseEnrollment $enrollment) => [
                     'id' => $enrollment->id,
                     'course_id' => $enrollment->course_id,
+                    'course_slug' => $enrollment->course?->slug,
                     'course_title' => $enrollment->course?->title,
                     'course_description' => $enrollment->course?->description,
                     'status' => $enrollment->status,

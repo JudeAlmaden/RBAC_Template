@@ -11,6 +11,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RoleSwitchController;
 use App\Http\Controllers\SectionPageController;
+use App\Http\Controllers\StageBuilderController;
 use App\Http\Controllers\TopicController;
 use App\Http\Controllers\TopicSectionController;
 use App\Http\Controllers\UserController;
@@ -33,6 +34,12 @@ Route::middleware(['auth', 'verified', 'force.password.change'])->group(function
     // Learner Portal Routes
     Route::prefix('learner')->name('learner.')->group(function () {
         Route::get('/dashboard', [LearnerController::class, 'dashboard'])->name('dashboard');
+
+        // Course Curriculum Drill-down
+        Route::get('/courses/{course}', [LearnerController::class, 'course'])->name('courses.show');
+        Route::get('/courses/{course}/modules/{module}', [LearnerController::class, 'module'])->name('modules.show');
+        Route::get('/courses/{course}/modules/{module}/topics/{topic}', [LearnerController::class, 'topic'])->name('topics.show');
+
         Route::get('/cyber-range', [LearnerController::class, 'cyberRange'])->name('cyber-range');
         Route::get('/glossary', [LearnerController::class, 'glossary'])->name('glossary');
         Route::get('/credentials', [LearnerController::class, 'credentials'])->name('credentials');
@@ -82,6 +89,9 @@ Route::middleware(['auth', 'verified', 'force.password.change'])->group(function
     Route::put('stages/{stage}/pages/{page}', [SectionPageController::class, 'update'])->name('stages.pages.update');
     Route::delete('stages/{stage}/pages/{page}', [SectionPageController::class, 'destroy'])->name('stages.pages.destroy');
     Route::post('stages/{stage}/pages/reorder', [SectionPageController::class, 'reorder'])->name('stages.pages.reorder');
+
+    // Stage Builder (Figma-style page/slide + component persistence)
+    Route::put('stages/{stage}/builder', [StageBuilderController::class, 'save'])->name('stages.builder.save');
 
     // Friendly Aliases for FAQ and Settings
     Route::get('/faq', fn () => redirect()->route('learner.faq'))->name('faq');

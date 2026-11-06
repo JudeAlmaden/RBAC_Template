@@ -5,6 +5,43 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
+## [Unreleased] - 2026-11-06
+
+Everything here is new: the stage screen became the authoring workspace, learners got their own reading surface, and access moved from role names to permissions.
+
+### Added
+- **Single-Page Stage Editor** — The stage screen (`/topics/{topic}/stages/{stage}`) is now the authoring workspace itself: slide rail, layout canvas and inspector share one surface, with Preview, Discard, Save and a `⋯` delete action living in the stage header.
+- **Slide Builder** — Slides (container pages) can be added, duplicated, reordered and deleted, each with its own title, layout (`single_column`, `split_two_column`, `cinema_focus`, `tabbed_stepper`) and per-layout droppable slots.
+- **Component Palette** — Text, Media, Code and Embed presets (heading, paragraph, note/warning callout, objectives, checklist, steps, accordion, table, image, video, audio, code, terminal, download, embed) that map onto existing `content_blocks` rows and their display variants; components are dropped into a slot and edited in the inspector.
+- **Bulk Component Operations** — Multi-select in the canvas or inspector to duplicate, move or delete several components at once, including across slides.
+- **Stage Settings Inspector** — Title, section type, instructions and the required/published flags edit inline and are submitted together with the slides in a single save.
+- **Learner Reading Experience** — `LearnerTopicLayout` with a stages-only rail, stage intro heading and themed reading surface, plus new learner course, module and topic pages with progress, prerequisites and prev/next stage navigation.
+- **Granular Content Permissions** — `manage courses`, `manage curriculum` and `view admin dashboard` are seeded and assignable; the course, module, topic, stage, page and admin dashboard controllers gate on them instead of hardcoded admin roles, and they are shared to the frontend as `can.manageCourses`, `can.manageCurriculum` and `can.viewAdminDashboard`.
+- **Collapsible Sidebar** — Top-bar toggle with `localStorage` persistence; the stage editor passes `startCollapsed` so the editor opens at full width.
+- **Grouped Sidebar Navigation** — Dashboard, LEARN, MANAGE (permission-gated) and ACCOUNT groups; notifications left the sidebar and remain available from the top-bar bell.
+
+### Changed
+- **Stage Authoring Unified** — The separate `/stages/{stage}/builder` page is folded into the stage page, so stage metadata and its slides are edited and saved in one place.
+- **Module Accordions Collapsed by Default** — The course curriculum screen no longer expands every module when it loads.
+- **Sidebar Scrolls Independently** — The navigation scrolls within the sidebar with a thin themed scrollbar instead of scrolling with the page.
+
+### Removed
+- `stages.builder.show` route, `StageBuilderController@show()` and `resources/js/Pages/Courses/Stages/Builder/Index.jsx`.
+- `StagePagesList.jsx` and `StagePageModal.jsx`, superseded by the slide rail and inspector.
+
+### Fixed
+- Repaired 93 `.jsx` files damaged by a search-and-replace that removed every lowercase `d`, restoring the build and pages.
+- Sidebar navigation no longer drags the page scroll with it.
+- Breadcrumb and stage header no longer duplicate the stage title now that the header edits it in place.
+
+### Technical
+- New: `app/Http/Controllers/StageBuilderController.php`; `resources/js/Pages/Courses/Stages/Builder/` (`registry.js`, `operations.js`, `Canvas`, `SlideRail`, `Inspector`, `BlockPalette`, `BlockCanvasItem`, `LayoutRenderer`, `blockEditors`, `blockRenderers`, `StageBuilder`); `resources/js/Layouts/LearnerTopicLayout.jsx`; `resources/js/Pages/Learner/{Courses,Modules,Topics}/Show.jsx`; `.agents/Documentation/COURSE_MAKER_PLAN.md`
+- Modified: `routes/web.php`, `TopicSectionController`, `TopicController`, `ModuleController`, `CourseController`, `SectionPageController`, `AdminDashboardController`, `DashboardController`, `RoleController`, `HandleInertiaRequests`, `User`, `ContentBlock`, `DatabaseSeeder`, `AuthenticatedLayout.jsx`, `Courses/Show.jsx`, `Courses/Stages/Show.jsx`, `app.css`, `tailwind.config.js`, `package.json`, `package-lock.json`
+- Deleted: `resources/js/Pages/Courses/Stages/Builder/Index.jsx`, `resources/js/Pages/Courses/Stages/Partials/StagePagesList.jsx`, `resources/js/Pages/Courses/Stages/Partials/StagePageModal.jsx`
+- Tests: 10 tests / 73 assertions passing (`TopicSectionCrudTest`); `npm run build` clean
+
+---
+
 ## [1.0.0] - 2026-11-05
 
 ### Added
@@ -13,12 +50,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - **Modularized Course, Module & Stage Pages** — Decomposed `Courses/Show.jsx`, `Modules/Show.jsx`, and `Stages/Index.jsx` into reusable partials: `CourseHeroCard`, `CourseCurriculumTab`, `CourseLearnersTab`, `ModuleHeroCard`, `ModuleTopicList`, `StageHeroCard`, `StagePipelineList`.
 - **Reusable `Breadcrumbs` Component** — Unified accessible breadcrumb strip with back-arrow button, ChevronRight separators, `aria-current`, and long-label truncation. Shared across Course, Module, and Stage views.
 - **Consistent Hero Card Design** — Course, Module, and Stage views all share the same layout: icon avatar, title + status badge, meta links, 4-stat grid, primary CTA + `ActionDropdown`.
+- **`ActionDropdown` Component** — Portal-based popover for Edit/Delete secondary actions across all resource pages.
 
 ### Changed
 - **Stage Pipeline rows are clickable** — Clicking a stage card navigates to the new dedicated Stage Show page. Reorder (↑↓) and Delete buttons stop event propagation to avoid accidental navigation.
 - **Module rows are clickable** — Clicking a module row in the Course curriculum navigates directly to the Module Show page; removed redundant "View Module" button.
 - **Course rows are clickable** — Clicking a course row in the index navigates to Course Show; action buttons stop propagation.
-- **ActionDropdown** introduced as a reusable portal-based popover for Edit/Delete secondary actions across all resource pages.
 - **Stage Hero Card** — Removed "Generate Preset" button from the hero card top bar; preset generation is now only available from the pipeline's empty state.
 
 ### Fixed

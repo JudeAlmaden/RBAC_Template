@@ -16,7 +16,7 @@ class SectionPageController extends Controller
      */
     public function store(Request $request, TopicSection $stage): RedirectResponse
     {
-        $this->authorizeAdmin($request);
+        $this->authorizeCurriculumEdit($request);
 
         $validated = $request->validate([
             'title' => ['nullable', 'string', 'max:255'],
@@ -41,7 +41,7 @@ class SectionPageController extends Controller
      */
     public function update(Request $request, TopicSection $stage, SectionPage $page): RedirectResponse
     {
-        $this->authorizeAdmin($request);
+        $this->authorizeCurriculumEdit($request);
 
         if ((int) $page->topic_section_id !== (int) $stage->id) {
             abort(404);
@@ -63,7 +63,7 @@ class SectionPageController extends Controller
      */
     public function destroy(Request $request, TopicSection $stage, SectionPage $page): RedirectResponse
     {
-        $this->authorizeAdmin($request);
+        $this->authorizeCurriculumEdit($request);
 
         if ((int) $page->topic_section_id !== (int) $stage->id) {
             abort(404);
@@ -80,7 +80,7 @@ class SectionPageController extends Controller
      */
     public function reorder(Request $request, TopicSection $stage): RedirectResponse
     {
-        $this->authorizeAdmin($request);
+        $this->authorizeCurriculumEdit($request);
 
         $validated = $request->validate([
             'page_ids' => ['required', 'array'],
@@ -107,10 +107,9 @@ class SectionPageController extends Controller
     /**
      * Authorize admin users.
      */
-    private function authorizeAdmin(Request $request): void
+    private function authorizeCurriculumEdit(Request $request): void
     {
-        $user = $request->user();
-        if (! $user->isAdmin() && ! $user->isSuperAdmin()) {
+        if (! $request->user()?->can('manage curriculum')) {
             abort(403, 'Unauthorized.');
         }
     }

@@ -88,6 +88,9 @@ class HandleInertiaRequests extends Middleware
                     'viewLogs' => $rolePerms->contains('view logs') || $rolePerms->contains('manage users') || $rolePerms->contains('manage roles'),
                     'isSuperAdmin' => $activeRole === 'super_admin',
                     'canPromoteSuperAdmin' => $rolePerms->contains('promote super admin'),
+                    'manageCourses' => $rolePerms->contains('manage courses'),
+                    'manageCurriculum' => $rolePerms->contains('manage curriculum'),
+                    'viewAdminDashboard' => $rolePerms->contains('view admin dashboard'),
                     'superAdminCount' => $superAdminCount,
                 ];
             } else {
@@ -98,6 +101,9 @@ class HandleInertiaRequests extends Middleware
                     'viewLogs' => $user->canViewLogs(),
                     'isSuperAdmin' => $user->isSuperAdmin(),
                     'canPromoteSuperAdmin' => $user->canPromoteToSuperAdmin(),
+                    'manageCourses' => $user->canManageCourses(),
+                    'manageCurriculum' => $user->canManageCurriculum(),
+                    'viewAdminDashboard' => $user->canViewAdminDashboard(),
                     'superAdminCount' => $superAdminCount,
                 ];
             }

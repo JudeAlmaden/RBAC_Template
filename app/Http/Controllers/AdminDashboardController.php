@@ -16,6 +16,10 @@ class AdminDashboardController extends Controller
      */
     public function index(Request $request): Response
     {
+        if (! $request->user()?->canViewAdminDashboard()) {
+            abort(403, 'You do not have permission to view the admin dashboard.');
+        }
+
         return Inertia::render('Admin/Dashboard', [
             'metrics' => [
                 'total_users' => User::count(),

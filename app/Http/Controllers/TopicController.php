@@ -16,7 +16,7 @@ class TopicController extends Controller
      */
     public function store(Request $request, Module $module): RedirectResponse
     {
-        $this->authorizeAdmin($request);
+        $this->authorizeCurriculumEdit($request);
 
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
@@ -52,7 +52,7 @@ class TopicController extends Controller
      */
     public function update(Request $request, Module $module, Topic $topic): RedirectResponse
     {
-        $this->authorizeAdmin($request);
+        $this->authorizeCurriculumEdit($request);
 
         if ((int) $topic->module_id !== (int) $module->id) {
             abort(404);
@@ -75,7 +75,7 @@ class TopicController extends Controller
      */
     public function destroy(Request $request, Module $module, Topic $topic): RedirectResponse
     {
-        $this->authorizeAdmin($request);
+        $this->authorizeCurriculumEdit($request);
 
         if ((int) $topic->module_id !== (int) $module->id) {
             abort(404);
@@ -92,7 +92,7 @@ class TopicController extends Controller
      */
     public function reorder(Request $request, Module $module): RedirectResponse
     {
-        $this->authorizeAdmin($request);
+        $this->authorizeCurriculumEdit($request);
 
         $validated = $request->validate([
             'topic_ids' => ['required', 'array'],
@@ -120,10 +120,9 @@ class TopicController extends Controller
     /**
      * Authorize that the current user is an admin or super admin.
      */
-    private function authorizeAdmin(Request $request): void
+    private function authorizeCurriculumEdit(Request $request): void
     {
-        $user = $request->user();
-        if (! $user->isAdmin() && ! $user->isSuperAdmin()) {
+        if (! $request->user()?->can('manage curriculum')) {
             abort(403, 'Unauthorized.');
         }
     }

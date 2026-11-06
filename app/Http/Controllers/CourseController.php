@@ -24,7 +24,7 @@ class CourseController extends Controller
      */
     public function index(Request $request): Response
     {
-        $this->authorizeAdmin($request);
+        $this->authorizeCourseManagement($request);
 
         $search = $request->input('search');
         $statusFilter = $request->input('status');
@@ -107,7 +107,7 @@ class CourseController extends Controller
      */
     public function show(Request $request, Course $course): Response
     {
-        $this->authorizeAdmin($request);
+        $this->authorizeCourseManagement($request);
 
         $course->load([
             'creator:id,name,email',
@@ -224,7 +224,7 @@ class CourseController extends Controller
      */
     public function destroy(Request $request, Course $course): RedirectResponse
     {
-        $this->authorizeAdmin($request);
+        $this->authorizeCourseManagement($request);
 
         $title = $course->title;
         $course->delete();
@@ -237,7 +237,7 @@ class CourseController extends Controller
      */
     public function assignableUsers(Request $request, Course $course): JsonResponse
     {
-        $this->authorizeAdmin($request);
+        $this->authorizeCourseManagement($request);
 
         $search = $request->input('search');
 
@@ -355,7 +355,7 @@ class CourseController extends Controller
      */
     public function unassign(Request $request, Course $course, User $user): RedirectResponse
     {
-        $this->authorizeAdmin($request);
+        $this->authorizeCourseManagement($request);
 
         CourseEnrollment::where('course_id', $course->id)
             ->where('user_id', $user->id)
@@ -372,10 +372,9 @@ class CourseController extends Controller
     /**
      * Authorize that the current user is an admin or super admin.
      */
-    private function authorizeAdmin(Request $request): void
+    private function authorizeCourseManagement(Request $request): void
     {
-        $user = $request->user();
-        if (! $user->isAdmin() && ! $user->isSuperAdmin()) {
+        if (! $request->user()?->can('manage courses')) {
             abort(403, 'Unauthorized.');
         }
     }

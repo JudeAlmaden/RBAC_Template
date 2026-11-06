@@ -239,4 +239,190 @@ class TopicSectionCrudTest extends TestCase
             'id' => $page->id,
         ]);
     }
+
+    public function test_admin_can_save_stage_builder_content(): void
+    {
+        $stage = $this->topic->sections()->create([
+            'section_type' => 'encode',
+            'title' => 'Encode Stage',
+            'position' => 1,
+        ]);
+
+        $page = $stage->pages()->create([
+            'title' => 'Page 1',
+            'layout_type' => 'single_column',
+            'position' => 1,
+            'is_visible' => true,
+        ]);
+
+        $block = $page->blocks()->create([
+            'block_type' => 'rich_text',
+            'display_variant' => 'default',
+            'layout_slot' => 'main',
+            'content' => ['text' => 'Old copy'],
+            'position' => 1,
+            'is_visible' => true,
+        ]);
+
+        $orphan = $page->blocks()->create([
+            'block_type' => 'callout',
+            'display_variant' => 'callout_tip',
+            'layout_slot' => 'main',
+            'content' => ['text' => 'Remove me'],
+            'position' => 2,
+            'is_visible' => true,
+        ]);
+
+        $response = $this->actingAs($this->admin)->put(route('stages.builder.save', $stage->id), [
+            'pages' => [
+                [
+                    'id' => $page->id,
+                    'title' => 'Renamed Page',
+                    'layout_type' => 'split_two_column',
+                    'is_visible' => true,
+                    'position' => 1,
+                    'blocks' => [
+                        [
+                            'id' => $block->id,
+                            'block_type' => 'rich_text',
+                            'display_variant' => 'heading',
+                            'layout_slot' => 'left',
+                            'content' => ['text' => 'Hello world', 'level' => 2],
+                            'is_visible' => true,
+                            'position' => 1,
+                        ],
+                        [
+                            'id' => null,
+                            'block_type' => 'video',
+                            'display_variant' => 'card',
+                            'layout_slot' => 'right',
+                            'content' => ['url' => 'https://example.com/video'],
+                            'is_visible' => true,
+                            'position' => 2,
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+        $response->assertRedirect();
+
+        $this->assertDatabaseHas('section_pages', [
+            'id' => $page->id,
+            'title' => 'Renamed Page',
+            'layout_type' => 'split_two_column',
+        ]);
+
+        $this->assertDatabaseHas('content_blocks', [
+            'id' => $block->id,
+            'display_variant' => 'heading',
+            'layout_slot' => 'left',
+            'position' => 1,
+        ]);
+
+        $this->assertDatabaseMissing('content_blocks', ['id' => $orphan->id]);
+
+        $this->assertDatabaseHas('content_blocks', [
+            'section_page_id' => $page->id,
+            'block_type' => 'video',
+            'layout_slot' => 'right',
+            'position' => 2,
+        ]);
+    }
+
+    public function test_builder_save_deletes_pages_missing_from_payload(): void
+    {
+        $stage = $this->topic->sections()->create([
+            'section_type' => 'encode',
+            'title' => 'Encode Stage',
+            'position' => 1,
+        ]);
+
+        $keep = $stage->pages()->create([
+            'title' => 'Keep',
+            'layout_type' => 'single_column',
+            'position' => 1,
+            'is_visible' => true,
+        ]);
+
+        $drop = $stage->pages()->create([
+            'title' => 'Drop',
+            'layout_type' => 'single_column',
+            'position' => 2,
+            'is_visible' => true,
+        ]);
+
+        $response = $this->actingAs($this->admin)->put(route('stages.builder.save', $stage->id), [
+            'pages' => [
+                [
+                    'id' => $keep->id,
+                    'title' => 'Keep',
+                    'layout_type' => 'single_column',
+                    'is_visible' => true,
+                    'position' => 1,
+                    'blocks' => [],
+                ],
+            ],
+        ]);
+
+        $response->assertRedirect();
+
+        $this->assertDatabaseHas('section_pages', ['id' => $keep->id]);
+        $this->assertDatabaseMissing('section_pages', ['id' => $drop->id]);
+    }
+
+    public function test_learner_cannot_save_stage_builder_content(): void
+    {
+        $stage = $this->topic->sections()->create([
+            'section_type' => 'encode',
+            'title' => 'Encode Stage',
+            'position' => 1,
+        ]);
+
+        $response = $this->actingAs($this->learner)->put(route('stages.builder.save', $stage->id), [
+            'pages' => [],
+        ]);
+
+        $response->assertForbidden();
+    }
+
+    public function test_admin_can_view_stage_show_with_pages_and_blocks(): void
+    {
+        $stage = $this->topic->sections()->create([
+            'section_type' => 'encode',
+            'title' => 'Encode Stage',
+            'position' => 1,
+        ]);
+
+        $page = $stage->pages()->create([
+            'title' => 'Concept Overview',
+            'layout_type' => 'split_two_column',
+            'position' => 1,
+            'is_visible' => true,
+        ]);
+
+        $page->blocks()->create([
+            'block_type' => 'rich_text',
+            'display_variant' => 'heading',
+            'layout_slot' => 'left',
+            'content' => ['text' => 'Objectives', 'level' => 2],
+            'position' => 1,
+            'is_visible' => true,
+        ]);
+
+        $response = $this->actingAs($this->admin)->get(route('topics.stages.show', [$this->topic->id, $stage->id]));
+
+        $response->assertOk();
+        $response->assertInertia(fn ($inertia) => $inertia
+            ->component('Courses/Stages/Show')
+            ->where('stage.id', $stage->id)
+            ->has('stage.pages', 1)
+            ->where('stage.pages.0.id', $page->id)
+            ->where('stage.pages.0.layout_type', 'split_two_column')
+            ->has('stage.pages.0.blocks', 1)
+            ->where('stage.pages.0.blocks.0.block_type', 'rich_text')
+            ->where('stage.pages.0.blocks.0.display_variant', 'heading')
+            ->where('stage.pages.0.blocks.0.layout_slot', 'left')
+        );
+    }
 }

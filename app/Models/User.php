@@ -118,6 +118,33 @@ class User extends Authenticatable
         }
     }
 
+    public function canManageCourses(): bool
+    {
+        try {
+            return $this->can('manage courses');
+        } catch (\Throwable) {
+            return false;
+        }
+    }
+
+    public function canManageCurriculum(): bool
+    {
+        try {
+            return $this->can('manage curriculum');
+        } catch (\Throwable) {
+            return false;
+        }
+    }
+
+    public function canViewAdminDashboard(): bool
+    {
+        try {
+            return $this->can('view admin dashboard');
+        } catch (\Throwable) {
+            return false;
+        }
+    }
+
     public function canManageRoles(): bool
     {
         try {

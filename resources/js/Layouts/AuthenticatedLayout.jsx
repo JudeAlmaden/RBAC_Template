@@ -10,7 +10,6 @@ import {
     LayoutDashboard,
     Users,
     ShieldCheck,
-    Bell,
     LogOut,
     Menu,
     X,
@@ -20,6 +19,8 @@ import {
     AlertTriangle,
     MoreHorizontal,
     History,
+    PanelLeftClose,
+    PanelLeftOpen,
     Crosshair,
     BookOpen,
     Award,
@@ -194,10 +195,12 @@ function NavGroup({ label, items, onNavigate }) {
     const visible = items.filter((i) => i.show);
     if (visible.length === 0) return null;
     return (
-        <div className="space-y-0.5">
-            <div className="px-3 pt-4 pb-1 text-[10px] font-bold uppercase tracking-widest text-[#4F6D82]">
-                {label}
-            </div>
+        <div className={label ? 'space-y-0.5' : 'space-y-0.5 pt-3'}>
+            {label && (
+                <div className="px-3 pt-4 pb-1 text-[10px] font-bold uppercase tracking-widest text-[#4F6D82]">
+                    {label}
+                </div>
+            )}
             {visible.map((item) => (
                 <NavItem key={item.name} item={item} onNavigate={onNavigate} />
             ))}
@@ -207,16 +210,25 @@ function NavGroup({ label, items, onNavigate }) {
 
 /* ─── Inner layout (needs toast context) ─────────────────────────────── */
 
-function LayoutInner({ header, children }) {
-    const { auth, flash, roleContext = {}, notifications: sharedNotifications } = usePage().props;
+function LayoutInner({ header, children, startCollapsed = false }) {
+    const { auth, flash, roleContext = {} } = usePage().props;
     const user = auth.user;
     const can  = auth.can || {};
-    const unreadNotificationsCount = sharedNotifications?.unread_count ?? 0;
     const { toast } = useToast();
     const { activeRole, switchableRoles = [], isPreviewing = false } = roleContext;
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [collapsed, setCollapsed] = useState(() => {
+        if (startCollapsed) return true;
+        if (typeof window === 'undefined') return false;
+        return localStorage.getItem('sidebar-collapsed') === 'true';
+    });
     const [dark, setDark] = useDarkMode();
+
+    // Remember the collapsed sidebar state across page visits and reloads.
+    useEffect(() => {
+        localStorage.setItem('sidebar-collapsed', collapsed ? 'true' : 'false');
+    }, [collapsed]);
 
     // Show flash messages as toasts
     useEffect(() => {
@@ -234,7 +246,7 @@ function LayoutInner({ header, children }) {
         return role.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
     };
 
-    const learnerNav = [
+    const mainNav = [
         {
             name: 'Dashboard',
             href: route('dashboard'),
@@ -242,6 +254,9 @@ function LayoutInner({ header, children }) {
             icon: LayoutDashboard,
             show: true,
         },
+    ];
+
+    const learnNav = [
         {
             name: 'Cyber Range',
             href: route('learner.cyber-range'),
@@ -265,15 +280,7 @@ function LayoutInner({ header, children }) {
         },
     ];
 
-    const otherNav = [
-        {
-            name: 'Notifications',
-            href: route('notifications.index'),
-            active: route().current('notifications.*'),
-            icon: Bell,
-            show: true,
-            badge: unreadNotificationsCount > 0 ? (unreadNotificationsCount > 99 ? '99+' : unreadNotificationsCount) : null,
-        },
+    const accountNav = [
         {
             name: 'My Credentials',
             href: route('learner.credentials'),
@@ -310,28 +317,28 @@ function LayoutInner({ header, children }) {
             href: route('users.index'),
             active: route().current('users.*'),
             icon: Users,
-            show: Boolean(can.manageUsers),
+            show: Boolean(can.manageUsers || can.isSuperAdmin),
         },
         {
             name: 'Courses',
             href: route('courses.index'),
             active: route().current('courses.*'),
             icon: GraduationCap,
-            show: Boolean(can.manageUsers),
+            show: Boolean(can.manageCourses || can.isSuperAdmin),
         },
         {
             name: 'Roles & Permissions',
             href: route('roles.index'),
             active: route().current('roles.*'),
             icon: ShieldCheck,
-            show: Boolean(can.manageRoles),
+            show: Boolean(can.manageRoles || can.isSuperAdmin),
         },
         {
             name: 'Audit Logs',
             href: route('activity-logs.index'),
             active: route().current('activity-logs.*'),
             icon: History,
-            show: Boolean(can.viewLogs),
+            show: Boolean(can.viewLogs || can.isSuperAdmin),
         },
     ];
 
@@ -349,9 +356,9 @@ function LayoutInner({ header, children }) {
 
             {/* SIDEBAR */}
             <aside
-                className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#102746] dark:bg-[#0C1B2D] flex flex-col justify-between transition-transform duration-300 lg:translate-x-0 ${
+                className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#102746] dark:bg-[#0C1B2D] flex flex-col justify-between transition-transform duration-300 ${
                     sidebarOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
-                }`}
+                } ${collapsed ? 'lg:-translate-x-full' : 'lg:translate-x-0'}`}
             >
                 <div className="flex flex-col min-h-0 flex-1">
                     {/* Brand Header */}
@@ -379,12 +386,13 @@ function LayoutInner({ header, children }) {
                     </div>
 
                     {/* Navigation Links — scrollable */}
-                    <div className="flex-1 overflow-y-auto px-3 py-3 space-y-0.5">
-                        <NavGroup label="Learner" items={learnerNav} onNavigate={() => setSidebarOpen(false)} />
+                    <div className="flex-1 overflow-y-auto custom-scrollbar overscroll-contain px-3 py-3 space-y-0.5">
+                        <NavGroup items={mainNav} onNavigate={() => setSidebarOpen(false)} />
+                        <NavGroup label="Learn" items={learnNav} onNavigate={() => setSidebarOpen(false)} />
                         {hasAdminNav && (
-                            <NavGroup label="Administration" items={adminNav} onNavigate={() => setSidebarOpen(false)} />
+                            <NavGroup label="Manage" items={adminNav} onNavigate={() => setSidebarOpen(false)} />
                         )}
-                        <NavGroup label="Others" items={otherNav} onNavigate={() => setSidebarOpen(false)} />
+                        <NavGroup label="Account" items={accountNav} onNavigate={() => setSidebarOpen(false)} />
                     </div>
                 </div>
 
@@ -415,7 +423,7 @@ function LayoutInner({ header, children }) {
             </aside>
 
             {/* MAIN CONTENT WRAPPER */}
-            <div className="flex-1 lg:pl-64 flex flex-col min-w-0">
+            <div className={`flex-1 flex flex-col min-w-0 transition-[padding] duration-300 ${collapsed ? 'lg:pl-0' : 'lg:pl-64'}`}>
                 {/* Role Preview Banner */}
                 {isPreviewing && (
                     <RolePreviewBanner activeRole={activeRole} />
@@ -429,6 +437,15 @@ function LayoutInner({ header, children }) {
                             className="lg:hidden p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-[#1D2B3B]"
                         >
                             <Menu className="w-5 h-5" />
+                        </button>
+                        <button
+                            onClick={() => setCollapsed((value) => !value)}
+                            className="hidden lg:inline-flex p-2 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-[#1D2B3B] transition"
+                            title={collapsed ? 'Show sidebar' : 'Hide sidebar'}
+                            aria-label={collapsed ? 'Show sidebar' : 'Hide sidebar'}
+                            aria-expanded={!collapsed}
+                        >
+                            {collapsed ? <PanelLeftOpen className="w-5 h-5" /> : <PanelLeftClose className="w-5 h-5" />}
                         </button>
                         <div>{header}</div>
                     </div>
@@ -469,10 +486,12 @@ function LayoutInner({ header, children }) {
 
 /* ─── Public export wraps with ToastProvider ──────────────────────────── */
 
-export default function AuthenticatedLayout({ header, children }) {
+export default function AuthenticatedLayout({ header, children, startCollapsed = false }) {
     return (
         <ToastProvider>
-            <LayoutInner header={header}>{children}</LayoutInner>
+            <LayoutInner header={header} startCollapsed={startCollapsed}>
+                {children}
+            </LayoutInner>
         </ToastProvider>
     );
 }

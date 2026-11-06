@@ -16,15 +16,8 @@ import TopicModal from './Partials/TopicModal';
 
 export default function CourseShow({ course, allCourses = [] }) {
     const [activeTab, setActiveTab] = useState('curriculum');
-    const [expandedModules, setExpandedModules] = useState(() => {
-        const init = {};
-        if (course.modules) {
-            course.modules.forEach((m) => {
-                init[m.id] = true;
-            });
-        }
-        return init;
-    });
+    // Every module starts collapsed; the header chevron toggles its topics.
+    const [expandedModules, setExpandedModules] = useState({});
 
     // Course Modals State
     const [editCourseOpen, setEditCourseOpen] = useState(false);
