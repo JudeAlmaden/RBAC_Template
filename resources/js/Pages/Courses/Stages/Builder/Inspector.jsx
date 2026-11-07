@@ -35,7 +35,6 @@ export default function Inspector({
     onDeleteSelected,
     onDuplicateSelected,
     onMoveSelectedToSlot,
-    preview = false,
 }) {
     const [panel, setPanel] = useState('slide');
     const slots = getLayoutSlots(page.layout_type);
@@ -86,7 +85,6 @@ export default function Inspector({
                                 <TextInput
                                     value={page.title || ''}
                                     onChange={(event) => onUpdatePage({ title: event.target.value })}
-                                    disabled={preview}
                                     className="mt-1 block w-full text-xs"
                                 />
                             </div>
@@ -96,7 +94,6 @@ export default function Inspector({
                                 <select
                                     value={page.layout_type}
                                     onChange={(event) => onUpdatePage({ layout_type: event.target.value })}
-                                    disabled={preview}
                                     className={selectClass}
                                 >
                                     {Object.entries(LAYOUT_TYPE_DETAILS).map(([key, details]) => (
@@ -115,7 +112,6 @@ export default function Inspector({
                                     type="checkbox"
                                     checked={page.is_visible !== false}
                                     onChange={(event) => onUpdatePage({ is_visible: event.target.checked })}
-                                    disabled={preview}
                                     className="rounded border-gray-300 text-[#5B5FC7] shadow-xs focus:ring-[#5B5FC7] dark:border-brand-border"
                                 />
                                 <span className="text-xs font-semibold text-gray-700 dark:text-gray-200">
@@ -151,7 +147,6 @@ export default function Inspector({
                                 <TextInput
                                     value={stage.title || ''}
                                     onChange={(event) => onUpdateStage({ title: event.target.value })}
-                                    disabled={preview}
                                     className="mt-1 block w-full text-xs"
                                 />
                             </div>
@@ -161,7 +156,6 @@ export default function Inspector({
                                 <select
                                     value={stage.section_type}
                                     onChange={(event) => onUpdateStage({ section_type: event.target.value })}
-                                    disabled={preview}
                                     className={selectClass}
                                 >
                                     {Object.entries(SECTION_TYPE_DETAILS).map(([key, details]) => (
@@ -178,7 +172,6 @@ export default function Inspector({
                                     rows={4}
                                     value={stage.instructions || ''}
                                     onChange={(event) => onUpdateStage({ instructions: event.target.value })}
-                                    disabled={preview}
                                     placeholder="Reviewed in the lab environment…"
                                     className={textareaClass}
                                 />
@@ -189,7 +182,6 @@ export default function Inspector({
                                     type="checkbox"
                                     checked={stage.is_required !== false}
                                     onChange={(event) => onUpdateStage({ is_required: event.target.checked })}
-                                    disabled={preview}
                                     className="rounded border-gray-300 text-[#5B5FC7] shadow-xs focus:ring-[#5B5FC7] dark:border-brand-border"
                                 />
                                 <span className="text-xs font-semibold text-gray-700 dark:text-gray-200">
@@ -202,7 +194,6 @@ export default function Inspector({
                                     type="checkbox"
                                     checked={Boolean(stage.is_published)}
                                     onChange={(event) => onUpdateStage({ is_published: event.target.checked })}
-                                    disabled={preview}
                                     className="rounded border-gray-300 text-[#5B5FC7] shadow-xs focus:ring-[#5B5FC7] dark:border-brand-border"
                                 />
                                 <span className="text-xs font-semibold text-gray-700 dark:text-gray-200">

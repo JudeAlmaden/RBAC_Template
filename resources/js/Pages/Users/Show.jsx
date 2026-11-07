@@ -10,6 +10,7 @@ import UserProfileCard from './Partials/UserProfileCard';
 import UserPermissionsMatrix from './Partials/UserPermissionsMatrix';
 import UserActivitySection from './Partials/UserActivitySection';
 import UserAssignedCourses from './Partials/UserAssignedCourses';
+import SetupLinkNotice from '@/Components/SetupLinkNotice';
 import { ArrowLeft } from 'lucide-react';
 
 export default function UserShow({
@@ -139,6 +140,8 @@ export default function UserShow({
             <Head title={`User Profile - ${profileUser.name}`} />
 
             <div className="space-y-6">
+                <SetupLinkNotice />
+
                 {/* ── User Overview Profile Card ──────────────────────────── */}
                 <UserProfileCard
                     profileUser={profileUser}

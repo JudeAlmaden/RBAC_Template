@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LearnerController;
 use App\Http\Controllers\ModuleController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\OnboardingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RoleSwitchController;
@@ -27,7 +28,16 @@ Route::get('/', function () {
     ]);
 });
 
-Route::middleware(['auth', 'verified', 'force.password.change'])->group(function () {
+// Signed, unauthenticated setup links: the account has no usable password yet.
+Route::get('onboarding/{user}/{hash}', [OnboardingController::class, 'show'])
+    ->middleware('signed')
+    ->name('onboarding.show');
+
+Route::post('onboarding/{user}/{hash}', [OnboardingController::class, 'store'])
+    ->middleware(['signed', 'rate-limit:onboarding'])
+    ->name('onboarding.store');
+
+Route::middleware(['auth', 'verified', 'force.password.change', 'rate-limit:web'])->group(function () {
     // Main Dashboard Dispatcher
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -91,7 +101,9 @@ Route::middleware(['auth', 'verified', 'force.password.change'])->group(function
     Route::post('stages/{stage}/pages/reorder', [SectionPageController::class, 'reorder'])->name('stages.pages.reorder');
 
     // Stage Builder (Figma-style page/slide + component persistence)
-    Route::put('stages/{stage}/builder', [StageBuilderController::class, 'save'])->name('stages.builder.save');
+    Route::put('stages/{stage}/builder', [StageBuilderController::class, 'save'])
+        ->middleware('rate-limit:builder')
+        ->name('stages.builder.save');
 
     // Friendly Aliases for FAQ and Settings
     Route::get('/faq', fn () => redirect()->route('learner.faq'))->name('faq');
@@ -108,6 +120,8 @@ Route::middleware(['auth', 'verified', 'force.password.change'])->group(function
 
     // User & Account Management (RBAC & PBAC)
     Route::resource('users', UserController::class);
+    Route::post('users/{user}/setup-link', [UserController::class, 'sendSetupLink'])
+        ->name('users.setup-link');
     Route::post('users/{user}/promote-super-admin', [UserController::class, 'promoteSuperAdmin'])
         ->name('users.promote-super-admin');
     Route::post('users/{user}/transfer-super-admin', [UserController::class, 'transferSuperAdmin'])
@@ -126,7 +140,9 @@ Route::middleware(['auth', 'verified', 'force.password.change'])->group(function
 
     // Audit & Activity Logs
     Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
-    Route::get('/activity-logs/export', [ActivityLogController::class, 'export'])->name('activity-logs.export');
+    Route::get('/activity-logs/export', [ActivityLogController::class, 'export'])
+        ->middleware('rate-limit:exports')
+        ->name('activity-logs.export');
 
     // Notifications
     Route::get('/notifications/feed', [NotificationController::class, 'feed'])->name('notifications.feed');

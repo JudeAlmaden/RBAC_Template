@@ -56,7 +56,8 @@ export default function CreateUserModal({
                     Create New Account
                 </h3>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mb-5">
-                    Provision credentials and optionally assign elevated or app roles
+                    Provision the account and optionally assign elevated or app roles. Leave the
+                    password blank to let the user set their own.
                 </p>
 
                 <div className="space-y-4">
@@ -86,15 +87,20 @@ export default function CreateUserModal({
                     </div>
 
                     <div>
-                        <InputLabel htmlFor="create-password" value="Initial Password" />
+                        <InputLabel htmlFor="create-password" value="Initial Password (optional)" />
                         <TextInput
                             id="create-password"
                             type="password"
                             value={form.data.password}
                             onChange={(e) => form.setData('password', e.target.value)}
+                            placeholder="Leave blank to send a setup link"
                             className="mt-1 block w-full text-xs"
-                            required
+                            autoComplete="new-password"
                         />
+                        <p className="mt-1 text-[10px] text-gray-400">
+                            Blank means the account starts with no usable password and the user
+                            chooses one from a secure link.
+                        </p>
                         <InputError message={form.errors.password} className="mt-1" />
                     </div>
 

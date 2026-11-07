@@ -14,11 +14,11 @@ import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import {
     Save,
     Eye,
-    Pencil,
     Undo2,
     Loader2,
     Layers,
     Boxes,
+    SlidersHorizontal,
     MoreHorizontal,
     Trash2,
 } from 'lucide-react';
@@ -85,10 +85,10 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
     const [activePageId, setActivePageId] = useState(() => buildDraft(stage.pages)[0].id);
     const [selectedBlockIds, setSelectedBlockIds] = useState(() => new Set());
     const [dirty, setDirty] = useState(false);
-    const [preview, setPreview] = useState(false);
     const [saving, setSaving] = useState(false);
     const [activeDrag, setActiveDrag] = useState(null);
     const [pane, setPane] = useState('pages');
+    const [settingsOpen, setSettingsOpen] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
 
     const stageDirty = useMemo(
@@ -96,6 +96,12 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
         [stageDraft, stage]
     );
     const isDirty = dirty || stageDirty;
+
+    // Preview opens the learner-facing stage page in its own tab.
+    const previewHref =
+        topic?.course?.id && topic?.module?.id
+            ? `${route('learner.topics.show', [topic.course.id, topic.module.id, topic.id])}?stage=${stage.id}`
+            : null;
 
     const sensors = useSensors(
         useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
@@ -131,6 +137,9 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
         () => (activePage ? activePage.blocks.filter((block) => selectedBlockIds.has(block.id)) : []),
         [activePage, selectedBlockIds]
     );
+
+    // The inspector is a drawer: it appears for a selection and can be pinned for slide/stage settings.
+    const inspectorVisible = settingsOpen || selectedBlocks.length > 0;
 
     const totalBlocks = useMemo(
         () => pages.reduce((sum, page) => sum + page.blocks.length, 0),
@@ -452,6 +461,45 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
         setDirty(false);
     };
 
+    // Keyboard layer: ⌘/Ctrl+S saves, Esc clears the selection, Delete removes it.
+    useEffect(() => {
+        const isEditableTarget = (target) =>
+            target instanceof HTMLElement &&
+            (target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName));
+
+        const handleKeyDown = (event) => {
+            if (isEditableTarget(event.target)) {
+                return;
+            }
+
+            if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 's') {
+                event.preventDefault();
+                if (isDirty && !saving) {
+                    handleSave();
+                }
+                return;
+            }
+
+            if (event.key === 'Escape') {
+                if (selectedBlockIds.size > 0) {
+                    setSelectedBlockIds(new Set());
+                } else if (settingsOpen) {
+                    setSettingsOpen(false);
+                }
+                return;
+            }
+
+            if ((event.key === 'Delete' || event.key === 'Backspace') && selectedBlockIds.size > 0) {
+                event.preventDefault();
+                handleDeleteSelected();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isDirty, saving, selectedBlockIds, settingsOpen, pages, stageDraft]);
+
     return (
         <DndContext
             sensors={sensors}
@@ -481,7 +529,7 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
                     </div>
 
                     <div className="flex items-center gap-2">
-                        {isDirty && !preview && (
+                        {isDirty && (
                             <span className="hidden items-center gap-1.5 text-[11px] font-medium text-amber-600 sm:flex dark:text-amber-400">
                                 <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
                                 Unsaved changes
@@ -490,16 +538,31 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
 
                         <button
                             type="button"
-                            onClick={() => setPreview((value) => !value)}
+                            onClick={() => setSettingsOpen((value) => !value)}
+                            aria-pressed={settingsOpen}
+                            title={settingsOpen ? 'Hide slide & stage settings' : 'Show slide & stage settings'}
                             className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-[11px] font-semibold transition ${
-                                preview
+                                settingsOpen
                                     ? 'border-[#5B5FC7] bg-[#5B5FC7]/10 text-[#5B5FC7] dark:text-[#8A8DE2]'
                                     : 'border-[#E8E8EC] text-gray-700 hover:bg-gray-50 dark:border-brand-border dark:text-gray-200 dark:hover:bg-brand-dark'
                             }`}
                         >
-                            {preview ? <Pencil className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
-                            {preview ? 'Edit' : 'Preview'}
+                            <SlidersHorizontal className="h-3.5 w-3.5" />
+                            Settings
                         </button>
+
+                        <a
+                            href={previewHref || '#'}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="Open the learner view of this stage in a new tab"
+                            className={`inline-flex items-center gap-1.5 rounded-lg border border-[#E8E8EC] px-2.5 py-1.5 text-[11px] font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-brand-border dark:text-gray-200 dark:hover:bg-brand-dark ${
+                                previewHref ? '' : 'pointer-events-none opacity-40'
+                            }`}
+                        >
+                            <Eye className="h-3.5 w-3.5" />
+                            Preview
+                        </a>
 
                         <button
                             type="button"
@@ -515,6 +578,7 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
                             type="button"
                             onClick={handleSave}
                             disabled={!isDirty || saving}
+                            title="Save (⌘/Ctrl+S)"
                             className="inline-flex items-center gap-1.5 rounded-lg bg-[#5B5FC7] px-3 py-1.5 text-[11px] font-semibold text-white shadow-xs transition hover:bg-[#484CB8] disabled:opacity-50"
                         >
                             {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
@@ -554,9 +618,9 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
                 </div>
 
                 {/* Workspace */}
-                <div className="flex h-[calc(100vh-280px)] min-h-[540px]">
+                <div className="flex h-[calc(100dvh-14rem)] min-h-[520px]">
                     {/* Left pane */}
-                    <aside className={`flex w-60 shrink-0 flex-col border-r border-[#E8E8EC] dark:border-brand-border transition-all duration-300 ${preview ? 'w-0 opacity-0 overflow-hidden border-r-0' : 'w-60'}`}>
+                    <aside className="flex w-60 shrink-0 flex-col border-r border-[#E8E8EC] dark:border-brand-border">
                         <div className="flex gap-1 border-b border-[#E8E8EC] p-2 dark:border-brand-border">
                             {[
                                 { key: 'pages', label: 'Slides', Icon: Layers },
@@ -587,7 +651,6 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
                                     onAddPage={handleAddPage}
                                     onDuplicatePage={handleDuplicatePage}
                                     onDeletePage={handleDeletePage}
-                                    disabled={preview}
                                 />
                             ) : (
                                 <BlockPalette onAdd={handlePaletteAdd} />
@@ -598,7 +661,7 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
                     {/* Center canvas */}
                     <main className="min-w-0 flex-1 overflow-y-auto bg-[#FAFAFC] p-6 dark:bg-[#101014] transition-all duration-300">
                         {activePage && (
-                            <div className={`mx-auto transition-all duration-300 ${preview ? 'max-w-5xl' : 'max-w-4xl'}`}>
+                            <div className={`mx-auto transition-[max-width] duration-200 ${inspectorVisible ? 'max-w-4xl' : 'max-w-5xl'}`}>
                                 <div className="mb-4 flex items-center justify-between">
                                     <div>
                                         <h3 className="text-sm font-bold text-gray-900 dark:text-white">
@@ -621,30 +684,29 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
                                     onDeleteBlock={handleDeleteBlock}
                                     onUpdateBlock={handleUpdateBlock}
                                     onToggleBlockVisibility={handleToggleBlockVisibility}
-                                    preview={preview}
-                                    disabled={preview}
                                 />
                             </div>
                         )}
                     </main>
 
-                    {/* Right inspector */}
-                    <aside className={`shrink-0 overflow-y-auto custom-scrollbar border-l border-[#E8E8EC] p-4 dark:border-brand-border transition-all duration-300 ${preview ? 'w-0 opacity-0 overflow-hidden border-l-0 p-0' : 'w-80'}`}>
-                        {activePage && (
-                            <Inspector
-                                page={activePage}
-                                selectedBlocks={selectedBlocks}
-                                stage={stageDraft}
-                                onUpdatePage={handleUpdatePage}
-                                onUpdateBlock={handleUpdateBlock}
-                                onUpdateStage={handleUpdateStage}
-                                onDeleteSelected={handleDeleteSelected}
-                                onDuplicateSelected={handleDuplicateSelected}
-                                onMoveSelectedToSlot={handleMoveSelectedToSlot}
-                                preview={preview}
-                            />
-                        )}
-                    </aside>
+                    {/* Right inspector: opens on selection, or stays pinned for slide/stage settings */}
+                    {inspectorVisible && (
+                        <aside className="w-80 shrink-0 overflow-y-auto custom-scrollbar border-l border-[#E8E8EC] p-4 dark:border-brand-border">
+                            {activePage && (
+                                <Inspector
+                                    page={activePage}
+                                    selectedBlocks={selectedBlocks}
+                                    stage={stageDraft}
+                                    onUpdatePage={handleUpdatePage}
+                                    onUpdateBlock={handleUpdateBlock}
+                                    onUpdateStage={handleUpdateStage}
+                                    onDeleteSelected={handleDeleteSelected}
+                                    onDuplicateSelected={handleDuplicateSelected}
+                                    onMoveSelectedToSlot={handleMoveSelectedToSlot}
+                                />
+                            )}
+                        </aside>
+                    )}
                 </div>
             </div>
 

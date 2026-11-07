@@ -11,7 +11,7 @@ import { ChevronRight, ArrowLeft } from 'lucide-react';
  */
 export default function Breadcrumbs({ items = [], backHref, className = '' }) {
     return (
-        <nav aria-label="Breadcrumb" className={`flex items-center gap-2 text-xs ${className}`}>
+        <nav aria-label="Breadcrumb" className={`flex min-w-0 items-center gap-2 overflow-hidden text-xs ${className}`}>
             {backHref && (
                 <Link
                     href={backHref}
@@ -22,26 +22,31 @@ export default function Breadcrumbs({ items = [], backHref, className = '' }) {
                 </Link>
             )}
 
-            <ol className="flex items-center gap-2 min-w-0 flex-wrap">
+            <ol className="flex min-w-0 flex-nowrap items-center gap-2 overflow-hidden">
                 {items.map((item, idx) => {
                     const isLast = idx === items.length - 1;
+                    // Keep the trail on one line: drop the middle crumbs on narrow screens.
+                    const isCollapsibleMiddle = idx > 0 && !isLast && idx < items.length - 1;
 
                     return (
-                        <li key={idx} className="flex items-center gap-2 min-w-0">
+                        <li
+                            key={idx}
+                            className={`min-w-0 shrink items-center gap-2 ${isCollapsibleMiddle ? 'hidden lg:flex' : 'flex'}`}
+                        >
                             {idx > 0 && (
                                 <ChevronRight className="w-3.5 h-3.5 text-gray-300 dark:text-gray-600 shrink-0" />
                             )}
                             {item.href && !isLast ? (
                                 <Link
                                     href={item.href}
-                                    className="font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition truncate max-w-[200px] sm:max-w-xs"
+                                    className="max-w-[120px] truncate font-medium text-gray-500 transition hover:text-gray-900 sm:max-w-[160px] lg:max-w-[220px] dark:text-gray-400 dark:hover:text-white"
                                     title={item.label}
                                 >
                                     {item.label}
                                 </Link>
                             ) : (
                                 <span
-                                    className={`truncate max-w-[220px] sm:max-w-md ${
+                                    className={`max-w-[140px] truncate sm:max-w-[220px] lg:max-w-[380px] ${
                                         isLast
                                             ? 'font-semibold text-gray-800 dark:text-gray-200'
                                             : 'font-medium text-gray-500 dark:text-gray-400'

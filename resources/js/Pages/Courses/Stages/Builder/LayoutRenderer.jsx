@@ -16,7 +16,7 @@ const COL_SPAN_CLASS = {
     3: 'col-span-12 lg:col-span-3',
 };
 
-function SlotZone({ page, slot, blocks, handlers, selectedIds, preview, disabled }) {
+function SlotZone({ page, slot, blocks, handlers, selectedIds, disabled }) {
     const { setNodeRef, isOver } = useDroppable({
         id: `slot:${page.id}:${slot.key}`,
         data: { kind: 'slot', pageId: page.id, slot: slot.key },
@@ -32,11 +32,9 @@ function SlotZone({ page, slot, blocks, handlers, selectedIds, preview, disabled
                     : 'border-[#E8E8EC] dark:border-brand-border bg-[#FAFAFC] dark:bg-[#101014]'
             }`}
         >
-            {!preview && (
-                <span className="text-[9px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
-                    {slot.label}
-                </span>
-            )}
+            <span className="text-[9px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+                {slot.label}
+            </span>
 
             <SortableContext
                 items={blocks.map((block) => `block:${block.id}`)}
@@ -47,14 +45,13 @@ function SlotZone({ page, slot, blocks, handlers, selectedIds, preview, disabled
                         key={block.id}
                         block={block}
                         selected={selectedIds.has(block.id)}
-                        preview={preview}
                         disabled={disabled}
                         {...handlers}
                     />
                 ))}
             </SortableContext>
 
-            {blocks.length === 0 && !preview && (
+            {blocks.length === 0 && (
                 <div className="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-[#E8E8EC] dark:border-brand-border py-6 text-center">
                     <Plus className="h-4 w-4 text-gray-300 dark:text-gray-600" />
                     <span className="text-[10px] text-gray-400 dark:text-gray-500">
@@ -77,7 +74,6 @@ export default function LayoutRenderer({
     onDeleteBlock,
     onUpdateBlock,
     onToggleBlockVisibility,
-    preview = false,
     disabled = false,
 }) {
     const slots = getLayoutSlots(page.layout_type);
@@ -100,7 +96,6 @@ export default function LayoutRenderer({
                         blocks={page.blocks.filter((block) => block.layout_slot === slot.key)}
                         handlers={handlers}
                         selectedIds={selectedIds}
-                        preview={preview}
                         disabled={disabled}
                     />
                 </div>

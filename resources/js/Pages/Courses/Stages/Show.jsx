@@ -23,25 +23,27 @@ export default function StageShow({ topic, stage, prevStage, nextStage }) {
             <div className="space-y-4">
                 {/* Breadcrumbs + stage navigation */}
                 <div className="flex items-center justify-between gap-4">
-                    <Breadcrumbs
-                        backHref={stagesIndexHref}
-                        items={[
-                            { label: 'Courses', href: route('courses.index') },
-                            ...(topic.course?.id
-                                ? [{ label: topic.course.title, href: route('courses.show', topic.course.id) }]
-                                : []),
-                            ...(topic.module?.id && topic.course?.id
-                                ? [
-                                      {
-                                          label: topic.module.title,
-                                          href: route('courses.modules.show', [topic.course.id, topic.module.id]),
-                                      },
-                                  ]
-                                : []),
-                            { label: topic.title, href: stagesIndexHref },
-                            { label: stage.title },
-                        ]}
-                    />
+                    <div className="min-w-0 flex-1">
+                        <Breadcrumbs
+                            backHref={stagesIndexHref}
+                            items={[
+                                { label: 'Courses', href: route('courses.index') },
+                                ...(topic.course?.id
+                                    ? [{ label: topic.course.title, href: route('courses.show', topic.course.id) }]
+                                    : []),
+                                ...(topic.module?.id && topic.course?.id
+                                    ? [
+                                          {
+                                              label: topic.module.title,
+                                              href: route('courses.modules.show', [topic.course.id, topic.module.id]),
+                                          },
+                                      ]
+                                    : []),
+                                { label: topic.title, href: stagesIndexHref },
+                                { label: stage.title },
+                            ]}
+                        />
+                    </div>
 
                     <div className="flex shrink-0 items-center gap-1">
                         <Link

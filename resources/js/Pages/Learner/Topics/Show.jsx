@@ -324,7 +324,15 @@ function StageIntroPage({ title, stageIndex, totalStages }) {
 }
 
 export default function Show({ course, module, topic }) {
-    const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
+    // Deep link support: the stage editor's Preview opens ?stage=<id>.
+    const [currentSectionIndex, setCurrentSectionIndex] = useState(() => {
+        const stageId = new URLSearchParams(window.location.search).get('stage');
+        if (!stageId) {
+            return 0;
+        }
+        const index = topic.sections.findIndex((section) => String(section.id) === String(stageId));
+        return index === -1 ? 0 : index;
+    });
     const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
     const currentSection = topic.sections[currentSectionIndex];

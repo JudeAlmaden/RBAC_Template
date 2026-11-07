@@ -17,7 +17,6 @@ export default function BlockCanvasItem({
     onDelete,
     onToggleVisibility,
     disabled = false,
-    preview = false,
 }) {
     const [isEditing, setIsEditing] = React.useState(false);
 
@@ -34,7 +33,7 @@ export default function BlockCanvasItem({
     };
 
     const handleDoubleClick = (e) => {
-        if (disabled || preview) return;
+        if (disabled) return;
         e.stopPropagation();
         setIsEditing(true);
     };
@@ -64,7 +63,7 @@ export default function BlockCanvasItem({
                 // Prevent the canvas marquee from starting when interacting with a block.
                 event.stopPropagation();
                 onSelect(block.id, event);
-                
+
                 // Also trigger dnd-kit's listener if it exists
                 if (!isEditing && listeners?.onPointerDown) {
                     listeners.onPointerDown(event);
@@ -74,56 +73,50 @@ export default function BlockCanvasItem({
                 selected
                     ? 'border-[#5B5FC7] ring-2 ring-[#5B5FC7]/60'
                     : 'border-[#E8E8EC] dark:border-brand-border hover:border-[#C7C9E8]'
-            } ${hidden ? 'opacity-60' : ''} ${preview ? 'p-0 border-transparent dark:border-transparent' : ''} ${
-                isEditing ? 'cursor-text' : 'cursor-default'
-            }`}
+            } ${hidden ? 'opacity-60' : ''} ${isEditing ? 'cursor-text' : 'cursor-default'}`}
         >
-            {!preview && (
-                <div className="absolute -top-3 right-2 z-10 flex items-center gap-0.5 rounded-md border border-[#E8E8EC] dark:border-brand-border bg-white dark:bg-brand-dark px-1 py-0.5 opacity-0 shadow-sm transition group-hover:opacity-100">
-                    <button
-                        type="button"
-                        className="cursor-grab rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700 active:cursor-grabbing dark:hover:bg-brand-surface-raised/30 dark:hover:text-gray-200"
-                        title="Drag component"
-                    >
-                        <GripVertical className="h-3 w-3" />
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => onToggleVisibility(block.id)}
-                        className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-brand-surface-raised/30 dark:hover:text-gray-200"
-                        title={hidden ? 'Show component' : 'Hide component'}
-                    >
-                        {hidden ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => onDuplicate(block.id)}
-                        className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-brand-surface-raised/30 dark:hover:text-gray-200"
-                        title="Duplicate component"
-                    >
-                        <Copy className="h-3 w-3" />
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => onDelete(block.id)}
-                        className="rounded p-1 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
-                        title="Delete component"
-                    >
-                        <Trash2 className="h-3 w-3" />
-                    </button>
-                </div>
-            )}
+            <div className="absolute -top-3 right-2 z-10 flex items-center gap-0.5 rounded-md border border-[#E8E8EC] dark:border-brand-border bg-white dark:bg-brand-dark px-1 py-0.5 opacity-0 shadow-sm transition group-hover:opacity-100">
+                <button
+                    type="button"
+                    className="cursor-grab rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700 active:cursor-grabbing dark:hover:bg-brand-surface-raised/30 dark:hover:text-gray-200"
+                    title="Drag component"
+                >
+                    <GripVertical className="h-3 w-3" />
+                </button>
+                <button
+                    type="button"
+                    onClick={() => onToggleVisibility(block.id)}
+                    className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-brand-surface-raised/30 dark:hover:text-gray-200"
+                    title={hidden ? 'Show component' : 'Hide component'}
+                >
+                    {hidden ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
+                </button>
+                <button
+                    type="button"
+                    onClick={() => onDuplicate(block.id)}
+                    className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-brand-surface-raised/30 dark:hover:text-gray-200"
+                    title="Duplicate component"
+                >
+                    <Copy className="h-3 w-3" />
+                </button>
+                <button
+                    type="button"
+                    onClick={() => onDelete(block.id)}
+                    className="rounded p-1 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
+                    title="Delete component"
+                >
+                    <Trash2 className="h-3 w-3" />
+                </button>
+            </div>
 
-            {!preview && (
-                <span className="absolute -top-2.5 left-2 z-10 rounded bg-[#5B5FC7] px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-white opacity-0 transition group-hover:opacity-100">
-                    {BLOCK_TYPE_LABELS[block.block_type] || block.block_type}
-                </span>
-            )}
+            <span className="absolute -top-2.5 left-2 z-10 rounded bg-[#5B5FC7] px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-white opacity-0 transition group-hover:opacity-100">
+                {BLOCK_TYPE_LABELS[block.block_type] || block.block_type}
+            </span>
 
-            <BlockPreview 
-                block={block} 
-                isEditing={isEditing} 
-                onContentChange={handleContentChange} 
+            <BlockPreview
+                block={block}
+                isEditing={isEditing}
+                onContentChange={handleContentChange}
                 onBlur={handleBlur}
             />
         </div>

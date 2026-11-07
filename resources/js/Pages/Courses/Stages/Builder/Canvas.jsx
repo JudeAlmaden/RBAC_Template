@@ -15,7 +15,6 @@ export default function Canvas({
     onDeleteBlock,
     onUpdateBlock,
     onToggleBlockVisibility,
-    preview = false,
     disabled = false,
 }) {
     const surfaceRef = useRef(null);
@@ -54,7 +53,7 @@ export default function Canvas({
     );
 
     const handlePointerDown = (event) => {
-        if (preview || disabled || event.button !== 0) {
+        if (disabled || event.button !== 0) {
             return;
         }
 
@@ -105,7 +104,6 @@ export default function Canvas({
                     onDeleteBlock={onDeleteBlock}
                     onUpdateBlock={onUpdateBlock}
                     onToggleBlockVisibility={onToggleBlockVisibility}
-                    preview={preview}
                     disabled={disabled}
                 />
             </div>

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { router } from '@inertiajs/react';
 import {
     MoreHorizontal,
     ChevronDown,
@@ -10,6 +11,7 @@ import {
     ArrowRightLeft,
     ShieldMinus,
     Trash2,
+    KeyRound,
 } from 'lucide-react';
 
 export default function UserProfileActions({
@@ -45,6 +47,10 @@ export default function UserProfileActions({
     const run = (fn) => {
         setOpen(false);
         if (fn) fn();
+    };
+
+    const sendSetupLink = () => {
+        router.post(route('users.setup-link', profileUser.id), {}, { preserveScroll: true });
     };
 
     const hasPrivilege = userCan.promoteSuperAdmin || userCan.transferSuperAdmin || userCan.demoteSuperAdmin;
@@ -87,6 +93,25 @@ export default function UserProfileActions({
                                 <span className="flex-1 text-left">
                                     <span className="block font-semibold">Edit Account</span>
                                     <span className="block text-[10px] text-gray-400 mt-0.5">Name, email, password &amp; roles</span>
+                                </span>
+                                <ChevronRight className="w-3 h-3 text-gray-300 dark:text-gray-600 group-hover:text-[#5B5FC7] transition" />
+                            </button>
+                        )}
+
+                        {userCan.update && (
+                            <button
+                                type="button"
+                                onClick={() => run(sendSetupLink)}
+                                className="group w-full flex items-center gap-3 px-2.5 py-2 rounded-lg text-xs text-gray-700 dark:text-gray-200 hover:bg-[#5B5FC7]/5 dark:hover:bg-[#5B5FC7]/10 transition"
+                            >
+                                <span className="w-7 h-7 rounded-md bg-indigo-50 dark:bg-indigo-950/40 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shrink-0">
+                                    <KeyRound className="w-3.5 h-3.5" />
+                                </span>
+                                <span className="flex-1 text-left">
+                                    <span className="block font-semibold">Send Setup Link</span>
+                                    <span className="block text-[10px] text-gray-400 mt-0.5">
+                                        Force a new password by email
+                                    </span>
                                 </span>
                                 <ChevronRight className="w-3 h-3 text-gray-300 dark:text-gray-600 group-hover:text-[#5B5FC7] transition" />
                             </button>

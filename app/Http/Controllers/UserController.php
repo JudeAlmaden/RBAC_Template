@@ -8,13 +8,18 @@ use App\Models\ActivityLog;
 use App\Models\Notification;
 use App\Models\Role;
 use App\Models\User;
+use App\Notifications\AccountInvitation;
+use App\Support\SetupLink;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification as NotificationFacade;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
+use Throwable;
 
 class UserController extends Controller
 {
@@ -291,16 +296,23 @@ class UserController extends Controller
     {
         $validated = $request->validated();
 
+        // No password means the account is provisioned with a setup link instead.
+        $passwordProvided = filled($validated['password'] ?? null);
+
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
+            'password' => $passwordProvided ? $validated['password'] : Str::random(40),
+            'must_change_password' => ! $passwordProvided,
         ]);
 
         $roles = $request->getSelectedRoles();
         $user->syncRoles($roles);
 
         $roleLabel = implode(', ', array_map(fn ($r) => ucwords(str_replace('_', ' ', $r)), $roles)) ?: 'User';
+
+        $setupLink = $user->must_change_password ? SetupLink::showUrlFor($user) : null;
+        $mailSent = $setupLink !== null && $this->sendInvitation($user, $setupLink, $roleLabel);
 
         Notification::send(
             recipient: $user,
@@ -309,14 +321,72 @@ class UserController extends Controller
             title: 'Your account has been created',
             options: [
                 'body' => "An account was created for you with the role: {$roleLabel}.",
-                'action_url' => route('dashboard'),
-                'action_label' => 'Go to Dashboard',
+                'action_url' => $setupLink ?? route('dashboard'),
+                'action_label' => $setupLink ? 'Set your password' : 'Go to Dashboard',
                 'icon' => 'user-plus',
                 'severity' => 'success',
             ]
         );
 
-        return redirect()->route('users.index')->with('success', "Account for '{$user->name}' created successfully.");
+        if ($setupLink === null) {
+            return redirect()->route('users.index')
+                ->with('success', "Account for '{$user->name}' created successfully.");
+        }
+
+        return redirect()->route('users.index')
+            ->with('setup_link', $setupLink)
+            ->with('setup_link_emailed', $mailSent)
+            ->with($mailSent ? 'success' : 'warning', $mailSent
+                ? "Account for '{$user->name}' created. A setup link was emailed to {$user->email}."
+                : "Account for '{$user->name}' created. Mail is not configured, so copy the setup link below.");
+    }
+
+    /**
+     * Issue a fresh setup link so a user chooses their own password.
+     */
+    public function sendSetupLink(Request $request, User $user): RedirectResponse
+    {
+        Gate::authorize('update', $user);
+
+        // Issuing a setup link invalidates the current password, so it is never
+        // self-service: signed-in users change their password from the profile form.
+        abort_if($request->user()->is($user), 403);
+
+        $user->forceFill(['must_change_password' => true])->save();
+
+        $setupLink = SetupLink::showUrlFor($user);
+        $roleLabel = $user->getRoleNames()
+            ->map(fn ($role) => ucwords(str_replace('_', ' ', $role)))
+            ->implode(', ') ?: 'User';
+
+        $mailSent = $this->sendInvitation($user, $setupLink, $roleLabel, isReset: true);
+
+        return back()
+            ->with('setup_link', $setupLink)
+            ->with('setup_link_emailed', $mailSent)
+            ->with($mailSent ? 'success' : 'warning', $mailSent
+                ? "A setup link was emailed to {$user->email}."
+                : 'Mail is not configured. Copy the setup link below and send it manually.');
+    }
+
+    /**
+     * Deliver the setup email, reporting transport failures instead of hiding them.
+     */
+    private function sendInvitation(User $user, string $setupLink, string $roleLabel, bool $isReset = false): bool
+    {
+        if (! SetupLink::mailIsDeliverable()) {
+            return false;
+        }
+
+        try {
+            NotificationFacade::send($user, new AccountInvitation($setupLink, $roleLabel, $isReset));
+
+            return true;
+        } catch (Throwable $exception) {
+            report($exception);
+
+            return false;
+        }
     }
 
     /**

@@ -4,6 +4,7 @@ import { Head, useForm, router } from '@inertiajs/react';
 import { useDebounce } from '@/hooks/useDebounce';
 import { UserPlus, Search, History, Users } from 'lucide-react';
 import ActivityLogTable from '@/Components/ActivityLogTable';
+import SetupLinkNotice from '@/Components/SetupLinkNotice';
 
 import UserTable from './Partials/UserTable';
 import CreateUserModal from './Partials/CreateUserModal';
@@ -157,6 +158,8 @@ export default function Index({ users, filters, meta, availableRoles = [], activ
             <Head title="Accounts Directory" />
 
             <div className="space-y-6">
+                <SetupLinkNotice />
+
                 {/* Tab Bar — shown whenever the user has any account management access */}
                 {(meta.canCreateUser || activityLogs !== null) && (
                     <div className="flex items-center gap-1 border-b border-[#E8E8EC] dark:border-[#26262D]">

@@ -49,7 +49,8 @@ class StoreUserRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'string', Password::defaults()],
+            // Optional: leaving it blank provisions the account with an emailed setup link.
+            'password' => ['nullable', 'string', Password::defaults()],
             'role' => [
                 'sometimes',
                 'string',

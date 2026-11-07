@@ -122,8 +122,8 @@ class LearnerController extends Controller
         $topic->load([
             'sections' => fn ($q) => $q->published()->orderBy('position')->with([
                 'pages' => fn ($p) => $p->visible()->orderBy('position')->with([
-                    'blocks' => fn ($b) => $b->visible()->orderBy('position')
-                ])
+                    'blocks' => fn ($b) => $b->visible()->orderBy('position'),
+                ]),
             ]),
         ]);
 
