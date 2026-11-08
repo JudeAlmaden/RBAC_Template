@@ -37,6 +37,29 @@ export default {
                     'surface-raised': '#334155',
                     border: '#334155',
                 },
+
+                /* Semantic theme colours. These resolve to the CSS variables
+                   declared in resources/css/app.css, so light/dark values —
+                   and any future re-theme — live in exactly one place. */
+                page: 'rgb(var(--page) / <alpha-value>)',
+                surface: 'rgb(var(--surface) / <alpha-value>)',
+                raised: 'rgb(var(--raised) / <alpha-value>)',
+                sunken: 'rgb(var(--sunken) / <alpha-value>)',
+                line: 'rgb(var(--line) / <alpha-value>)',
+                'line-strong': 'rgb(var(--line-strong) / <alpha-value>)',
+                ink: 'rgb(var(--ink) / <alpha-value>)',
+                muted: 'rgb(var(--muted) / <alpha-value>)',
+                faint: 'rgb(var(--faint) / <alpha-value>)',
+                accent: {
+                    DEFAULT: 'rgb(var(--accent) / <alpha-value>)',
+                    hover: 'rgb(var(--accent-hover) / <alpha-value>)',
+                    light: 'rgb(var(--accent-light) / <alpha-value>)',
+                },
+                sidebar: {
+                    DEFAULT: 'rgb(var(--sidebar) / <alpha-value>)',
+                    ink: 'rgb(var(--sidebar-ink) / <alpha-value>)',
+                    faint: 'rgb(var(--sidebar-faint) / <alpha-value>)',
+                },
             },
             boxShadow: {
                 'gumloop-sm': 'rgba(0, 0, 0, 0.08) 0px 1px 3px 0px, rgba(0, 0, 0, 0.05) 0px 1px 2px -1px',
