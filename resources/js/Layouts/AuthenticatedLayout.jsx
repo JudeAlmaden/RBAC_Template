@@ -405,7 +405,7 @@ function LayoutInner({ header, children, startCollapsed = false }) {
                 )}
 
                 {/* Top Bar */}
-                <header className="h-14 bg-surface border-b border-line-strong sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6">
+                <header className="h-16 bg-surface border-b border-line-strong sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6">
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => setSidebarOpen(true)}
