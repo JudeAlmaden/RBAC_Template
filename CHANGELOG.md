@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 Everything here is new: onboarding and password recovery were rebuilt around signed setup links, the stage screen became the authoring workspace, learners got their own reading surface, access moved from role names to permissions, and the whole interface now themes from one set of semantic colour tokens.
 
+Nothing in this file has been released. The project is still on the `1.0.0` template baseline, and a version number is assigned only when a release is actually cut.
+
 ### Added
 - **Signed Setup-Link Onboarding** — New accounts are created without a password; the invitee receives a signed, 72-hour link to `onboarding.show`, chooses their own password and is signed in. `OnboardingController`, `SetupLink` and the `Onboarding/Show` page back the flow, and administrators can re-issue the link from the account page.
 - **Admin Password Resets** — `UserController` can send the same signed setup link to any account, so an administrator can force a reset without knowing or setting a password.
@@ -55,7 +57,7 @@ Everything here is new: onboarding and password recovery were rebuilt around sig
 
 ---
 
-## [1.0.0] - 2026-11-05
+## 2026-11-05 — Curriculum authoring (unreleased)
 
 ### Added
 - **Dedicated Stage View** — Each learning stage in the pipeline now has its own full page (`/topics/{topic}/stages/{stage}`). Features breadcrumb trail (Courses → Course → Module → Topic → Stage), Prev/Next stage pager, hero card with section-type badge + colored metadata, 4-stat grid (Content Blocks, Activities, Layout, Required), and inline Edit Stage modal.
@@ -87,7 +89,7 @@ Everything here is new: onboarding and password recovery were rebuilt around sig
 
 ---
 
-## [1.1.0] - 2026-10-28
+## 2026-10-28 — Administration surface (unreleased)
 
 ### Added
 - **Grouped Effective Permissions Matrix by Role** — `UserPermissionsMatrix` renders permissions dynamically segmented per assigned role with role badges/icons (`Crown`, `Shield`, `User`, `Sparkles`), permission counts, Super Admin wildcard banner, and distinct PBAC direct overrides.
@@ -132,7 +134,7 @@ Everything here is new: onboarding and password recovery were rebuilt around sig
 
 ---
 
-## [1.0.0] - 2026-09-09
+## [1.0.0] - 2026-09-09 — Template baseline
 
 ### Added
 
