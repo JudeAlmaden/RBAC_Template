@@ -106,12 +106,12 @@ export default function EditUserModal({
                         <div>
                             <div className="flex items-center justify-between mb-1.5">
                                 <InputLabel value="Elevated & App Roles" />
-                                <span className="text-[11px] text-gray-400">
+                                <span className="text-[0.6875rem] text-gray-400">
                                     {currentRoles.length === 0 ? 'None (Standard User)' : `${currentRoles.length} selected`}
                                 </span>
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto p-1 border border-[#E8E8EC] dark:border-[#26262D] rounded-lg bg-[#FAFAFC] dark:bg-[#121217]">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto p-1 border border-line rounded-lg bg-raised dark:bg-sunken">
                                 {selectableRoles.map((role) => {
                                     const isSelected = currentRoles.includes(role.name);
                                     const isLocked   = role.locked === true;
@@ -121,18 +121,18 @@ export default function EditUserModal({
                                         return (
                                             <div
                                                 key={role.name}
-                                                className="flex items-start gap-2.5 p-2.5 rounded-md border text-xs select-none opacity-60 cursor-not-allowed bg-white/60 dark:bg-[#181820]/60 border-[#E8E8EC] dark:border-[#26262D]"
+                                                className="flex items-start gap-2.5 p-2.5 rounded-md border text-xs select-none opacity-60 cursor-not-allowed bg-white/60 dark:bg-raised/60 border-line"
                                                 title="Only a Super Admin can modify this role"
                                             >
-                                                <div className="mt-0.5 w-4 h-4 rounded flex items-center justify-center border border-gray-300 dark:border-gray-600 bg-white dark:bg-[#15151A] shrink-0">
+                                                <div className="mt-0.5 w-4 h-4 rounded flex items-center justify-center border border-gray-300 dark:border-line bg-surface shrink-0">
                                                     <Lock className="w-2.5 h-2.5 text-gray-400" />
                                                 </div>
                                                 <div className="min-w-0 flex-1">
                                                     <div className="font-semibold text-gray-900 dark:text-white flex items-center gap-1.5">
                                                         <span>{role.label}</span>
-                                                        <Award className="w-3 h-3 text-[#5B5FC7] shrink-0" />
+                                                        <Award className="w-3 h-3 text-accent shrink-0" />
                                                     </div>
-                                                    <p className="text-[10px] text-gray-400 truncate">{role.description}</p>
+                                                    <p className="text-[0.625rem] text-gray-400 truncate">{role.description}</p>
                                                 </div>
                                             </div>
                                         );
@@ -144,15 +144,15 @@ export default function EditUserModal({
                                             onClick={() => toggleRole(role.name)}
                                             className={`flex items-start gap-2.5 p-2.5 rounded-md border text-xs cursor-pointer transition select-none ${
                                                 isSelected
-                                                    ? 'bg-white dark:bg-[#1C1C24] border-[#5B5FC7] shadow-xs'
-                                                    : 'bg-white/60 dark:bg-[#181820]/60 border-[#E8E8EC] dark:border-[#26262D] hover:border-gray-300 dark:hover:border-gray-700'
+                                                    ? 'bg-surface dark:bg-raised border-accent shadow-xs'
+                                                    : 'bg-white/60 dark:bg-raised/60 border-line hover:border-gray-300 dark:hover:border-gray-700'
                                             }`}
                                         >
                                             <div
                                                 className={`mt-0.5 w-4 h-4 rounded flex items-center justify-center border transition shrink-0 ${
                                                     isSelected
-                                                        ? 'bg-[#5B5FC7] border-[#5B5FC7] text-white'
-                                                        : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-[#15151A]'
+                                                        ? 'bg-accent border-accent text-white'
+                                                        : 'border-gray-300 dark:border-line bg-surface'
                                                 }`}
                                             >
                                                 {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
@@ -161,13 +161,13 @@ export default function EditUserModal({
                                                 <div className="font-semibold text-gray-900 dark:text-white flex items-center gap-1.5">
                                                     <span>{role.label}</span>
                                                     {role.name === 'super_admin' && (
-                                                        <Award className="w-3 h-3 text-[#5B5FC7] shrink-0" />
+                                                        <Award className="w-3 h-3 text-accent shrink-0" />
                                                     )}
                                                     {role.name === 'admin' && (
                                                         <Shield className="w-3 h-3 text-blue-500 shrink-0" />
                                                     )}
                                                 </div>
-                                                <p className="text-[10px] text-gray-400 truncate">{role.description}</p>
+                                                <p className="text-[0.625rem] text-gray-400 truncate">{role.description}</p>
                                             </div>
                                         </div>
                                     );
@@ -182,7 +182,7 @@ export default function EditUserModal({
                     <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>
                     <PrimaryButton
                         disabled={form.processing}
-                        className="!bg-[#5B5FC7] hover:!bg-[#484CB8]"
+                        className="!bg-accent hover:!bg-accent-hover"
                     >
                         Save Changes
                     </PrimaryButton>

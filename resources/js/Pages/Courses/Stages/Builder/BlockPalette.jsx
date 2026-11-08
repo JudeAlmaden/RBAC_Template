@@ -18,14 +18,14 @@ function PaletteItem({ preset, onAdd }) {
             {...attributes}
             onClick={() => onAdd(preset)}
             title={`Add ${preset.label} — drag onto the canvas or click to append`}
-            className={`group flex w-full items-center gap-2.5 rounded-lg border border-[#E8E8EC] dark:border-brand-border bg-white dark:bg-brand-dark px-2.5 py-2 text-left transition hover:border-[#5B5FC7] hover:bg-[#5B5FC7]/5 cursor-grab active:cursor-grabbing ${
+            className={`group flex w-full items-center gap-2.5 rounded-lg border border-line dark:border-brand-border bg-surface dark:bg-brand-dark px-2.5 py-2 text-left transition hover:border-accent hover:bg-accent/5 cursor-grab active:cursor-grabbing ${
                 isDragging ? 'opacity-40' : ''
             }`}
         >
-            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[#5B5FC7]/10 dark:bg-[#5B5FC7]/20">
-                <Icon className="h-3.5 w-3.5 text-[#5B5FC7] dark:text-[#8A8DE2]" />
+            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-accent/10 dark:bg-accent/20">
+                <Icon className="h-3.5 w-3.5 text-accent-light" />
             </span>
-            <span className="min-w-0 truncate text-[11px] font-semibold text-gray-700 dark:text-gray-200">
+            <span className="min-w-0 truncate text-[0.6875rem] font-semibold text-gray-700 dark:text-gray-200">
                 {preset.label}
             </span>
         </button>
@@ -40,17 +40,17 @@ export default function BlockPalette({ onAdd }) {
     return (
         <div className="space-y-4">
             <div>
-                <h3 className="text-[11px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+                <h3 className="text-[0.6875rem] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
                     Components
                 </h3>
-                <p className="mt-0.5 text-[10px] text-gray-400 dark:text-gray-500">
+                <p className="mt-0.5 text-[0.625rem] text-gray-400 dark:text-gray-500">
                     Drag onto the canvas, or click to add.
                 </p>
             </div>
 
             {BLOCK_LIBRARY.map((group) => (
                 <div key={group.group} className="space-y-1.5">
-                    <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+                    <p className="text-[0.625rem] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">
                         {group.group}
                     </p>
                     <div className="space-y-1.5">

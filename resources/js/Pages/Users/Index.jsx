@@ -162,12 +162,12 @@ export default function Index({ users, filters, meta, availableRoles = [], activ
 
                 {/* Tab Bar — shown whenever the user has any account management access */}
                 {(meta.canCreateUser || activityLogs !== null) && (
-                    <div className="flex items-center gap-1 border-b border-[#E8E8EC] dark:border-[#26262D]">
+                    <div className="flex items-center gap-1 border-b border-line">
                         <button
                             onClick={() => setActiveTab('accounts')}
                             className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition -mb-px ${
                                 activeTab === 'accounts'
-                                    ? 'border-[#5B5FC7] text-[#5B5FC7] dark:text-[#8A8DE2]'
+                                    ? 'border-accent text-accent-light'
                                     : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
                             }`}
                         >
@@ -179,14 +179,14 @@ export default function Index({ users, filters, meta, availableRoles = [], activ
                                 onClick={() => setActiveTab('history')}
                                 className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition -mb-px ${
                                     activeTab === 'history'
-                                        ? 'border-[#5B5FC7] text-[#5B5FC7] dark:text-[#8A8DE2]'
+                                        ? 'border-accent text-accent-light'
                                         : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
                                 }`}
                             >
                                 <History className="w-3.5 h-3.5" />
                                 Activity History
                                 {activityLogs?.total > 0 && (
-                                    <span className="ml-0.5 px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-[#5B5FC7]/10 text-[#5B5FC7] dark:bg-[#5B5FC7]/20 dark:text-[#8A8DE2]">
+                                    <span className="ml-0.5 px-1.5 py-0.5 rounded-full text-[0.625rem] font-bold bg-accent/10 text-accent dark:bg-accent/20 dark:text-accent-light">
                                         {activityLogs.total}
                                     </span>
                                 )}
@@ -208,7 +208,7 @@ export default function Index({ users, filters, meta, availableRoles = [], activ
                                         value={search}
                                         onChange={(e) => setSearch(e.target.value)}
                                         placeholder="Search by name or email..."
-                                        className="w-full pl-9 pr-4 py-2 text-xs bg-white dark:bg-[#15151A] border border-[#E8E8EC] dark:border-[#26262D] rounded-lg text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#5B5FC7] focus:outline-none transition"
+                                        className="w-full pl-9 pr-4 py-2 text-xs bg-surface border border-line rounded-lg text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-accent focus:outline-none transition"
                                     />
                                 </div>
 
@@ -216,7 +216,7 @@ export default function Index({ users, filters, meta, availableRoles = [], activ
                                     <select
                                         value={roleFilter}
                                         onChange={(e) => setRoleFilter(e.target.value)}
-                                        className="text-xs bg-white dark:bg-[#15151A] border border-[#E8E8EC] dark:border-[#26262D] rounded-lg px-3 py-2 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#5B5FC7] focus:outline-none"
+                                        className="text-xs bg-surface border border-line rounded-lg px-3 py-2 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-accent focus:outline-none"
                                     >
                                         <option value="">All Roles</option>
                                         <option value="super_admin">Super Admin</option>
@@ -239,7 +239,7 @@ export default function Index({ users, filters, meta, availableRoles = [], activ
                                         createForm.reset();
                                         setCreateModalOpen(true);
                                     }}
-                                    className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#5B5FC7] hover:bg-[#484CB8] text-white text-xs font-semibold shadow-sm transition"
+                                    className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-accent hover:bg-accent-hover text-white text-xs font-semibold shadow-sm transition"
                                 >
                                     <UserPlus className="w-4 h-4" />
                                     Add Account
@@ -276,7 +276,7 @@ export default function Index({ users, filters, meta, availableRoles = [], activ
 
                 {/* Activity History Tab */}
                 {activeTab === 'history' && (
-                    <div className="bg-white dark:bg-[#15151A] rounded-xl border border-[#E8E8EC] dark:border-[#26262D] shadow-sm overflow-hidden">
+                    <div className="bg-surface rounded-xl border border-line shadow-sm overflow-hidden">
                         <ActivityLogTable
                             logs={activityLogs}
                             emptyLabel="No account activity recorded yet."

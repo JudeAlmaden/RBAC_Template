@@ -110,7 +110,7 @@ export default function Canvas({
 
             {marqueeStyle && (
                 <div
-                    className="pointer-events-none fixed z-50 rounded-sm border border-[#5B5FC7] bg-[#5B5FC7]/10"
+                    className="pointer-events-none fixed z-50 rounded-sm border border-accent bg-accent/10"
                     style={marqueeStyle}
                 />
             )}

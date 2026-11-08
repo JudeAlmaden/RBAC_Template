@@ -15,8 +15,8 @@ export default function PromoteUserModal({
         <Modal show={show} onClose={onClose}>
             <div className="p-6">
                 <div className="flex items-center gap-3 mb-3">
-                    <div className="w-9 h-9 rounded-lg bg-[#5B5FC7]/10 dark:bg-[#5B5FC7]/20 flex items-center justify-center">
-                        <Award className="w-5 h-5 text-[#5B5FC7] dark:text-[#8A8DE2]" />
+                    <div className="w-9 h-9 rounded-lg bg-accent/10 dark:bg-accent/20 flex items-center justify-center">
+                        <Award className="w-5 h-5 text-accent-light" />
                     </div>
                     <div>
                         <h3 className="text-base font-bold text-gray-900 dark:text-white">
@@ -38,7 +38,7 @@ export default function PromoteUserModal({
                     <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>
                     <PrimaryButton
                         onClick={onConfirm}
-                        className="!bg-[#5B5FC7] hover:!bg-[#484CB8]"
+                        className="!bg-accent hover:!bg-accent-hover"
                     >
                         Confirm Promotion
                     </PrimaryButton>

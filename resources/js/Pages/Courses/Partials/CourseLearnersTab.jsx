@@ -26,37 +26,37 @@ export default function CourseLearnersTab({
                 </div>
                 <button
                     onClick={onAssignLearner}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-[#4A91CC] hover:bg-[#347DBB] shadow-2xs transition"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-accent hover:bg-accent-hover shadow-2xs transition"
                 >
                     Assign Learner
                 </button>
             </div>
 
-            <div className="bg-white dark:bg-[#15151A] rounded-xl border border-[#E8E8EC] dark:border-[#26262D] overflow-hidden shadow-xs">
+            <div className="bg-surface rounded-xl border border-line overflow-hidden shadow-xs">
                 <table className="w-full text-left text-xs">
                     <thead>
-                        <tr className="border-b border-[#E8E8EC] dark:border-[#26262D] bg-[#FAFAFC] dark:bg-[#1C1C24]">
-                            <th className="py-3 px-5 font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-[10px]">
+                        <tr className="border-b border-line bg-raised">
+                            <th className="py-3 px-5 font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-[0.625rem]">
                                 Learner
                             </th>
-                            <th className="py-3 px-5 font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-[10px]">
+                            <th className="py-3 px-5 font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-[0.625rem]">
                                 Status
                             </th>
-                            <th className="py-3 px-5 font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-[10px]">
+                            <th className="py-3 px-5 font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-[0.625rem]">
                                 Progress
                             </th>
-                            <th className="py-3 px-5 font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-[10px]">
+                            <th className="py-3 px-5 font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-[0.625rem]">
                                 Enrolled Date
                             </th>
-                            <th className="py-3 px-5 font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-[10px]">
+                            <th className="py-3 px-5 font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-[0.625rem]">
                                 Due Date
                             </th>
-                            <th className="py-3 px-5 text-center font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-[10px]">
+                            <th className="py-3 px-5 text-center font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-[0.625rem]">
                                 Action
                             </th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#E8E8EC] dark:divide-[#26262D]">
+                    <tbody className="divide-y divide-line">
                         {(!course.enrollments || course.enrollments.length === 0) ? (
                             <tr>
                                 <td colSpan={6} className="py-12 text-center text-gray-400">
@@ -64,7 +64,7 @@ export default function CourseLearnersTab({
                                     <p className="text-xs font-medium">No learners enrolled yet.</p>
                                     <button
                                         onClick={onAssignLearner}
-                                        className="mt-2 text-xs font-semibold text-[#4A91CC] hover:underline"
+                                        className="mt-2 text-xs font-semibold text-accent hover:underline"
                                     >
                                         Assign a learner now
                                     </button>
@@ -75,38 +75,38 @@ export default function CourseLearnersTab({
                                 <tr
                                     key={enr.id}
                                     onClick={() => enr.user && router.visit(route('users.show', enr.user.id))}
-                                    className="group hover:bg-[#FAFAFC] dark:hover:bg-[#1C1C24] transition cursor-pointer"
+                                    className="group hover:bg-raised transition cursor-pointer"
                                 >
                                     <td className="py-2.5 px-5">
-                                        <div className="font-semibold text-gray-900 dark:text-white text-xs group-hover:text-[#4A91CC] transition">
+                                        <div className="font-semibold text-gray-900 dark:text-white text-xs group-hover:text-accent transition">
                                             {enr.user?.name || 'Unknown User'}
                                         </div>
-                                        <div className="text-[10px] text-gray-400">
+                                        <div className="text-[0.625rem] text-gray-400">
                                             {enr.user?.email}
                                         </div>
                                     </td>
                                     <td className="py-2.5 px-5">
-                                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold capitalize bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+                                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[0.625rem] font-semibold capitalize bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
                                             {enr.status}
                                         </span>
                                     </td>
                                     <td className="py-2.5 px-5">
                                         <div className="flex items-center gap-2 max-w-[140px]">
-                                            <div className="flex-1 bg-gray-200 dark:bg-gray-700 h-1.5 rounded-full overflow-hidden">
+                                            <div className="flex-1 bg-gray-200 dark:bg-raised h-1.5 rounded-full overflow-hidden">
                                                 <div
-                                                    className="bg-[#4A91CC] h-full rounded-full"
+                                                    className="bg-accent h-full rounded-full"
                                                     style={{ width: `${Math.min(enr.progress_percent || 0, 100)}%` }}
                                                 />
                                             </div>
-                                            <span className="text-[10px] font-semibold text-gray-700 dark:text-gray-300">
+                                            <span className="text-[0.625rem] font-semibold text-gray-700 dark:text-gray-300">
                                                 {Math.round(enr.progress_percent || 0)}%
                                             </span>
                                         </div>
                                     </td>
-                                    <td className="py-2.5 px-5 text-gray-500 dark:text-gray-400 text-[11px]">
+                                    <td className="py-2.5 px-5 text-gray-500 dark:text-gray-400 text-[0.6875rem]">
                                         {enr.enrolled_at || '—'}
                                     </td>
-                                    <td className="py-2.5 px-5 text-gray-500 dark:text-gray-400 text-[11px]">
+                                    <td className="py-2.5 px-5 text-gray-500 dark:text-gray-400 text-[0.6875rem]">
                                         {enr.due_at ? (
                                             <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400 font-medium">
                                                 <Calendar className="w-3 h-3" />

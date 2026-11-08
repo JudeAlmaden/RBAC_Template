@@ -113,14 +113,14 @@ export default function ModuleShow({ course, module, siblingModules = [] }) {
                         {prevModule ? (
                             <Link
                                 href={route('courses.modules.show', [course.id, prevModule.id])}
-                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md border border-gray-200 dark:border-[#26262D] bg-white dark:bg-[#15151A] text-gray-700 dark:text-gray-300 hover:bg-gray-50 text-[11px] font-medium transition"
+                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md border border-gray-200 dark:border-line bg-surface text-gray-700 dark:text-gray-300 hover:bg-raised text-[0.6875rem] font-medium transition"
                                 title={`Previous: ${prevModule.title}`}
                             >
                                 <ChevronLeft className="w-3.5 h-3.5" />
                                 Prev
                             </Link>
                         ) : (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md border border-gray-100 dark:border-[#26262D] text-gray-300 dark:text-gray-600 text-[11px] cursor-not-allowed">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md border border-gray-100 dark:border-line text-gray-300 dark:text-gray-600 text-[0.6875rem] cursor-not-allowed">
                                 <ChevronLeft className="w-3.5 h-3.5" />
                                 Prev
                             </span>
@@ -129,14 +129,14 @@ export default function ModuleShow({ course, module, siblingModules = [] }) {
                         {nextModule ? (
                             <Link
                                 href={route('courses.modules.show', [course.id, nextModule.id])}
-                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md border border-gray-200 dark:border-[#26262D] bg-white dark:bg-[#15151A] text-gray-700 dark:text-gray-300 hover:bg-gray-50 text-[11px] font-medium transition"
+                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md border border-gray-200 dark:border-line bg-surface text-gray-700 dark:text-gray-300 hover:bg-raised text-[0.6875rem] font-medium transition"
                                 title={`Next: ${nextModule.title}`}
                             >
                                 Next
                                 <ChevronRight className="w-3.5 h-3.5" />
                             </Link>
                         ) : (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md border border-gray-100 dark:border-[#26262D] text-gray-300 dark:text-gray-600 text-[11px] cursor-not-allowed">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md border border-gray-100 dark:border-line text-gray-300 dark:text-gray-600 text-[0.6875rem] cursor-not-allowed">
                                 Next
                                 <ChevronRight className="w-3.5 h-3.5" />
                             </span>

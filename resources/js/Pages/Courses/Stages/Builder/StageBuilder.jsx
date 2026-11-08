@@ -148,7 +148,7 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
 
     const typeDetails = SECTION_TYPE_DETAILS[stageDraft.section_type] || {
         label: stageDraft.section_type,
-        badge: 'bg-gray-100 text-gray-700 dark:bg-[#26262D] dark:text-gray-300',
+        badge: 'bg-gray-100 text-gray-700 dark:bg-line dark:text-gray-300',
     };
 
     const markDirty = () => setDirty(true);
@@ -508,18 +508,18 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
             onDragEnd={handleDragEnd}
             onDragCancel={() => setActiveDrag(null)}
         >
-            <div className="overflow-hidden rounded-xl border border-[#E8E8EC] bg-white shadow-xs dark:border-brand-border dark:bg-brand-surface">
+            <div className="overflow-hidden rounded-xl border border-line bg-surface shadow-xs dark:border-brand-border dark:bg-brand-surface">
                 {/* Stage header + actions */}
-                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#E8E8EC] px-4 py-2.5 dark:border-brand-border">
+                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-4 py-2.5 dark:border-brand-border">
                     <div className="flex min-w-0 items-center gap-3">
-                        <span className={`inline-flex items-center rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${typeDetails.badge}`}>
+                        <span className={`inline-flex items-center rounded px-2 py-0.5 text-[0.625rem] font-bold uppercase tracking-wider ${typeDetails.badge}`}>
                             {typeDetails.label}
                         </span>
                         <div className="min-w-0">
                             <p className="truncate text-sm font-bold text-gray-900 dark:text-white">
                                 {stageDraft.title || 'Untitled stage'}
                             </p>
-                            <p className="text-[10px] text-gray-400 dark:text-gray-500">
+                            <p className="text-[0.625rem] text-gray-400 dark:text-gray-500">
                                 {pages.length} slide{pages.length === 1 ? '' : 's'} · {totalBlocks} component
                                 {totalBlocks === 1 ? '' : 's'} · {stageDraft.is_required ? 'Required' : 'Optional'} ·{' '}
                                 {stageDraft.is_published ? 'Published' : 'Draft'}
@@ -530,7 +530,7 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
 
                     <div className="flex items-center gap-2">
                         {isDirty && (
-                            <span className="hidden items-center gap-1.5 text-[11px] font-medium text-amber-600 sm:flex dark:text-amber-400">
+                            <span className="hidden items-center gap-1.5 text-[0.6875rem] font-medium text-amber-600 sm:flex dark:text-amber-400">
                                 <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
                                 Unsaved changes
                             </span>
@@ -541,10 +541,10 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
                             onClick={() => setSettingsOpen((value) => !value)}
                             aria-pressed={settingsOpen}
                             title={settingsOpen ? 'Hide slide & stage settings' : 'Show slide & stage settings'}
-                            className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-[11px] font-semibold transition ${
+                            className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-[0.6875rem] font-semibold transition ${
                                 settingsOpen
-                                    ? 'border-[#5B5FC7] bg-[#5B5FC7]/10 text-[#5B5FC7] dark:text-[#8A8DE2]'
-                                    : 'border-[#E8E8EC] text-gray-700 hover:bg-gray-50 dark:border-brand-border dark:text-gray-200 dark:hover:bg-brand-dark'
+                                    ? 'border-accent bg-accent/10 text-accent-light'
+                                    : 'border-line text-gray-700 hover:bg-raised dark:border-brand-border dark:text-gray-200 dark:hover:bg-brand-dark'
                             }`}
                         >
                             <SlidersHorizontal className="h-3.5 w-3.5" />
@@ -556,7 +556,7 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
                             target="_blank"
                             rel="noopener noreferrer"
                             title="Open the learner view of this stage in a new tab"
-                            className={`inline-flex items-center gap-1.5 rounded-lg border border-[#E8E8EC] px-2.5 py-1.5 text-[11px] font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-brand-border dark:text-gray-200 dark:hover:bg-brand-dark ${
+                            className={`inline-flex items-center gap-1.5 rounded-lg border border-line px-2.5 py-1.5 text-[0.6875rem] font-semibold text-gray-700 transition hover:bg-raised dark:border-brand-border dark:text-gray-200 dark:hover:bg-brand-dark ${
                                 previewHref ? '' : 'pointer-events-none opacity-40'
                             }`}
                         >
@@ -568,7 +568,7 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
                             type="button"
                             onClick={handleDiscard}
                             disabled={!isDirty || saving}
-                            className="inline-flex items-center gap-1.5 rounded-lg border border-[#E8E8EC] px-2.5 py-1.5 text-[11px] font-semibold text-gray-700 transition hover:bg-gray-50 disabled:opacity-40 dark:border-brand-border dark:text-gray-200 dark:hover:bg-brand-dark"
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-line px-2.5 py-1.5 text-[0.6875rem] font-semibold text-gray-700 transition hover:bg-raised disabled:opacity-40 dark:border-brand-border dark:text-gray-200 dark:hover:bg-brand-dark"
                         >
                             <Undo2 className="h-3.5 w-3.5" />
                             Discard
@@ -579,7 +579,7 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
                             onClick={handleSave}
                             disabled={!isDirty || saving}
                             title="Save (⌘/Ctrl+S)"
-                            className="inline-flex items-center gap-1.5 rounded-lg bg-[#5B5FC7] px-3 py-1.5 text-[11px] font-semibold text-white shadow-xs transition hover:bg-[#484CB8] disabled:opacity-50"
+                            className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-3 py-1.5 text-[0.6875rem] font-semibold text-white shadow-xs transition hover:bg-accent-hover disabled:opacity-50"
                         >
                             {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
                             {saving ? 'Saving…' : 'Save'}
@@ -589,7 +589,7 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
                             <button
                                 type="button"
                                 onClick={() => setMenuOpen((open) => !open)}
-                                className="inline-flex rounded-lg border border-[#E8E8EC] p-1.5 text-gray-500 transition hover:bg-gray-50 dark:border-brand-border dark:text-gray-300 dark:hover:bg-brand-dark"
+                                className="inline-flex rounded-lg border border-line p-1.5 text-gray-500 transition hover:bg-raised dark:border-brand-border dark:text-gray-300 dark:hover:bg-brand-dark"
                                 title="Stage actions"
                                 aria-label="Stage actions"
                             >
@@ -598,14 +598,14 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
                             {menuOpen && (
                                 <>
                                     <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
-                                    <div className="absolute right-0 top-full z-50 mt-1 w-44 overflow-hidden rounded-lg border border-[#E8E8EC] bg-white p-1 shadow-lg dark:border-brand-border dark:bg-brand-surface">
+                                    <div className="absolute right-0 top-full z-50 mt-1 w-44 overflow-hidden rounded-lg border border-line bg-surface p-1 shadow-lg dark:border-brand-border dark:bg-brand-surface">
                                         <button
                                             type="button"
                                             onClick={() => {
                                                 setMenuOpen(false);
                                                 onDeleteStage?.();
                                             }}
-                                            className="flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-left text-[11px] font-semibold text-red-600 transition hover:bg-red-50 dark:hover:bg-red-900/20"
+                                            className="flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-left text-[0.6875rem] font-semibold text-red-600 transition hover:bg-red-50 dark:hover:bg-red-900/20"
                                         >
                                             <Trash2 className="h-3.5 w-3.5" />
                                             Delete stage
@@ -620,8 +620,8 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
                 {/* Workspace */}
                 <div className="flex h-[calc(100dvh-14rem)] min-h-[520px]">
                     {/* Left pane */}
-                    <aside className="flex w-60 shrink-0 flex-col border-r border-[#E8E8EC] dark:border-brand-border">
-                        <div className="flex gap-1 border-b border-[#E8E8EC] p-2 dark:border-brand-border">
+                    <aside className="flex w-60 shrink-0 flex-col border-r border-line dark:border-brand-border">
+                        <div className="flex gap-1 border-b border-line p-2 dark:border-brand-border">
                             {[
                                 { key: 'pages', label: 'Slides', Icon: Layers },
                                 { key: 'components', label: 'Components', Icon: Boxes },
@@ -630,10 +630,10 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
                                     key={key}
                                     type="button"
                                     onClick={() => setPane(key)}
-                                    className={`inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg px-2 py-1.5 text-[11px] font-semibold transition ${
+                                    className={`inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg px-2 py-1.5 text-[0.6875rem] font-semibold transition ${
                                         pane === key
-                                            ? 'bg-[#5B5FC7] text-white shadow-xs'
-                                            : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-brand-dark'
+                                            ? 'bg-accent text-white shadow-xs'
+                                            : 'text-gray-600 hover:bg-raised dark:text-gray-300 dark:hover:bg-brand-dark'
                                     }`}
                                 >
                                     <Icon className="h-3.5 w-3.5" />
@@ -659,7 +659,7 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
                     </aside>
 
                     {/* Center canvas */}
-                    <main className="min-w-0 flex-1 overflow-y-auto bg-[#FAFAFC] p-6 dark:bg-[#101014] transition-all duration-300">
+                    <main className="min-w-0 flex-1 overflow-y-auto bg-raised p-6 dark:bg-sunken transition-all duration-300">
                         {activePage && (
                             <div className={`mx-auto transition-[max-width] duration-200 ${inspectorVisible ? 'max-w-4xl' : 'max-w-5xl'}`}>
                                 <div className="mb-4 flex items-center justify-between">
@@ -667,7 +667,7 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
                                         <h3 className="text-sm font-bold text-gray-900 dark:text-white">
                                             {activePage.title || 'Untitled slide'}
                                         </h3>
-                                        <p className="text-[11px] text-gray-400 dark:text-gray-500">
+                                        <p className="text-[0.6875rem] text-gray-400 dark:text-gray-500">
                                             {activePage.blocks.length} component
                                             {activePage.blocks.length === 1 ? '' : 's'} · click to select, drag to reorder
                                         </p>
@@ -691,7 +691,7 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
 
                     {/* Right inspector: opens on selection, or stays pinned for slide/stage settings */}
                     {inspectorVisible && (
-                        <aside className="w-80 shrink-0 overflow-y-auto custom-scrollbar border-l border-[#E8E8EC] p-4 dark:border-brand-border">
+                        <aside className="w-80 shrink-0 overflow-y-auto custom-scrollbar border-l border-line p-4 dark:border-brand-border">
                             {activePage && (
                                 <Inspector
                                     page={activePage}
@@ -724,8 +724,8 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
                 {activeDrag && (
                     <div className="z-[100] cursor-grabbing select-none pointer-events-none">
                         {activeDrag.kind === 'block' && activeDrag.block ? (
-                            <div className="w-64 rounded-lg border border-[#5B5FC7] bg-white p-3 shadow-xl dark:bg-brand-surface">
-                                <span className="mb-2 block text-[9px] font-semibold uppercase tracking-wider text-[#5B5FC7]">
+                            <div className="w-64 rounded-lg border border-accent bg-surface p-3 shadow-xl dark:bg-brand-surface">
+                                <span className="mb-2 block text-[0.5625rem] font-semibold uppercase tracking-wider text-accent">
                                     {activeDrag.label}
                                 </span>
                                 <div className="opacity-80">
@@ -733,7 +733,7 @@ export default function StageBuilder({ stage, topic, onDeleteStage }) {
                                 </div>
                             </div>
                         ) : (
-                            <div className="inline-flex items-center gap-2 rounded-lg border border-[#5B5FC7] bg-white px-3 py-2 text-[11px] font-semibold text-[#5B5FC7] shadow-lg dark:bg-brand-dark dark:text-[#8A8DE2]">
+                            <div className="inline-flex items-center gap-2 rounded-lg border border-accent bg-surface px-3 py-2 text-[0.6875rem] font-semibold text-accent shadow-lg dark:bg-brand-dark dark:text-accent-light">
                                 {activeDrag.Icon && <activeDrag.Icon className="h-3.5 w-3.5" />}
                                 {activeDrag.label}
                             </div>

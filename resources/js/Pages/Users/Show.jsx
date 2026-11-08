@@ -114,7 +114,7 @@ export default function UserShow({
                 <div className="flex items-center gap-3">
                     <Link
                         href={route('users.index')}
-                        className="p-1.5 rounded-lg border border-[#E8E8EC] dark:border-[#2A2A35] bg-white dark:bg-[#1A1A22] text-gray-500 hover:text-gray-800 dark:hover:text-gray-200 transition"
+                        className="p-1.5 rounded-lg border border-line bg-surface dark:bg-raised text-gray-500 hover:text-gray-800 dark:hover:text-gray-200 transition"
                         title="Back to Accounts"
                     >
                         <ArrowLeft className="w-4 h-4" />

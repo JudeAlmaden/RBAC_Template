@@ -69,7 +69,7 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
             case 'super_admin':
                 return {
                     icon: Crown,
-                    containerClass: 'bg-[#5B5FC7]/10 text-[#5B5FC7] dark:bg-[#5B5FC7]/20 dark:text-[#8A8DE2]',
+                    containerClass: 'bg-accent/10 text-accent dark:bg-accent/20 dark:text-accent-light',
                 };
             case 'admin':
                 return {
@@ -79,7 +79,7 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
             case 'user':
                 return {
                     icon: User,
-                    containerClass: 'bg-gray-100 text-gray-700 dark:bg-[#252530] dark:text-gray-300',
+                    containerClass: 'bg-gray-100 text-gray-700 dark:bg-raised dark:text-gray-300',
                 };
             default:
                 return {
@@ -221,12 +221,12 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
 
             <div className="space-y-6">
                 {/* Tab Bar */}
-                <div className="flex items-center gap-1 border-b border-[#E8E8EC] dark:border-[#26262D]">
+                <div className="flex items-center gap-1 border-b border-line">
                     <button
                         onClick={() => setActiveTab('roles')}
                         className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition -mb-px ${
                             activeTab === 'roles'
-                                ? 'border-[#5B5FC7] text-[#5B5FC7] dark:text-[#8A8DE2]'
+                                ? 'border-accent text-accent-light'
                                 : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
                         }`}
                     >
@@ -237,14 +237,14 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
                         onClick={() => setActiveTab('history')}
                         className={`inline-flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition -mb-px ${
                             activeTab === 'history'
-                                ? 'border-[#5B5FC7] text-[#5B5FC7] dark:text-[#8A8DE2]'
+                                ? 'border-accent text-accent-light'
                                 : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
                         }`}
                     >
                         <History className="w-3.5 h-3.5" />
                         Activity History
                         {activityLogs?.total > 0 && (
-                            <span className="ml-0.5 px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-[#5B5FC7]/10 text-[#5B5FC7] dark:bg-[#5B5FC7]/20 dark:text-[#8A8DE2]">
+                            <span className="ml-0.5 px-1.5 py-0.5 rounded-full text-[0.625rem] font-bold bg-accent/10 text-accent dark:bg-accent/20 dark:text-accent-light">
                                 {activityLogs.total}
                             </span>
                         )}
@@ -262,7 +262,7 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
                                         createForm.reset();
                                         setCreateModalOpen(true);
                                     }}
-                                    className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#5B5FC7] hover:bg-[#484CB8] text-white text-xs font-semibold shadow-sm transition"
+                                    className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-accent hover:bg-accent-hover text-white text-xs font-semibold shadow-sm transition"
                                 >
                                     <Plus className="w-4 h-4" />
                                     Create Custom Role
@@ -271,22 +271,22 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
                         )}
 
                         {/* Roles Table */}
-                        <div className="bg-white dark:bg-[#15151A] rounded-xl border border-[#E8E8EC] dark:border-[#26262D] shadow-sm overflow-hidden">
+                        <div className="bg-surface rounded-xl border border-line shadow-sm overflow-hidden">
                             <div className="overflow-x-auto">
                                 <table className="w-full text-left border-collapse text-xs">
                                     <thead>
-                                <tr className="border-b border-[#E8E8EC] dark:border-[#26262D] bg-[#FAFAFC] dark:bg-[#1C1C24] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-[10px]">
+                                <tr className="border-b border-line bg-raised font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-[0.625rem]">
                                     <th className="py-3.5 px-5 w-[30%]">Role Name</th>
                                     <th className="py-3.5 px-5 w-[24%]">Personnel / Active Seats</th>
                                     <th className="py-3.5 px-5 w-[32%]">Granted Permissions</th>
                                     <th className="py-3.5 px-5 w-[14%] text-right">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-[#E8E8EC] dark:divide-[#26262D] text-gray-700 dark:text-gray-300">
+                            <tbody className="divide-y divide-line text-gray-700 dark:text-gray-300">
                                 {roles.map((role) => {
                                     const isFull = role.maxActiveUsers !== null && role.activeUsersCount >= role.maxActiveUsers;
                                     return (
-                                        <tr key={role.id} className="hover:bg-gray-50/60 dark:hover:bg-[#1C1C24]/50 transition">
+                                        <tr key={role.id} className="hover:bg-raised/60 dark:hover:bg-raised/50 transition">
                                             <td className="py-4 px-5">
                                                 <div className="flex items-center gap-3">
                                                     {(() => {
@@ -306,12 +306,12 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
                                                                 <Lock className="w-3 h-3 text-gray-400 dark:text-gray-500 shrink-0" title="System protected role" />
                                                             )}
                                                             {!role.is_active && (
-                                                                <span className="text-[10px] text-amber-600 dark:text-amber-400 font-medium">
+                                                                <span className="text-[0.625rem] text-amber-600 dark:text-amber-400 font-medium">
                                                                     (Disabled)
                                                                 </span>
                                                             )}
                                                         </div>
-                                                        <div className="text-[11px] text-gray-400 truncate mt-0.5">
+                                                        <div className="text-[0.6875rem] text-gray-400 truncate mt-0.5">
                                                             {getRoleSubtitle(role)}
                                                         </div>
                                                     </div>
@@ -334,7 +334,7 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
                                                         </div>
 
                                                     </div>
-                                                    <div className="text-[11px] text-gray-400 pl-5">
+                                                    <div className="text-[0.6875rem] text-gray-400 pl-5">
                                                         {role.usersCount} total account{role.usersCount === 1 ? '' : 's'}
                                                     </div>
                                                 </div>
@@ -343,8 +343,8 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
                                             <td className="py-4 px-5">
                                                 {role.name === 'super_admin' ? (
                                                     <div className="flex items-center gap-2 ">
-                                                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#5B5FC7]/10 dark:bg-[#5B5FC7]/20 text-[#5B5FC7] dark:text-[#8A8DE2] border border-[#5B5FC7]/20">
-                                                            <ShieldCheck className="w-3.5 h-3.5 text-[#5B5FC7] dark:text-[#8A8DE2]" />
+                                                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-accent/10 dark:bg-accent/20 text-accent-light border border-accent/20">
+                                                            <ShieldCheck className="w-3.5 h-3.5 text-accent-light" />
                                                             Full System Access
                                                         </span>
                                                     </div>
@@ -355,13 +355,13 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
                                                         {role.permissions.slice(0, 2).map((p) => (
                                                             <span
                                                                 key={p}
-                                                                className="inline-block px-2 py-0.5 rounded-md text-[11px] font-medium bg-gray-100 dark:bg-[#202028] text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-[#2C2C38]"
+                                                                className="inline-block px-2 py-0.5 rounded-md text-[0.6875rem] font-medium bg-gray-100 dark:bg-raised text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-line"
                                                             >
                                                                 {formatPermLabel(p)}
                                                             </span>
                                                         ))}
                                                         {role.permissions.length > 2 && (
-                                                            <span className="inline-block px-1.5 py-0.5 rounded-md text-[10px] font-medium bg-gray-50 dark:bg-[#1A1A22] text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-[#2C2C38]">
+                                                            <span className="inline-block px-1.5 py-0.5 rounded-md text-[0.625rem] font-medium bg-gray-50 dark:bg-raised text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-line">
                                                                 +{role.permissions.length - 2} more
                                                             </span>
                                                         )}
@@ -374,7 +374,7 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
                                                     {(!role.isProtected || can.isSuperAdmin) ? (
                                                         <button
                                                             onClick={() => handleOpenEdit(role)}
-                                                            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-[#22222C] hover:bg-gray-200 dark:hover:bg-[#2A2A38] transition"
+                                                            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-raised hover:bg-gray-200 dark:hover:bg-raised transition"
                                                             title="Configure Permissions"
                                                         >
                                                             <Sliders className="w-3.5 h-3.5 text-gray-400" />
@@ -400,7 +400,7 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
 
                 {/* Activity History Tab */}
                 {activeTab === 'history' && (
-                    <div className="bg-white dark:bg-[#15151A] rounded-xl border border-[#E8E8EC] dark:border-[#26262D] shadow-sm overflow-hidden">
+                    <div className="bg-surface rounded-xl border border-line shadow-sm overflow-hidden">
                         <ActivityLogTable
                             logs={activityLogs}
                             emptyLabel="No role activity recorded yet."
@@ -415,9 +415,9 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
             {/* ── CREATE ROLE MODAL ─────────────────────────────────────────── */}
             <Modal show={createModalOpen} onClose={() => setCreateModalOpen(false)} maxWidth="2xl">
                 <form onSubmit={handleCreateSubmit} className="flex flex-col max-h-[calc(100vh-3.5rem)] overflow-hidden">
-                    <div className="p-5 sm:p-6 pb-4 border-b border-[#E8E8EC] dark:border-[#26262D] shrink-0 flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-lg bg-[#5B5FC7]/10 dark:bg-[#5B5FC7]/20 flex items-center justify-center shrink-0">
-                            <ShieldCheck className="w-5 h-5 text-[#5B5FC7] dark:text-[#8A8DE2]" />
+                    <div className="p-5 sm:p-6 pb-4 border-b border-line shrink-0 flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-lg bg-accent/10 dark:bg-accent/20 flex items-center justify-center shrink-0">
+                            <ShieldCheck className="w-5 h-5 text-accent-light" />
                         </div>
                         <div>
                             <h3 className="text-base font-bold text-gray-900 dark:text-white">Create Custom Role</h3>
@@ -450,7 +450,7 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
                                 placeholder="Leave empty for unlimited active personnel"
                                 className="mt-1 block w-full text-xs"
                             />
-                            <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">
+                            <p className="text-[0.6875rem] text-gray-500 dark:text-gray-400 mt-1">
                                 Cap the number of active users for this role. Deactivated users do not count against this limit.
                             </p>
                             <InputError message={createForm.errors.max_active_users} className="mt-1" />
@@ -469,16 +469,16 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
                                     return (
                                         <div
                                             key={group.category}
-                                            className="border border-[#E8E8EC] dark:border-[#26262D] rounded-xl p-3.5 bg-gray-50/50 dark:bg-[#1A1A22]"
+                                            className="border border-line rounded-xl p-3.5 bg-gray-50/50 dark:bg-raised"
                                         >
-                                            <div className="flex items-center justify-between pb-2 mb-2.5 border-b border-[#E8E8EC] dark:border-[#26262D]">
+                                            <div className="flex items-center justify-between pb-2 mb-2.5 border-b border-line">
                                                 <span className="font-semibold text-xs text-gray-900 dark:text-white">
                                                     {group.category}
                                                 </span>
                                                 <button
                                                     type="button"
                                                     onClick={() => toggleCreateCategory(group.permissions)}
-                                                    className="text-[11px] font-medium text-[#5B5FC7] dark:text-[#8A8DE2] hover:underline"
+                                                    className="text-[0.6875rem] font-medium text-accent-light hover:underline"
                                                 >
                                                     {allChecked ? 'Deselect All' : 'Select All'}
                                                 </button>
@@ -496,13 +496,13 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
                                                                 type="checkbox"
                                                                 checked={checked}
                                                                 onChange={() => toggleCreatePerm(perm.name)}
-                                                                className="mt-0.5 rounded border-gray-300 dark:border-gray-700 text-[#5B5FC7] focus:ring-[#5B5FC7] dark:bg-[#15151A]"
+                                                                className="mt-0.5 rounded border-gray-300 dark:border-line text-accent focus:ring-accent dark:bg-surface"
                                                             />
                                                             <div>
-                                                                <div className="font-mono text-xs font-semibold text-gray-800 dark:text-gray-200 group-hover:text-[#5B5FC7] dark:group-hover:text-[#8A8DE2] transition">
+                                                                <div className="font-mono text-xs font-semibold text-gray-800 dark:text-gray-200 group-hover:text-accent-light transition">
                                                                     {perm.name}
                                                                 </div>
-                                                                <div className="text-[11px] text-gray-500 dark:text-gray-400">
+                                                                <div className="text-[0.6875rem] text-gray-500 dark:text-gray-400">
                                                                     {perm.description}
                                                                 </div>
                                                             </div>
@@ -517,9 +517,9 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
                         </div>
                     </div>
 
-                    <div className="p-4 px-5 sm:px-6 border-t border-[#E8E8EC] dark:border-[#26262D] bg-gray-50/75 dark:bg-[#181820] shrink-0 flex items-center justify-end gap-2.5">
+                    <div className="p-4 px-5 sm:px-6 border-t border-line bg-gray-50/75 dark:bg-raised shrink-0 flex items-center justify-end gap-2.5">
                         <SecondaryButton onClick={() => setCreateModalOpen(false)}>Cancel</SecondaryButton>
-                        <PrimaryButton disabled={createForm.processing} className="!bg-[#5B5FC7] hover:!bg-[#484CB8]">
+                        <PrimaryButton disabled={createForm.processing} className="!bg-accent hover:!bg-accent-hover">
                             Create Role
                         </PrimaryButton>
                     </div>
@@ -529,9 +529,9 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
             {/* ── CONFIGURE / EDIT ROLE MODAL ──────────────────────────────── */}
             <Modal show={editModalOpen} onClose={() => setEditModalOpen(false)} maxWidth="2xl">
                 <form onSubmit={handleEditSubmit} className="flex flex-col max-h-[calc(100vh-3.5rem)] overflow-hidden">
-                    <div className="p-5 sm:p-6 pb-4 border-b border-[#E8E8EC] dark:border-[#26262D] shrink-0 flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-lg bg-[#5B5FC7]/10 dark:bg-[#5B5FC7]/20 flex items-center justify-center shrink-0">
-                            <Sliders className="w-5 h-5 text-[#5B5FC7] dark:text-[#8A8DE2]" />
+                    <div className="p-5 sm:p-6 pb-4 border-b border-line shrink-0 flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-lg bg-accent/10 dark:bg-accent/20 flex items-center justify-center shrink-0">
+                            <Sliders className="w-5 h-5 text-accent-light" />
                         </div>
                         <div>
                             <h3 className="text-base font-bold text-gray-900 dark:text-white">
@@ -551,12 +551,12 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
                                 value={editForm.data.name}
                                 onChange={(e) => editForm.setData('name', e.target.value)}
                                 disabled={selectedRole?.isProtected}
-                                className={`mt-1 block w-full text-xs ${selectedRole?.isProtected ? 'opacity-70 bg-gray-100 dark:bg-[#1A1A22] cursor-not-allowed' : ''
+                                className={`mt-1 block w-full text-xs ${selectedRole?.isProtected ? 'opacity-70 bg-gray-100 dark:bg-raised cursor-not-allowed' : ''
                                     }`}
                                 required
                             />
                             {selectedRole?.isProtected && (
-                                <p className="text-[11px] text-gray-400 mt-1">
+                                <p className="text-[0.6875rem] text-gray-400 mt-1">
                                     System protected roles cannot be renamed.
                                 </p>
                             )}
@@ -574,7 +574,7 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
                                 placeholder="Leave empty for unlimited active personnel"
                                 className="mt-1 block w-full text-xs"
                             />
-                            <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">
+                            <p className="text-[0.6875rem] text-gray-500 dark:text-gray-400 mt-1">
                                 Active user seats limit. Deactivated users do not count against this capacity.
                             </p>
                             <InputError message={editForm.errors.max_active_users} className="mt-1" />
@@ -593,16 +593,16 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
                                     return (
                                         <div
                                             key={group.category}
-                                            className="border border-[#E8E8EC] dark:border-[#26262D] rounded-xl p-3.5 bg-gray-50/50 dark:bg-[#1A1A22]"
+                                            className="border border-line rounded-xl p-3.5 bg-gray-50/50 dark:bg-raised"
                                         >
-                                            <div className="flex items-center justify-between pb-2 mb-2.5 border-b border-[#E8E8EC] dark:border-[#26262D]">
+                                            <div className="flex items-center justify-between pb-2 mb-2.5 border-b border-line">
                                                 <span className="font-semibold text-xs text-gray-900 dark:text-white">
                                                     {group.category}
                                                 </span>
                                                 <button
                                                     type="button"
                                                     onClick={() => toggleEditCategory(group.permissions)}
-                                                    className="text-[11px] font-medium text-[#5B5FC7] dark:text-[#8A8DE2] hover:underline"
+                                                    className="text-[0.6875rem] font-medium text-accent-light hover:underline"
                                                 >
                                                     {allChecked ? 'Deselect All' : 'Select All'}
                                                 </button>
@@ -626,7 +626,7 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
                                                                 checked={checked}
                                                                 disabled={isLockedSuperAdmin}
                                                                 onChange={() => toggleEditPerm(perm.name)}
-                                                                className="mt-0.5 rounded border-gray-300 dark:border-gray-700 text-[#5B5FC7] focus:ring-[#5B5FC7] dark:bg-[#15151A]"
+                                                                className="mt-0.5 rounded border-gray-300 dark:border-line text-accent focus:ring-accent dark:bg-surface"
                                                             />
                                                             <div className="flex-1">
                                                                 <div className="flex items-center gap-2">
@@ -634,12 +634,12 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
                                                                         {perm.name}
                                                                     </span>
                                                                     {isLockedSuperAdmin && (
-                                                                        <span className="text-[10px] text-amber-600 dark:text-amber-400 font-sans">
+                                                                        <span className="text-[0.625rem] text-amber-600 dark:text-amber-400 font-sans">
                                                                             (Required for Super Admin)
                                                                         </span>
                                                                     )}
                                                                 </div>
-                                                                <div className="text-[11px] text-gray-500 dark:text-gray-400">
+                                                                <div className="text-[0.6875rem] text-gray-500 dark:text-gray-400">
                                                                     {perm.description}
                                                                 </div>
                                                             </div>
@@ -655,7 +655,7 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
 
                         {/* Danger Zone: Only for custom non-protected roles */}
                         {!selectedRole?.isProtected && (
-                            <div className="mt-6 pt-5 border-t border-[#E8E8EC] dark:border-[#26262D]">
+                            <div className="mt-6 pt-5 border-t border-line">
                                 <div className="text-xs font-semibold text-red-600 dark:text-red-400 mb-2.5 flex items-center gap-1.5">
                                     <AlertTriangle className="w-3.5 h-3.5" />
                                     Danger Zone
@@ -668,7 +668,7 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
                                             <div className="text-xs font-semibold text-gray-900 dark:text-white">
                                                 {selectedRole?.is_active ? 'Deactivate this role' : 'Activate this role'}
                                             </div>
-                                            <div className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
+                                            <div className="text-[0.6875rem] text-gray-500 dark:text-gray-400 mt-0.5">
                                                 {selectedRole?.is_active
                                                     ? 'Prevent this role from being assigned to any new accounts.'
                                                     : 'Enable this role so administrators can assign it to accounts.'}
@@ -694,7 +694,7 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
                                             <div className="text-xs font-semibold text-gray-900 dark:text-white">
                                                 Delete this custom role
                                             </div>
-                                            <div className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
+                                            <div className="text-[0.6875rem] text-gray-500 dark:text-gray-400 mt-0.5">
                                                 {selectedRole?.usersCount > 0 ? (
                                                     <span className="text-amber-600 dark:text-amber-400 font-medium">
                                                         Cannot delete: {selectedRole.usersCount} user(s) currently assigned. Reassign them first.
@@ -713,7 +713,7 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
                                             }}
                                             className={`shrink-0 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 w-36 rounded-lg text-xs font-medium transition border ${
                                                 selectedRole?.usersCount > 0
-                                                    ? 'opacity-40 cursor-not-allowed bg-gray-100 dark:bg-[#202028] text-gray-400 border-gray-200 dark:border-[#2C2C38]'
+                                                    ? 'opacity-40 cursor-not-allowed bg-gray-100 dark:bg-raised text-gray-400 border-gray-200 dark:border-line'
                                                     : 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/40 hover:bg-red-100 dark:hover:bg-red-900/40 border-red-200 dark:border-red-900/50'
                                             }`}
                                         >
@@ -727,9 +727,9 @@ export default function Index({ roles, categorizedPermissions, activityLogs = nu
                     </div>
 
                     {/* Standard, clean modal footer */}
-                    <div className="p-4 px-5 sm:px-6 border-t border-[#E8E8EC] dark:border-[#26262D] bg-gray-50/75 dark:bg-[#181820] shrink-0 flex items-center justify-end gap-2.5">
+                    <div className="p-4 px-5 sm:px-6 border-t border-line bg-gray-50/75 dark:bg-raised shrink-0 flex items-center justify-end gap-2.5">
                         <SecondaryButton onClick={() => setEditModalOpen(false)}>Cancel</SecondaryButton>
-                        <PrimaryButton disabled={editForm.processing} className="!bg-[#5B5FC7] hover:!bg-[#484CB8]">
+                        <PrimaryButton disabled={editForm.processing} className="!bg-accent hover:!bg-accent-hover">
                             Save Changes
                         </PrimaryButton>
                     </div>

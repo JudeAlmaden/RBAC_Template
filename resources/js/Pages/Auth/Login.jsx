@@ -112,7 +112,7 @@ export default function Login({ status, canResetPassword }) {
             </form>
 
             {/* Quick Login Test helper for RBAC testing */}
-            <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <div className="mt-8 pt-6 border-t border-gray-200 dark:border-line">
                 <div className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3 flex items-center gap-1.5">
                     <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
                     <span>Quick Test Accounts</span>
@@ -123,11 +123,11 @@ export default function Login({ status, canResetPassword }) {
                         onClick={() => quickFill('superadmin@example.com', 'password')}
                         className="p-2 text-left rounded-lg bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800 hover:border-indigo-400 transition group"
                     >
-                        <div className="flex items-center gap-1 text-[11px] font-bold text-indigo-700 dark:text-indigo-400">
+                        <div className="flex items-center gap-1 text-[0.6875rem] font-bold text-indigo-700 dark:text-indigo-400">
                             <Shield className="w-3 h-3" />
                             <span>Super Admin</span>
                         </div>
-                        <div className="text-[10px] text-gray-500 dark:text-gray-400 truncate mt-0.5">superadmin</div>
+                        <div className="text-[0.625rem] text-gray-500 dark:text-gray-400 truncate mt-0.5">superadmin</div>
                     </button>
 
                     <button
@@ -135,23 +135,23 @@ export default function Login({ status, canResetPassword }) {
                         onClick={() => quickFill('admin@example.com', 'password')}
                         className="p-2 text-left rounded-lg bg-purple-50 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800 hover:border-purple-400 transition group"
                     >
-                        <div className="flex items-center gap-1 text-[11px] font-bold text-purple-700 dark:text-purple-400">
+                        <div className="flex items-center gap-1 text-[0.6875rem] font-bold text-purple-700 dark:text-purple-400">
                             <UserCheck className="w-3 h-3" />
                             <span>Admin</span>
                         </div>
-                        <div className="text-[10px] text-gray-500 dark:text-gray-400 truncate mt-0.5">admin</div>
+                        <div className="text-[0.625rem] text-gray-500 dark:text-gray-400 truncate mt-0.5">admin</div>
                     </button>
 
                     <button
                         type="button"
                         onClick={() => quickFill('user@example.com', 'password')}
-                        className="p-2 text-left rounded-lg bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 hover:border-slate-400 transition group"
+                        className="p-2 text-left rounded-lg bg-slate-50 dark:bg-raised border border-slate-200 dark:border-line hover:border-slate-400 transition group"
                     >
-                        <div className="flex items-center gap-1 text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                        <div className="flex items-center gap-1 text-[0.6875rem] font-bold text-slate-700 dark:text-slate-300">
                             <User className="w-3 h-3" />
                             <span>User</span>
                         </div>
-                        <div className="text-[10px] text-gray-500 dark:text-gray-400 truncate mt-0.5">user</div>
+                        <div className="text-[0.625rem] text-gray-500 dark:text-gray-400 truncate mt-0.5">user</div>
                     </button>
                 </div>
             </div>

@@ -64,11 +64,11 @@ export default function DeleteUserModal({
                 {/* Loading State */}
                 {loading ? (
                     <div className="py-8 flex flex-col items-center justify-center text-center">
-                        <Loader2 className="w-8 h-8 text-[#5B5FC7] animate-spin mb-3" />
+                        <Loader2 className="w-8 h-8 text-accent animate-spin mb-3" />
                         <p className="text-xs font-medium text-gray-700 dark:text-gray-300">
                             Inspecting account audit history & records...
                         </p>
-                        <p className="text-[11px] text-gray-400 mt-1">
+                        <p className="text-[0.6875rem] text-gray-400 mt-1">
                             Checking for associated activity logs and system dependencies
                         </p>
                     </div>
@@ -112,7 +112,7 @@ export default function DeleteUserModal({
                             <span className="text-gray-400 font-mono">({selectedUser?.email})</span>?
                         </p>
 
-                        <div className="p-3 bg-gray-50 dark:bg-[#15151A] rounded-lg border border-[#E8E8EC] dark:border-[#26262D] text-[11px] text-gray-500 dark:text-gray-400 mb-6 leading-relaxed">
+                        <div className="p-3 bg-gray-50 dark:bg-surface rounded-lg border border-line text-[0.6875rem] text-gray-500 dark:text-gray-400 mb-6 leading-relaxed">
                             This account has no associated audit logs or foreign records. Deletion is permanent and cannot be undone.
                         </div>
 
@@ -163,7 +163,7 @@ export default function DeleteUserModal({
                                 {summary.map((item, idx) => (
                                     <span
                                         key={idx}
-                                        className="inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-medium bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300 border border-amber-200/70 dark:border-amber-800/40"
+                                        className="inline-flex items-center px-2.5 py-1 rounded-md text-[0.6875rem] font-medium bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300 border border-amber-200/70 dark:border-amber-800/40"
                                     >
                                         • {item}
                                     </span>
@@ -171,7 +171,7 @@ export default function DeleteUserModal({
                             </div>
                         )}
 
-                        <div className="p-3 bg-amber-50/50 dark:bg-amber-950/20 rounded-lg border border-amber-200/60 dark:border-amber-900/40 text-[11px] text-amber-800 dark:text-amber-300 mb-6 leading-relaxed">
+                        <div className="p-3 bg-amber-50/50 dark:bg-amber-950/20 rounded-lg border border-amber-200/60 dark:border-amber-900/40 text-[0.6875rem] text-amber-800 dark:text-amber-300 mb-6 leading-relaxed">
                             {isActive
                                 ? 'To maintain data consistency and audit trail compliance, this account will be deactivated instead. Deactivation immediately revokes sign-in access while preserving all historical records.'
                                 : 'This account is already deactivated. Historical records remain preserved for audit compliance.'}

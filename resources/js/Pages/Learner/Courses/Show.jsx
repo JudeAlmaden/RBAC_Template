@@ -22,9 +22,9 @@ export default function Show({ course }) {
 
             <div className="space-y-8">
                 {/* Hero Section */}
-                <div className="relative rounded-2xl overflow-hidden bg-[#102746] p-8 sm:p-12 text-white border border-white/5">
+                <div className="relative rounded-2xl overflow-hidden bg-sidebar p-8 sm:p-12 text-white border border-white/5">
                     <div className="relative z-10 max-w-2xl">
-                        <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-[10px] font-bold uppercase tracking-widest mb-6 border border-blue-500/30">
+                        <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-[0.625rem] font-bold uppercase tracking-widest mb-6 border border-blue-500/30">
                             Course Curriculum
                         </div>
                         <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">
@@ -57,22 +57,22 @@ export default function Show({ course }) {
                         {course.modules.map((module, index) => (
                             <div 
                                 key={module.id} 
-                                className="bg-white dark:bg-brand-surface rounded-xl border border-[#E8E8EC] dark:border-brand-border p-5 shadow-xs hover:border-[#5B5FC7]/40 transition-all group"
+                                className="bg-surface dark:bg-brand-surface rounded-xl border border-line dark:border-brand-border p-5 shadow-xs hover:border-accent/40 transition-all group"
                             >
                                 <div className="flex items-start justify-between gap-4">
                                     <div className="flex items-start gap-4">
-                                        <div className="w-10 h-10 rounded-xl bg-gray-50 dark:bg-brand-dark border border-[#E8E8EC] dark:border-brand-border flex items-center justify-center shrink-0 font-bold text-[#5B5FC7] group-hover:bg-[#5B5FC7] group-hover:text-white transition-colors">
+                                        <div className="w-10 h-10 rounded-xl bg-gray-50 dark:bg-brand-dark border border-line dark:border-brand-border flex items-center justify-center shrink-0 font-bold text-accent group-hover:bg-accent group-hover:text-white transition-colors">
                                             {index + 1}
                                         </div>
                                         <div>
-                                            <h3 className="font-bold text-gray-900 dark:text-white mb-1 group-hover:text-[#5B5FC7] dark:group-hover:text-[#8A8DE2] transition-colors">
+                                            <h3 className="font-bold text-gray-900 dark:text-white mb-1 group-hover:text-accent-light transition-colors">
                                                 {module.title}
                                             </h3>
                                             <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">
                                                 {module.description}
                                             </p>
                                             <div className="flex items-center gap-4 mt-3">
-                                                <span className="text-[10px] font-bold uppercase tracking-widest text-[#8BADC7]">
+                                                <span className="text-[0.625rem] font-bold uppercase tracking-widest text-sidebar-ink">
                                                     {module.topics.length} Topics
                                                 </span>
                                             </div>
@@ -80,7 +80,7 @@ export default function Show({ course }) {
                                     </div>
                                     <Link 
                                         href={route('learner.modules.show', { course: course.id, module: module.id })}
-                                        className="shrink-0 px-4 py-2 rounded-lg bg-gray-50 dark:bg-brand-dark text-xs font-bold text-gray-600 dark:text-gray-300 hover:bg-[#5B5FC7] hover:text-white transition-all flex items-center gap-2"
+                                        className="shrink-0 px-4 py-2 rounded-lg bg-gray-50 dark:bg-brand-dark text-xs font-bold text-gray-600 dark:text-gray-300 hover:bg-accent hover:text-white transition-all flex items-center gap-2"
                                     >
                                         View Module
                                         <ChevronRight className="w-3.5 h-3.5" />

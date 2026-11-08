@@ -24,7 +24,7 @@ export default function ModuleTopicList({
             </div>
 
             {(!module.topics || module.topics.length === 0) ? (
-                <div className="bg-white dark:bg-[#15151A] rounded-xl border border-[#E8E8EC] dark:border-[#26262D] p-12 text-center">
+                <div className="bg-surface rounded-xl border border-line p-12 text-center">
                     <BookOpen className="w-10 h-10 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
                     <h3 className="text-sm font-semibold text-gray-900 dark:text-white">No lessons yet</h3>
                     <p className="text-xs text-gray-500 dark:text-gray-400 max-w-sm mx-auto mt-1">
@@ -32,7 +32,7 @@ export default function ModuleTopicList({
                     </p>
                     <button
                         onClick={onAddLesson}
-                        className="mt-4 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-white bg-[#4A91CC] hover:bg-[#347DBB] shadow-xs transition"
+                        className="mt-4 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-white bg-accent hover:bg-accent-hover shadow-xs transition"
                     >
                         <Plus className="w-4 h-4" />
                         Add First Lesson
@@ -44,20 +44,20 @@ export default function ModuleTopicList({
                         <div
                             key={t.id}
                             onClick={() => router.visit(route('topics.stages.index', t.id))}
-                            className="group/topic bg-white dark:bg-[#15151A] rounded-xl border border-[#E8E8EC] dark:border-[#26262D] p-3.5 shadow-xs hover:border-[#4A91CC]/40 hover:bg-gray-50/70 dark:hover:bg-[#1C1C24]/70 transition cursor-pointer"
+                            className="group/topic bg-surface rounded-xl border border-line p-3.5 shadow-xs hover:border-accent/40 hover:bg-raised/70 dark:hover:bg-raised/70 transition cursor-pointer"
                         >
                             <div className="flex items-center justify-between gap-4">
                                 <div className="flex items-center gap-3.5 min-w-0">
-                                    <div className="w-7 h-7 rounded-md bg-gray-100 dark:bg-[#26262D] flex items-center justify-center text-gray-500 dark:text-gray-400 shrink-0 group-hover/topic:text-[#4A91CC] transition">
+                                    <div className="w-7 h-7 rounded-md bg-gray-100 dark:bg-line flex items-center justify-center text-gray-500 dark:text-gray-400 shrink-0 group-hover/topic:text-accent transition">
                                         <BookOpen className="w-3.5 h-3.5" />
                                     </div>
                                     <div className="min-w-0">
                                         <div className="flex items-center gap-2">
-                                            <span className="font-semibold text-xs text-gray-900 dark:text-white group-hover/topic:text-[#4A91CC] transition truncate">
+                                            <span className="font-semibold text-xs text-gray-900 dark:text-white group-hover/topic:text-accent transition truncate">
                                                 {t.title}
                                             </span>
                                             <span
-                                                className={`inline-flex items-center px-1.5 py-0.2 rounded text-[9px] font-semibold ${
+                                                className={`inline-flex items-center px-1.5 py-0.2 rounded text-[0.5625rem] font-semibold ${
                                                     t.is_published
                                                         ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
                                                         : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
@@ -66,7 +66,7 @@ export default function ModuleTopicList({
                                                 {t.is_published ? 'Published' : 'Draft'}
                                             </span>
                                         </div>
-                                        <div className="flex items-center gap-3 text-[10px] text-gray-400 mt-0.5">
+                                        <div className="flex items-center gap-3 text-[0.625rem] text-gray-400 mt-0.5">
                                             {t.estimated_minutes && (
                                                 <span className="flex items-center gap-1">
                                                     <Clock className="w-3 h-3" />
@@ -90,7 +90,7 @@ export default function ModuleTopicList({
                                                 {t.sections.map((sec) => (
                                                     <span
                                                         key={sec.id}
-                                                        className="inline-flex items-center px-1.5 py-0.2 rounded text-[9px] font-semibold uppercase tracking-wider bg-purple-50 text-purple-700 dark:bg-purple-950/40 dark:text-purple-300 border border-purple-200/50 dark:border-purple-800/40"
+                                                        className="inline-flex items-center px-1.5 py-0.2 rounded text-[0.5625rem] font-semibold uppercase tracking-wider bg-purple-50 text-purple-700 dark:bg-purple-950/40 dark:text-purple-300 border border-purple-200/50 dark:border-purple-800/40"
                                                     >
                                                         {sec.section_type}
                                                     </span>
@@ -107,7 +107,7 @@ export default function ModuleTopicList({
                                 >
                                     <Link
                                         href={route('topics.stages.index', t.id)}
-                                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium text-[#4A91CC] bg-[#4A91CC]/10 hover:bg-[#4A91CC]/20 transition"
+                                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium text-accent bg-accent/10 hover:bg-accent/20 transition"
                                         title="Open Pedagogical Stage Builder"
                                     >
                                         <Layers className="w-3.5 h-3.5" />
@@ -116,7 +116,7 @@ export default function ModuleTopicList({
                                     <ActionDropdown align="right" widthClass="w-36">
                                         <button
                                             onClick={() => onEditTopic(t)}
-                                            className="w-full flex items-center gap-2 px-3 py-1.5 text-left text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#26262D] transition"
+                                            className="w-full flex items-center gap-2 px-3 py-1.5 text-left text-gray-700 dark:text-gray-200 hover:bg-raised dark:hover:bg-raised transition"
                                         >
                                             <Pencil className="w-3.5 h-3.5 text-gray-400" />
                                             Edit Lesson

@@ -201,18 +201,18 @@ export default function CourseShow({ course, allCourses = [] }) {
                 />
 
                 {/* Tabs bar */}
-                <div className="flex items-center gap-2 border-b border-[#E8E8EC] dark:border-[#26262D] text-xs font-semibold">
+                <div className="flex items-center gap-2 border-b border-line text-xs font-semibold">
                     <button
                         onClick={() => setActiveTab('curriculum')}
                         className={`inline-flex items-center gap-2 py-3 px-4 border-b-2 transition ${
                             activeTab === 'curriculum'
-                                ? 'border-[#4A91CC] text-[#4A91CC]'
+                                ? 'border-accent text-accent'
                                 : 'border-transparent text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
                         }`}
                     >
                         <Layers className="w-4 h-4" />
                         Curriculum Outline
-                        <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-gray-100 dark:bg-[#26262D] text-gray-600 dark:text-gray-300">
+                        <span className="px-1.5 py-0.2 rounded-full text-[0.625rem] bg-gray-100 dark:bg-line text-gray-600 dark:text-gray-300">
                             {course.modules?.length || 0}
                         </span>
                     </button>
@@ -220,13 +220,13 @@ export default function CourseShow({ course, allCourses = [] }) {
                         onClick={() => setActiveTab('learners')}
                         className={`inline-flex items-center gap-2 py-3 px-4 border-b-2 transition ${
                             activeTab === 'learners'
-                                ? 'border-[#4A91CC] text-[#4A91CC]'
+                                ? 'border-accent text-accent'
                                 : 'border-transparent text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
                         }`}
                     >
                         <Users className="w-4 h-4" />
                         Enrolled Learners
-                        <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-gray-100 dark:bg-[#26262D] text-gray-600 dark:text-gray-300">
+                        <span className="px-1.5 py-0.2 rounded-full text-[0.625rem] bg-gray-100 dark:bg-line text-gray-600 dark:text-gray-300">
                             {course.enrollments?.length || 0}
                         </span>
                     </button>

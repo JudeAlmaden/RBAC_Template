@@ -17,11 +17,11 @@ export default function UserTable({
     onToggleStatus,
 }) {
     return (
-        <div className="bg-white dark:bg-[#15151A] rounded-xl border border-[#E8E8EC] dark:border-[#26262D] shadow-sm">
+        <div className="bg-surface rounded-xl border border-line shadow-sm">
             <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse text-xs">
                     <thead>
-                        <tr className="border-b border-[#E8E8EC] dark:border-[#26262D] bg-[#FAFAFC] dark:bg-[#1C1C24] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-[10px]">
+                        <tr className="border-b border-line bg-raised font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-[0.625rem]">
                             <th className="py-3.5 px-5">User</th>
                             <th className="py-3.5 px-5">Role</th>
                             <th className="py-3.5 px-5">Courses</th>
@@ -30,7 +30,7 @@ export default function UserTable({
                             <th className="py-3.5 px-5 text-right"></th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#E8E8EC] dark:divide-[#26262D] text-gray-700 dark:text-gray-300">
+                    <tbody className="divide-y divide-line text-gray-700 dark:text-gray-300">
                         {users.data.length === 0 ? (
                             <tr>
                                 <td colSpan="6" className="py-12 text-center text-gray-400">
@@ -43,7 +43,7 @@ export default function UserTable({
                                 return (
                                     <tr
                                         key={u.id}
-                                        className="hover:bg-gray-50/60 dark:hover:bg-[#1C1C24]/50 transition"
+                                        className="hover:bg-raised/60 dark:hover:bg-raised/50 transition"
                                     >
                                         <td className="py-3.5 px-5">
                                             <div className="flex items-center gap-3">
@@ -51,16 +51,16 @@ export default function UserTable({
                                                 <div>
                                                     <Link
                                                         href={route('users.show', u.id)}
-                                                        className="font-semibold text-[#5B5FC7] dark:text-[#8A8DE2] hover:underline"
+                                                        className="font-semibold text-accent-light hover:underline"
                                                     >
                                                         {u.name}
                                                     </Link>
                                                     {isSelf && (
-                                                        <span className="text-gray-400 font-normal text-[11px] ml-1">
+                                                        <span className="text-gray-400 font-normal text-[0.6875rem] ml-1">
                                                             (You)
                                                         </span>
                                                     )}
-                                                    <div className="text-gray-400 font-mono text-[11px]">
+                                                    <div className="text-gray-400 font-mono text-[0.6875rem]">
                                                         {u.email}
                                                     </div>
                                                 </div>
@@ -77,12 +77,12 @@ export default function UserTable({
                                                     return displayList.map((roleName) => (
                                                         <span
                                                             key={roleName}
-                                                            className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium ${roleName === 'super_admin'
-                                                                    ? 'bg-[#5B5FC7]/10 text-[#5B5FC7] dark:bg-[#5B5FC7]/20 dark:text-[#8A8DE2]'
+                                                            className={`inline-flex items-center px-2 py-0.5 rounded text-[0.6875rem] font-medium ${roleName === 'super_admin'
+                                                                    ? 'bg-accent/10 text-accent dark:bg-accent/20 dark:text-accent-light'
                                                                     : roleName === 'admin'
                                                                         ? 'bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300'
                                                                         : roleName === 'user'
-                                                                            ? 'bg-gray-100 text-gray-700 dark:bg-[#202028] dark:text-gray-300'
+                                                                            ? 'bg-gray-100 text-gray-700 dark:bg-raised dark:text-gray-300'
                                                                             : 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/30 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/40'
                                                                 }`}
                                                         >
@@ -97,33 +97,33 @@ export default function UserTable({
                                             {u.assigned_courses_count > 0 ? (
                                                 <Link
                                                     href={route('users.show', u.id)}
-                                                    className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium bg-[#5B5FC7]/10 text-[#5B5FC7] dark:bg-[#5B5FC7]/20 dark:text-[#8A8DE2] hover:underline"
+                                                    className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[0.6875rem] font-medium bg-accent/10 text-accent dark:bg-accent/20 dark:text-accent-light hover:underline"
                                                 >
                                                     <span>{u.assigned_courses_count}</span>
-                                                    <span className="text-[10px] text-gray-500 dark:text-gray-400">
+                                                    <span className="text-[0.625rem] text-gray-500 dark:text-gray-400">
                                                         course{u.assigned_courses_count !== 1 ? 's' : ''}
                                                     </span>
                                                 </Link>
                                             ) : (
-                                                <span className="text-gray-400 text-[11px]">—</span>
+                                                <span className="text-gray-400 text-[0.6875rem]">—</span>
                                             )}
                                         </td>
 
                                         <td className="py-3.5 px-5">
                                             {u.is_active ? (
-                                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/40">
+                                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[0.625rem] font-medium bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/40">
                                                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                                                     Active
                                                 </span>
                                             ) : (
-                                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-gray-100 dark:bg-[#22222A] text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-[#2C2C38]">
+                                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[0.625rem] font-medium bg-gray-100 dark:bg-raised text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-line">
                                                     <span className="w-1.5 h-1.5 rounded-full bg-gray-400"></span>
                                                     Deactivated
                                                 </span>
                                             )}
                                         </td>
 
-                                        <td className="py-3.5 px-5 text-gray-400 font-mono text-[11px]">
+                                        <td className="py-3.5 px-5 text-gray-400 font-mono text-[0.6875rem]">
                                             {u.created_at}
                                         </td>
 

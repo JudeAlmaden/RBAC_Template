@@ -50,7 +50,7 @@ function StageRow({ stage, flatIdx, totalSections, topic, onMove, onDelete, isGr
                     router.visit(route('topics.stages.show', [topic.id, stage.id]));
                 }
             }}
-            className={`bg-white dark:bg-[#15151A] rounded-xl border border-[#E8E8EC] dark:border-[#26262D] p-4 shadow-xs hover:border-[#5B5FC7]/40 hover:shadow-sm cursor-pointer transition ${isGrouped ? 'border-l-2 border-l-[#5B5FC7]/30' : ''}`}
+            className={`bg-surface rounded-xl border border-line p-4 shadow-xs hover:border-accent/40 hover:shadow-sm cursor-pointer transition ${isGrouped ? 'border-l-2 border-l-accent/30' : ''}`}
         >
             <div className="flex items-start justify-between gap-4">
                 {/* Left details */}
@@ -61,7 +61,7 @@ function StageRow({ stage, flatIdx, totalSections, topic, onMove, onDelete, isGr
                             type="button"
                             disabled={flatIdx === 0}
                             onClick={(e) => { e.stopPropagation(); onMove(flatIdx, 'up'); }}
-                            className="p-1 rounded hover:bg-gray-100 dark:hover:bg-[#26262D] text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 disabled:opacity-20 transition"
+                            className="p-1 rounded hover:bg-raised dark:hover:bg-raised text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 disabled:opacity-20 transition"
                             title="Move stage up"
                         >
                             <ChevronUp className="w-3.5 h-3.5" />
@@ -70,14 +70,14 @@ function StageRow({ stage, flatIdx, totalSections, topic, onMove, onDelete, isGr
                             type="button"
                             disabled={flatIdx === totalSections - 1}
                             onClick={(e) => { e.stopPropagation(); onMove(flatIdx, 'down'); }}
-                            className="p-1 rounded hover:bg-gray-100 dark:hover:bg-[#26262D] text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 disabled:opacity-20 transition"
+                            className="p-1 rounded hover:bg-raised dark:hover:bg-raised text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 disabled:opacity-20 transition"
                             title="Move stage down"
                         >
                             <ChevronDown className="w-3.5 h-3.5" />
                         </button>
                     </div>
 
-                    <div className="w-7 h-7 rounded-lg bg-[#5B5FC7]/10 dark:bg-[#5B5FC7]/20 flex items-center justify-center font-bold text-xs text-[#5B5FC7] dark:text-[#8A8DE2] shrink-0">
+                    <div className="w-7 h-7 rounded-lg bg-accent/10 dark:bg-accent/20 flex items-center justify-center font-bold text-xs text-accent-light shrink-0">
                         {flatIdx + 1}
                     </div>
 
@@ -85,7 +85,7 @@ function StageRow({ stage, flatIdx, totalSections, topic, onMove, onDelete, isGr
                         <div className="flex flex-wrap items-center gap-2">
                             {/* Only show type badge when NOT inside a grouped header (it's shown on the header itself) */}
                             {!isGrouped && (
-                                <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${details.badge}`}>
+                                <span className={`inline-flex items-center px-2 py-0.5 rounded text-[0.625rem] font-bold uppercase tracking-wider ${details.badge}`}>
                                     {details.label}
                                 </span>
                             )}
@@ -93,7 +93,7 @@ function StageRow({ stage, flatIdx, totalSections, topic, onMove, onDelete, isGr
                                 {stage.title}
                             </span>
                             <span
-                                className={`inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-semibold ${
+                                className={`inline-flex items-center px-1.5 py-0.5 rounded text-[0.5625rem] font-semibold ${
                                     stage.is_published
                                         ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
                                         : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
@@ -102,19 +102,19 @@ function StageRow({ stage, flatIdx, totalSections, topic, onMove, onDelete, isGr
                                 {stage.is_published ? 'Published' : 'Draft'}
                             </span>
                             {stage.is_required && (
-                                <span className="text-[9px] font-semibold text-gray-400 dark:text-gray-500">
+                                <span className="text-[0.5625rem] font-semibold text-gray-400 dark:text-gray-500">
                                     (Required)
                                 </span>
                             )}
                         </div>
 
                         {stage.instructions && (
-                            <p className="text-[11px] text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed">
+                            <p className="text-[0.6875rem] text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed">
                                 {stage.instructions}
                             </p>
                         )}
 
-                        <div className="flex items-center gap-3 text-[10px] text-gray-400 pt-1">
+                        <div className="flex items-center gap-3 text-[0.625rem] text-gray-400 pt-1">
                             <span className="flex items-center gap-1">
                                 <Boxes className="w-3 h-3 text-gray-400" />
                                 {stage.blocks_count || 0} Content Blocks
@@ -167,22 +167,22 @@ function StageGroup({ group, totalSections, topic, onMove, onDelete }) {
     }
 
     return (
-        <div className="rounded-xl border border-[#E8E8EC] dark:border-[#26262D] overflow-hidden shadow-xs">
+        <div className="rounded-xl border border-line overflow-hidden shadow-xs">
             {/* Group header */}
             <button
                 type="button"
                 onClick={() => setOpen((v) => !v)}
-                className="w-full flex items-center justify-between gap-3 px-4 py-3 bg-[#FAFAFC] dark:bg-[#1C1C24] hover:bg-gray-100 dark:hover:bg-[#26262D] transition text-left"
+                className="w-full flex items-center justify-between gap-3 px-4 py-3 bg-raised hover:bg-raised dark:hover:bg-raised transition text-left"
             >
                 <div className="flex items-center gap-2.5">
-                    <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${details.badge}`}>
+                    <span className={`inline-flex items-center px-2 py-0.5 rounded text-[0.625rem] font-bold uppercase tracking-wider ${details.badge}`}>
                         {details.label}
                     </span>
                     <span className="text-xs font-semibold text-gray-700 dark:text-gray-200">
                         {group.stages.length} parts
                     </span>
                     {details.desc && (
-                        <span className="hidden sm:inline text-[11px] text-gray-400 dark:text-gray-500 truncate max-w-xs">
+                        <span className="hidden sm:inline text-[0.6875rem] text-gray-400 dark:text-gray-500 truncate max-w-xs">
                             — {details.desc}
                         </span>
                     )}
@@ -192,7 +192,7 @@ function StageGroup({ group, totalSections, topic, onMove, onDelete }) {
 
             {/* Group rows */}
             {open && (
-                <div className="divide-y divide-[#E8E8EC] dark:divide-[#26262D] pl-4 bg-white dark:bg-[#15151A]">
+                <div className="divide-y divide-line pl-4 bg-surface">
                     {group.stages.map((stage) => (
                         <StageRow
                             key={stage.id}
@@ -235,7 +235,7 @@ export default function StagePipelineList({
             </div>
 
             {sections.length === 0 ? (
-                <div className="bg-white dark:bg-[#15151A] rounded-xl border border-[#E8E8EC] dark:border-[#26262D] p-12 text-center">
+                <div className="bg-surface rounded-xl border border-line p-12 text-center">
                     <Layers className="w-10 h-10 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
                     <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
                         No learning stages created yet
@@ -253,7 +253,7 @@ export default function StagePipelineList({
                         </button>
                         <button
                             onClick={onAddStage}
-                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white bg-[#5B5FC7] hover:bg-[#484CB8] shadow-xs transition"
+                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white bg-accent hover:bg-accent-hover shadow-xs transition"
                         >
                             <Plus className="w-3.5 h-3.5" />
                             Add Stage Manually

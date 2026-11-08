@@ -7,15 +7,15 @@ import { LAYOUT_TYPE_DETAILS, SECTION_TYPE_DETAILS } from '../Partials/StageForm
 import { BLOCK_TYPE_LABELS, VARIANTS_BY_TYPE, variantLabel, getLayoutSlots } from './registry';
 
 const selectClass =
-    'mt-1 block w-full rounded-md border-gray-300 dark:border-brand-border dark:bg-brand-dark dark:text-white shadow-xs focus:border-[#5B5FC7] focus:ring-[#5B5FC7] text-xs';
+    'mt-1 block w-full rounded-md border-gray-300 dark:border-brand-border dark:bg-brand-dark dark:text-white shadow-xs focus:border-accent focus:ring-accent text-xs';
 
 const textareaClass =
-    'mt-1 block w-full rounded-md border-gray-300 dark:border-brand-border dark:bg-brand-dark dark:text-white shadow-xs focus:border-[#5B5FC7] focus:ring-[#5B5FC7] text-xs';
+    'mt-1 block w-full rounded-md border-gray-300 dark:border-brand-border dark:bg-brand-dark dark:text-white shadow-xs focus:border-accent focus:ring-accent text-xs';
 
 function Section({ title, children }) {
     return (
         <div className="space-y-3">
-            <h4 className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">{title}</h4>
+            <h4 className="text-[0.625rem] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">{title}</h4>
             {children}
         </div>
     );
@@ -44,11 +44,11 @@ export default function Inspector({
     return (
         <div className="flex h-full flex-col">
             <div className="flex items-center justify-between pb-3">
-                <h3 className="text-[11px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+                <h3 className="text-[0.6875rem] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
                     Inspector
                 </h3>
                 {selectionCount > 0 && (
-                    <span className="rounded-full bg-[#5B5FC7]/10 px-1.5 py-0.5 text-[10px] font-semibold text-[#5B5FC7] dark:bg-[#5B5FC7]/20 dark:text-[#8A8DE2]">
+                    <span className="rounded-full bg-accent/10 px-1.5 py-0.5 text-[0.625rem] font-semibold text-accent dark:bg-accent/20 dark:text-accent-light">
                         {selectionCount} selected
                     </span>
                 )}
@@ -64,9 +64,9 @@ export default function Inspector({
                             key={key}
                             type="button"
                             onClick={() => setPanel(key)}
-                            className={`inline-flex flex-1 items-center justify-center rounded-md px-2 py-1.5 text-[11px] font-semibold transition ${
+                            className={`inline-flex flex-1 items-center justify-center rounded-md px-2 py-1.5 text-[0.6875rem] font-semibold transition ${
                                 activePanel === key
-                                    ? 'bg-white text-gray-900 shadow-xs dark:bg-brand-surface dark:text-white'
+                                    ? 'bg-surface text-gray-900 shadow-xs dark:bg-brand-surface dark:text-white'
                                     : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
                             }`}
                         >
@@ -102,7 +102,7 @@ export default function Inspector({
                                         </option>
                                     ))}
                                 </select>
-                                <p className="mt-1 text-[10px] text-gray-400 dark:text-gray-500">
+                                <p className="mt-1 text-[0.625rem] text-gray-400 dark:text-gray-500">
                                     {slots.length} slot{slots.length > 1 ? 's' : ''}: {slots.map((slot) => slot.label).join(', ')}
                                 </p>
                             </div>
@@ -112,7 +112,7 @@ export default function Inspector({
                                     type="checkbox"
                                     checked={page.is_visible !== false}
                                     onChange={(event) => onUpdatePage({ is_visible: event.target.checked })}
-                                    className="rounded border-gray-300 text-[#5B5FC7] shadow-xs focus:ring-[#5B5FC7] dark:border-brand-border"
+                                    className="rounded border-gray-300 text-accent shadow-xs focus:ring-accent dark:border-brand-border"
                                 />
                                 <span className="text-xs font-semibold text-gray-700 dark:text-gray-200">
                                     Slide visible to learners
@@ -122,12 +122,12 @@ export default function Inspector({
 
                         <Section title="Slide summary">
                             <div className="grid grid-cols-2 gap-2">
-                                <div className="rounded-lg border border-[#E8E8EC] dark:border-brand-border p-2.5">
-                                    <p className="text-[10px] text-gray-400">Components</p>
+                                <div className="rounded-lg border border-line dark:border-brand-border p-2.5">
+                                    <p className="text-[0.625rem] text-gray-400">Components</p>
                                     <p className="text-sm font-bold text-gray-900 dark:text-white">{page.blocks.length}</p>
                                 </div>
-                                <div className="rounded-lg border border-[#E8E8EC] dark:border-brand-border p-2.5">
-                                    <p className="text-[10px] text-gray-400 flex items-center gap-1">
+                                <div className="rounded-lg border border-line dark:border-brand-border p-2.5">
+                                    <p className="text-[0.625rem] text-gray-400 flex items-center gap-1">
                                         <Layout className="h-3 w-3" /> Layout
                                     </p>
                                     <p className="truncate text-xs font-bold text-gray-900 dark:text-white">
@@ -182,7 +182,7 @@ export default function Inspector({
                                     type="checkbox"
                                     checked={stage.is_required !== false}
                                     onChange={(event) => onUpdateStage({ is_required: event.target.checked })}
-                                    className="rounded border-gray-300 text-[#5B5FC7] shadow-xs focus:ring-[#5B5FC7] dark:border-brand-border"
+                                    className="rounded border-gray-300 text-accent shadow-xs focus:ring-accent dark:border-brand-border"
                                 />
                                 <span className="text-xs font-semibold text-gray-700 dark:text-gray-200">
                                     Required to complete the topic
@@ -194,7 +194,7 @@ export default function Inspector({
                                     type="checkbox"
                                     checked={Boolean(stage.is_published)}
                                     onChange={(event) => onUpdateStage({ is_published: event.target.checked })}
-                                    className="rounded border-gray-300 text-[#5B5FC7] shadow-xs focus:ring-[#5B5FC7] dark:border-brand-border"
+                                    className="rounded border-gray-300 text-accent shadow-xs focus:ring-accent dark:border-brand-border"
                                 />
                                 <span className="text-xs font-semibold text-gray-700 dark:text-gray-200">
                                     Published to learners
@@ -202,7 +202,7 @@ export default function Inspector({
                             </label>
                         </Section>
 
-                        <p className="text-[10px] text-gray-400 dark:text-gray-500">
+                        <p className="text-[0.625rem] text-gray-400 dark:text-gray-500">
                             Stage settings save with the same Save action as the slides.
                         </p>
                     </>
@@ -252,7 +252,7 @@ export default function Inspector({
                                     onChange={(event) =>
                                         onUpdateBlock(selectedBlocks[0].id, { is_visible: event.target.checked })
                                     }
-                                    className="rounded border-gray-300 text-[#5B5FC7] shadow-xs focus:ring-[#5B5FC7] dark:border-brand-border"
+                                    className="rounded border-gray-300 text-accent shadow-xs focus:ring-accent dark:border-brand-border"
                                 />
                                 <span className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 dark:text-gray-200">
                                     {selectedBlocks[0].is_visible !== false ? (
@@ -272,18 +272,18 @@ export default function Inspector({
                             />
                         </Section>
 
-                        <div className="flex items-center gap-2 border-t border-[#E8E8EC] pt-4 dark:border-brand-border">
+                        <div className="flex items-center gap-2 border-t border-line pt-4 dark:border-brand-border">
                             <button
                                 type="button"
                                 onClick={onDuplicateSelected}
-                                className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-[#E8E8EC] px-3 py-2 text-[11px] font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-brand-border dark:text-gray-200 dark:hover:bg-brand-dark"
+                                className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-line px-3 py-2 text-[0.6875rem] font-semibold text-gray-700 transition hover:bg-raised dark:border-brand-border dark:text-gray-200 dark:hover:bg-brand-dark"
                             >
                                 <Copy className="h-3.5 w-3.5" /> Duplicate
                             </button>
                             <button
                                 type="button"
                                 onClick={onDeleteSelected}
-                                className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-red-200 px-3 py-2 text-[11px] font-semibold text-red-600 transition hover:bg-red-50 dark:border-red-900 dark:hover:bg-red-900/20"
+                                className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-red-200 px-3 py-2 text-[0.6875rem] font-semibold text-red-600 transition hover:bg-red-50 dark:border-red-900 dark:hover:bg-red-900/20"
                             >
                                 <Trash2 className="h-3.5 w-3.5" /> Delete
                             </button>
@@ -317,14 +317,14 @@ export default function Inspector({
                             <button
                                 type="button"
                                 onClick={onDuplicateSelected}
-                                className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-[#E8E8EC] px-3 py-2 text-[11px] font-semibold text-gray-700 transition hover:bg-gray-50 dark:border-brand-border dark:text-gray-200 dark:hover:bg-brand-dark"
+                                className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-line px-3 py-2 text-[0.6875rem] font-semibold text-gray-700 transition hover:bg-raised dark:border-brand-border dark:text-gray-200 dark:hover:bg-brand-dark"
                             >
                                 <Copy className="h-3.5 w-3.5" /> Duplicate all
                             </button>
                             <button
                                 type="button"
                                 onClick={onDeleteSelected}
-                                className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-red-200 px-3 py-2 text-[11px] font-semibold text-red-600 transition hover:bg-red-50 dark:border-red-900 dark:hover:bg-red-900/20"
+                                className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-red-200 px-3 py-2 text-[0.6875rem] font-semibold text-red-600 transition hover:bg-red-50 dark:border-red-900 dark:hover:bg-red-900/20"
                             >
                                 <Trash2 className="h-3.5 w-3.5" /> Delete all
                             </button>

@@ -23,10 +23,10 @@ function PageCard({ page, index, isActive, onSelect, onDuplicate, onDelete, disa
         <div
             ref={setNodeRef}
             style={style}
-            className={`group relative rounded-lg border bg-white dark:bg-brand-dark p-2.5 transition ${
+            className={`group relative rounded-lg border bg-surface dark:bg-brand-dark p-2.5 transition ${
                 isActive
-                    ? 'border-[#5B5FC7] ring-1 ring-[#5B5FC7]'
-                    : 'border-[#E8E8EC] dark:border-brand-border hover:border-[#C7C9E8]'
+                    ? 'border-accent ring-1 ring-accent'
+                    : 'border-line dark:border-brand-border hover:border-accent-light'
             }`}
         >
             <div className="flex items-start gap-2">
@@ -43,15 +43,15 @@ function PageCard({ page, index, isActive, onSelect, onDuplicate, onDelete, disa
 
                 <button type="button" onClick={() => onSelect(page.id)} className="min-w-0 flex-1 text-left">
                     <div className="flex items-center gap-1.5">
-                        <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded bg-[#5B5FC7]/10 dark:bg-[#5B5FC7]/20 text-[9px] font-bold text-[#5B5FC7] dark:text-[#8A8DE2]">
+                        <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded bg-accent/10 dark:bg-accent/20 text-[0.5625rem] font-bold text-accent-light">
                             {index + 1}
                         </span>
-                        <span className="truncate text-[11px] font-semibold text-gray-800 dark:text-gray-100">
+                        <span className="truncate text-[0.6875rem] font-semibold text-gray-800 dark:text-gray-100">
                             {page.title || `Page ${index + 1}`}
                         </span>
                         {!page.is_visible && <EyeOff className="h-3 w-3 shrink-0 text-gray-400" />}
                     </div>
-                    <div className="mt-1 flex items-center gap-2 text-[10px] text-gray-400 dark:text-gray-500">
+                    <div className="mt-1 flex items-center gap-2 text-[0.625rem] text-gray-400 dark:text-gray-500">
                         <span className="truncate">{layoutLabel}</span>
                         <span className="flex items-center gap-0.5 shrink-0">
                             <Layers className="h-2.5 w-2.5" />
@@ -65,7 +65,7 @@ function PageCard({ page, index, isActive, onSelect, onDuplicate, onDelete, disa
                         type="button"
                         onClick={() => onDuplicate(page.id)}
                         disabled={disabled}
-                        className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-brand-surface-raised/30 dark:hover:text-gray-200 disabled:opacity-40"
+                        className="rounded p-1 text-gray-400 hover:bg-raised hover:text-gray-700 dark:hover:bg-brand-surface-raised/30 dark:hover:text-gray-200 disabled:opacity-40"
                         title="Duplicate page"
                     >
                         <Copy className="h-3 w-3" />
@@ -100,10 +100,10 @@ export default function SlideRail({
     return (
         <div className="flex h-full flex-col gap-3">
             <div className="flex items-center justify-between">
-                <h3 className="text-[11px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+                <h3 className="text-[0.6875rem] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
                     Pages
                 </h3>
-                <span className="rounded-full bg-[#5B5FC7]/10 px-1.5 py-0.5 text-[10px] font-semibold text-[#5B5FC7] dark:bg-[#5B5FC7]/20 dark:text-[#8A8DE2]">
+                <span className="rounded-full bg-accent/10 px-1.5 py-0.5 text-[0.625rem] font-semibold text-accent dark:bg-accent/20 dark:text-accent-light">
                     {pages.length}
                 </span>
             </div>
@@ -125,7 +125,7 @@ export default function SlideRail({
                 </SortableContext>
 
                 {pages.length === 0 && (
-                    <p className="rounded-lg border border-dashed border-[#E8E8EC] dark:border-brand-border p-4 text-center text-[10px] text-gray-400">
+                    <p className="rounded-lg border border-dashed border-line dark:border-brand-border p-4 text-center text-[0.625rem] text-gray-400">
                         No pages yet.
                     </p>
                 )}
@@ -135,7 +135,7 @@ export default function SlideRail({
                 type="button"
                 onClick={onAddPage}
                 disabled={disabled}
-                className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-dashed border-[#5B5FC7]/40 bg-[#5B5FC7]/5 px-3 py-2 text-[11px] font-semibold text-[#5B5FC7] transition hover:bg-[#5B5FC7]/10 disabled:opacity-50 dark:text-[#8A8DE2]"
+                className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-dashed border-accent/40 bg-accent/5 px-3 py-2 text-[0.6875rem] font-semibold text-accent transition hover:bg-accent/10 disabled:opacity-50 dark:text-accent-light"
             >
                 <Plus className="h-3.5 w-3.5" />
                 Add Page

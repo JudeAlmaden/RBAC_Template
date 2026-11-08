@@ -4,7 +4,7 @@ import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
 
 const fieldClass =
-    'mt-1 block w-full rounded-md border-gray-300 dark:border-brand-border dark:bg-brand-dark dark:text-white shadow-xs focus:border-[#5B5FC7] focus:ring-[#5B5FC7] text-xs';
+    'mt-1 block w-full rounded-md border-gray-300 dark:border-brand-border dark:bg-brand-dark dark:text-white shadow-xs focus:border-accent focus:ring-accent text-xs';
 
 function Field({ label, children }) {
     return (
@@ -51,7 +51,7 @@ function StringListEditor({ label, items = [], onChange, placeholder = 'Add item
                 <button
                     type="button"
                     onClick={add}
-                    className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-[#5B5FC7] dark:text-[#8A8DE2] hover:underline"
+                    className="inline-flex items-center gap-1.5 text-[0.6875rem] font-semibold text-accent-light hover:underline"
                 >
                     <Plus className="w-3.5 h-3.5" />
                     Add item
@@ -77,7 +77,7 @@ function PairListEditor({ label, items = [], onChange, titlePlaceholder = 'Title
                 {items.map((item, index) => (
                     <div
                         key={index}
-                        className="rounded-lg border border-[#E8E8EC] dark:border-brand-border p-2.5 space-y-2"
+                        className="rounded-lg border border-line dark:border-brand-border p-2.5 space-y-2"
                     >
                         <div className="flex items-center gap-1.5">
                             <TextInput
@@ -107,7 +107,7 @@ function PairListEditor({ label, items = [], onChange, titlePlaceholder = 'Title
                 <button
                     type="button"
                     onClick={add}
-                    className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-[#5B5FC7] dark:text-[#8A8DE2] hover:underline"
+                    className="inline-flex items-center gap-1.5 text-[0.6875rem] font-semibold text-accent-light hover:underline"
                 >
                     <Plus className="w-3.5 h-3.5" />
                     Add panel
@@ -202,14 +202,14 @@ function TableEditor({ headers = [], rows = [], onChange }) {
                     <button
                         type="button"
                         onClick={addRow}
-                        className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#5B5FC7] dark:text-[#8A8DE2] hover:underline"
+                        className="inline-flex items-center gap-1 text-[0.6875rem] font-semibold text-accent-light hover:underline"
                     >
                         <Plus className="w-3 h-3" /> Add row
                     </button>
                     <button
                         type="button"
                         onClick={addColumn}
-                        className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#5B5FC7] dark:text-[#8A8DE2] hover:underline"
+                        className="inline-flex items-center gap-1 text-[0.6875rem] font-semibold text-accent-light hover:underline"
                     >
                         <Plus className="w-3 h-3" /> Add column
                     </button>
@@ -278,7 +278,7 @@ export default function BlockContentEditor({ block, onChange }) {
                 );
             }
             if (variant === 'divider') {
-                return <p className="text-[11px] text-gray-400 dark:text-gray-500">No options for a divider.</p>;
+                return <p className="text-[0.6875rem] text-gray-400 dark:text-gray-500">No options for a divider.</p>;
             }
             return (
                 <Field label="Text">
@@ -449,6 +449,6 @@ export default function BlockContentEditor({ block, onChange }) {
             );
 
         default:
-            return <p className="text-[11px] text-gray-400 dark:text-gray-500">No editor for this component.</p>;
+            return <p className="text-[0.6875rem] text-gray-400 dark:text-gray-500">No editor for this component.</p>;
     }
 }

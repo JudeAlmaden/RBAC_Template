@@ -69,16 +69,16 @@ export default function BlockCanvasItem({
                     listeners.onPointerDown(event);
                 }
             }}
-            className={`group relative rounded-lg border bg-white dark:bg-brand-surface p-3 transition ${
+            className={`group relative rounded-lg border bg-surface dark:bg-brand-surface p-3 transition ${
                 selected
-                    ? 'border-[#5B5FC7] ring-2 ring-[#5B5FC7]/60'
-                    : 'border-[#E8E8EC] dark:border-brand-border hover:border-[#C7C9E8]'
+                    ? 'border-accent ring-2 ring-accent/60'
+                    : 'border-line dark:border-brand-border hover:border-accent-light'
             } ${hidden ? 'opacity-60' : ''} ${isEditing ? 'cursor-text' : 'cursor-default'}`}
         >
-            <div className="absolute -top-3 right-2 z-10 flex items-center gap-0.5 rounded-md border border-[#E8E8EC] dark:border-brand-border bg-white dark:bg-brand-dark px-1 py-0.5 opacity-0 shadow-sm transition group-hover:opacity-100">
+            <div className="absolute -top-3 right-2 z-10 flex items-center gap-0.5 rounded-md border border-line dark:border-brand-border bg-surface dark:bg-brand-dark px-1 py-0.5 opacity-0 shadow-sm transition group-hover:opacity-100">
                 <button
                     type="button"
-                    className="cursor-grab rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700 active:cursor-grabbing dark:hover:bg-brand-surface-raised/30 dark:hover:text-gray-200"
+                    className="cursor-grab rounded p-1 text-gray-400 hover:bg-raised hover:text-gray-700 active:cursor-grabbing dark:hover:bg-brand-surface-raised/30 dark:hover:text-gray-200"
                     title="Drag component"
                 >
                     <GripVertical className="h-3 w-3" />
@@ -86,7 +86,7 @@ export default function BlockCanvasItem({
                 <button
                     type="button"
                     onClick={() => onToggleVisibility(block.id)}
-                    className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-brand-surface-raised/30 dark:hover:text-gray-200"
+                    className="rounded p-1 text-gray-400 hover:bg-raised hover:text-gray-700 dark:hover:bg-brand-surface-raised/30 dark:hover:text-gray-200"
                     title={hidden ? 'Show component' : 'Hide component'}
                 >
                     {hidden ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
@@ -94,7 +94,7 @@ export default function BlockCanvasItem({
                 <button
                     type="button"
                     onClick={() => onDuplicate(block.id)}
-                    className="rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-brand-surface-raised/30 dark:hover:text-gray-200"
+                    className="rounded p-1 text-gray-400 hover:bg-raised hover:text-gray-700 dark:hover:bg-brand-surface-raised/30 dark:hover:text-gray-200"
                     title="Duplicate component"
                 >
                     <Copy className="h-3 w-3" />
@@ -109,7 +109,7 @@ export default function BlockCanvasItem({
                 </button>
             </div>
 
-            <span className="absolute -top-2.5 left-2 z-10 rounded bg-[#5B5FC7] px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-white opacity-0 transition group-hover:opacity-100">
+            <span className="absolute -top-2.5 left-2 z-10 rounded bg-accent px-1.5 py-0.5 text-[0.5625rem] font-semibold uppercase tracking-wider text-white opacity-0 transition group-hover:opacity-100">
                 {BLOCK_TYPE_LABELS[block.block_type] || block.block_type}
             </span>
 

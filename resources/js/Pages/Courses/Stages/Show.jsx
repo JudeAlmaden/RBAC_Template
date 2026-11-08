@@ -51,7 +51,7 @@ export default function StageShow({ topic, stage, prevStage, nextStage }) {
                             aria-disabled={!prevStage}
                             className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium transition ${
                                 prevStage
-                                    ? 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-[#26262D]'
+                                    ? 'text-gray-700 hover:bg-raised dark:text-gray-300 dark:hover:bg-raised'
                                     : 'pointer-events-none cursor-not-allowed text-gray-300 dark:text-gray-600'
                             }`}
                         >
@@ -62,7 +62,7 @@ export default function StageShow({ topic, stage, prevStage, nextStage }) {
                             aria-disabled={!nextStage}
                             className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-medium transition ${
                                 nextStage
-                                    ? 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-[#26262D]'
+                                    ? 'text-gray-700 hover:bg-raised dark:text-gray-300 dark:hover:bg-raised'
                                     : 'pointer-events-none cursor-not-allowed text-gray-300 dark:text-gray-600'
                             }`}
                         >
@@ -74,14 +74,14 @@ export default function StageShow({ topic, stage, prevStage, nextStage }) {
                 <StageBuilder stage={stage} topic={topic} onDeleteStage={handleDeleteStage} />
 
                 {/* Learning activities stay on the same page as the editor */}
-                <details className="rounded-xl border border-[#E8E8EC] bg-white shadow-xs dark:border-brand-border dark:bg-brand-surface">
+                <details className="rounded-xl border border-line bg-surface shadow-xs dark:border-brand-border dark:bg-brand-surface">
                     <summary className="flex cursor-pointer items-center justify-between px-4 py-3 text-xs font-bold text-gray-900 dark:text-white">
                         <span>Learning activities</span>
-                        <span className="text-[10px] font-medium text-gray-400 dark:text-gray-500">
+                        <span className="text-[0.625rem] font-medium text-gray-400 dark:text-gray-500">
                             {stage.activities_count || 0} linked
                         </span>
                     </summary>
-                    <div className="border-t border-[#E8E8EC] px-4 py-4 text-center text-[11px] text-gray-400 dark:border-brand-border dark:text-gray-500">
+                    <div className="border-t border-line px-4 py-4 text-center text-[0.6875rem] text-gray-400 dark:border-brand-border dark:text-gray-500">
                         {(stage.activities_count || 0) > 0
                             ? `${stage.activities_count} activities linked to this stage.`
                             : 'No activities yet. The activity builder will live here.'}

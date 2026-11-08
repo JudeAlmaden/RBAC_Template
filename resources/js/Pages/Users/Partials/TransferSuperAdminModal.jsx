@@ -42,7 +42,7 @@ export default function TransferSuperAdminModal({
                     <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>
                     <PrimaryButton
                         onClick={onConfirm}
-                        className="!bg-[#5B5FC7] hover:!bg-[#484CB8]"
+                        className="!bg-accent hover:!bg-accent-hover"
                     >
                         Confirm Transfer
                     </PrimaryButton>

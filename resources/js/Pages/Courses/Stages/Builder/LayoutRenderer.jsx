@@ -28,11 +28,11 @@ function SlotZone({ page, slot, blocks, handlers, selectedIds, disabled }) {
             ref={setNodeRef}
             className={`flex min-h-[120px] flex-col gap-2.5 rounded-xl border p-3 transition ${
                 isOver
-                    ? 'border-[#5B5FC7] bg-[#5B5FC7]/5'
-                    : 'border-[#E8E8EC] dark:border-brand-border bg-[#FAFAFC] dark:bg-[#101014]'
+                    ? 'border-accent bg-accent/5'
+                    : 'border-line dark:border-brand-border bg-raised dark:bg-sunken'
             }`}
         >
-            <span className="text-[9px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+            <span className="text-[0.5625rem] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
                 {slot.label}
             </span>
 
@@ -52,9 +52,9 @@ function SlotZone({ page, slot, blocks, handlers, selectedIds, disabled }) {
             </SortableContext>
 
             {blocks.length === 0 && (
-                <div className="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-[#E8E8EC] dark:border-brand-border py-6 text-center">
+                <div className="flex flex-1 flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-line dark:border-brand-border py-6 text-center">
                     <Plus className="h-4 w-4 text-gray-300 dark:text-gray-600" />
-                    <span className="text-[10px] text-gray-400 dark:text-gray-500">
+                    <span className="text-[0.625rem] text-gray-400 dark:text-gray-500">
                         Drag a component here
                     </span>
                 </div>

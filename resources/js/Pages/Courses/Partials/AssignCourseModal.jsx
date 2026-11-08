@@ -104,24 +104,24 @@ export default function AssignCourseModal({ show, onClose, course }) {
                                     form.setData('user_id', '');
                                 }}
                                 placeholder="Search by name or email..."
-                                className="w-full pl-8 pr-4 py-2 text-xs bg-white dark:bg-[#15151A] border border-[#E8E8EC] dark:border-[#26262D] rounded-lg text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#5B5FC7] focus:outline-none transition"
+                                className="w-full pl-8 pr-4 py-2 text-xs bg-surface border border-line rounded-lg text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-accent focus:outline-none transition"
                             />
                         </div>
 
                         {/* Selected User pill */}
                         {selectedUser && (
-                            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#5B5FC7]/10 border border-[#5B5FC7]/30 mb-2">
-                                <UserCheck className="w-3.5 h-3.5 text-[#5B5FC7] shrink-0" />
-                                <span className="text-xs font-medium text-[#5B5FC7] dark:text-[#8A8DE2]">
+                            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-accent/10 border border-accent/30 mb-2">
+                                <UserCheck className="w-3.5 h-3.5 text-accent shrink-0" />
+                                <span className="text-xs font-medium text-accent-light">
                                     {selectedUser.name}
                                 </span>
-                                <span className="text-[10px] text-gray-400">{selectedUser.email}</span>
+                                <span className="text-[0.625rem] text-gray-400">{selectedUser.email}</span>
                             </div>
                         )}
 
                         {/* Results list */}
                         {!selectedUser && (
-                            <div className="max-h-44 overflow-y-auto rounded-lg border border-[#E8E8EC] dark:border-[#26262D] bg-[#FAFAFC] dark:bg-[#121217]">
+                            <div className="max-h-44 overflow-y-auto rounded-lg border border-line bg-raised dark:bg-sunken">
                                 {isSearching ? (
                                     <div className="p-3 text-xs text-center text-gray-400">Searching…</div>
                                 ) : userResults.length === 0 ? (
@@ -134,12 +134,12 @@ export default function AssignCourseModal({ show, onClose, course }) {
                                             key={user.id}
                                             type="button"
                                             onClick={() => handleSelectUser(user)}
-                                            className="w-full flex items-center gap-3 px-3 py-2.5 text-xs hover:bg-white dark:hover:bg-[#1C1C24] transition text-left border-b border-[#E8E8EC] dark:border-[#26262D] last:border-0"
+                                            className="w-full flex items-center gap-3 px-3 py-2.5 text-xs hover:bg-surface dark:hover:bg-raised transition text-left border-b border-line last:border-0"
                                         >
                                             <Avatar name={user.name} size="w-6 h-6" />
                                             <div className="min-w-0">
                                                 <div className="font-medium text-gray-900 dark:text-white truncate">{user.name}</div>
-                                                <div className="text-[10px] text-gray-400 truncate">{user.email}</div>
+                                                <div className="text-[0.625rem] text-gray-400 truncate">{user.email}</div>
                                             </div>
                                         </button>
                                     ))
@@ -159,7 +159,7 @@ export default function AssignCourseModal({ show, onClose, course }) {
                                 type="datetime-local"
                                 value={form.data.due_at}
                                 onChange={(e) => form.setData('due_at', e.target.value)}
-                                className="w-full pl-8 pr-4 py-2 text-xs bg-white dark:bg-[#15151A] border border-[#E8E8EC] dark:border-[#26262D] rounded-lg text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-[#5B5FC7] focus:outline-none transition"
+                                className="w-full pl-8 pr-4 py-2 text-xs bg-surface border border-line rounded-lg text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-accent focus:outline-none transition"
                             />
                         </div>
                         <InputError message={form.errors.due_at} className="mt-1" />
@@ -171,7 +171,7 @@ export default function AssignCourseModal({ show, onClose, course }) {
                             type="checkbox"
                             checked={form.data.required}
                             onChange={(e) => form.setData('required', e.target.checked)}
-                            className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-[#5B5FC7] focus:ring-[#5B5FC7]"
+                            className="w-4 h-4 rounded border-gray-300 dark:border-line text-accent focus:ring-accent"
                         />
                         <span className="text-xs text-gray-700 dark:text-gray-300 font-medium">Mark as required</span>
                     </label>
@@ -181,7 +181,7 @@ export default function AssignCourseModal({ show, onClose, course }) {
                     <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>
                     <PrimaryButton
                         disabled={form.processing || !selectedUser}
-                        className="!bg-[#5B5FC7] hover:!bg-[#484CB8]"
+                        className="!bg-accent hover:!bg-accent-hover"
                     >
                         Assign Course
                     </PrimaryButton>

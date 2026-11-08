@@ -48,7 +48,7 @@ export default function ForgotPassword({ status, resetEmail }) {
                     <button
                         type="button"
                         onClick={() => setSent(false)}
-                        className="mt-5 text-xs font-semibold text-[#5B5FC7] hover:underline dark:text-[#8A8DE2]"
+                        className="mt-5 text-xs font-semibold text-accent hover:underline dark:text-accent-light"
                     >
                         Use a different address
                     </button>

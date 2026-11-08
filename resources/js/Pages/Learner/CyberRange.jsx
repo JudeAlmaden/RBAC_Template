@@ -16,8 +16,8 @@ export default function CyberRange() {
             <Head title="Cyber Range" />
 
             <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-5">
-                <div className="w-20 h-20 rounded-2xl bg-[#4A91CC]/10 dark:bg-[#4A91CC]/20 flex items-center justify-center">
-                    <Crosshair className="w-9 h-9 text-[#4A91CC] dark:text-[#65A9E3]" />
+                <div className="w-20 h-20 rounded-2xl bg-accent/10 dark:bg-accent/20 flex items-center justify-center">
+                    <Crosshair className="w-9 h-9 text-accent-light" />
                 </div>
                 <div className="space-y-2">
                     <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Cyber Range</h2>

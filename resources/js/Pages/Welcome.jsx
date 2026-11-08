@@ -84,11 +84,11 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
     ];
 
     return (
-        <div className="min-h-screen bg-[#FBFBFC] dark:bg-[#0D0E12] text-gray-900 dark:text-gray-100 flex flex-col justify-between selection:bg-[#5B5FC7] selection:text-white font-sans">
+        <div className="min-h-screen bg-surface dark:bg-page text-gray-900 dark:text-gray-100 flex flex-col justify-between selection:bg-accent selection:text-white font-sans">
             <Head title="Laravel RBAC Starter Kit" />
 
             {/* Navigation */}
-            <header className="h-16 border-b border-gray-200/80 dark:border-white/[0.08] bg-white/70 dark:bg-[#121319]/70 backdrop-blur-md sticky top-0 z-30 transition-colors">
+            <header className="h-16 border-b border-gray-200/80 dark:border-white/[0.08] bg-white/70 dark:bg-surface/70 backdrop-blur-md sticky top-0 z-30 transition-colors">
                 <div className="max-w-6xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <ApplicationLogo className="w-8 h-8 rounded-lg" />
@@ -103,7 +103,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                         {auth?.user ? (
                             <Link
                                 href={route('dashboard')}
-                                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#5B5FC7] hover:bg-[#4E52B8] text-white text-xs font-semibold shadow-xs transition"
+                                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-accent hover:bg-accent-hover text-white text-xs font-semibold shadow-xs transition"
                             >
                                 <span>Go to Dashboard</span>
                                 <ArrowRight className="w-3.5 h-3.5" />
@@ -111,7 +111,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                         ) : (
                             <Link
                                 href={route('login')}
-                                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#5B5FC7] hover:bg-[#4E52B8] text-white text-xs font-semibold shadow-xs transition"
+                                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-accent hover:bg-accent-hover text-white text-xs font-semibold shadow-xs transition"
                             >
                                 <span>Sign In</span>
                                 <ArrowRight className="w-3.5 h-3.5" />
@@ -125,7 +125,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
             <main className="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-16">
                 {/* Hero Header */}
                 <div className="max-w-3xl space-y-4">
-                    <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md text-[11px] font-mono font-medium bg-gray-100 dark:bg-white/[0.06] text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-white/[0.08]">
+                    <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md text-[0.6875rem] font-mono font-medium bg-gray-100 dark:bg-white/[0.06] text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-white/[0.08]">
                         <span>Starter Kit Template</span>
                         <span className="text-gray-400">·</span>
                         <span>Laravel {laravelVersion || '12'} · Inertia React</span>
@@ -145,7 +145,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                         {auth?.user ? (
                             <Link
                                 href={route('dashboard')}
-                                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#5B5FC7] hover:bg-[#4E52B8] text-white text-xs font-semibold shadow-xs transition"
+                                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-accent hover:bg-accent-hover text-white text-xs font-semibold shadow-xs transition"
                             >
                                 <span>Open Application</span>
                                 <ArrowRight className="w-3.5 h-3.5" />
@@ -153,7 +153,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                         ) : (
                             <Link
                                 href={route('login')}
-                                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#5B5FC7] hover:bg-[#4E52B8] text-white text-xs font-semibold shadow-xs transition"
+                                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-accent hover:bg-accent-hover text-white text-xs font-semibold shadow-xs transition"
                             >
                                 <span>Sign In</span>
                                 <ArrowRight className="w-3.5 h-3.5" />
@@ -162,7 +162,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
 
                         <a
                             href="#quickstart"
-                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-gray-200 dark:border-white/[0.1] bg-white dark:bg-[#161720] text-gray-700 dark:text-gray-300 hover:text-gray-950 dark:hover:text-white text-xs font-medium transition"
+                            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-gray-200 dark:border-white/[0.1] bg-surface text-gray-700 dark:text-gray-300 hover:text-gray-950 dark:hover:text-white text-xs font-medium transition"
                         >
                             <span>Quick Start Guide</span>
                         </a>
@@ -181,7 +181,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                             return (
                                 <div
                                     key={i}
-                                    className="p-4 rounded-xl border border-gray-200/80 dark:border-white/[0.08] bg-white dark:bg-[#14151C] shadow-2xs space-y-2"
+                                    className="p-4 rounded-xl border border-gray-200/80 dark:border-white/[0.08] bg-surface shadow-2xs space-y-2"
                                 >
                                     <div className="w-7 h-7 rounded-lg bg-gray-100 dark:bg-white/[0.06] text-gray-700 dark:text-gray-300 flex items-center justify-center">
                                         <Icon className="w-4 h-4" />
@@ -215,18 +215,18 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                             {seedAccounts.map((acc) => (
                                 <div
                                     key={acc.email}
-                                    className="p-3 rounded-lg border border-gray-200/80 dark:border-white/[0.08] bg-white dark:bg-[#14151C] flex items-center justify-between text-xs"
+                                    className="p-3 rounded-lg border border-gray-200/80 dark:border-white/[0.08] bg-surface flex items-center justify-between text-xs"
                                 >
                                     <div className="space-y-0.5">
                                         <div className="flex items-center gap-2">
                                             <span className="font-semibold text-gray-900 dark:text-white">
                                                 {acc.role}
                                             </span>
-                                            <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${acc.badgeClass}`}>
+                                            <span className={`text-[0.625rem] px-1.5 py-0.5 rounded font-medium ${acc.badgeClass}`}>
                                                 {acc.badge}
                                             </span>
                                         </div>
-                                        <div className="font-mono text-[11px] text-gray-500 dark:text-gray-400">
+                                        <div className="font-mono text-[0.6875rem] text-gray-500 dark:text-gray-400">
                                             {acc.email}
                                         </div>
                                     </div>
@@ -234,7 +234,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                                     <button
                                         onClick={() => handleCopy(acc.email, acc.email)}
                                         title="Copy email"
-                                        className="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-white/[0.06] text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition"
+                                        className="p-1.5 rounded-md hover:bg-raised dark:hover:bg-white/[0.06] text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition"
                                     >
                                         {copiedKey === acc.email ? (
                                             <Check className="w-3.5 h-3.5 text-emerald-500" />
@@ -259,7 +259,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                         </div>
 
                         <div className="p-4 rounded-xl border border-gray-200/80 dark:border-white/[0.08] bg-gray-900 text-gray-200 font-mono text-xs space-y-3">
-                            <div className="flex items-center justify-between text-gray-400 border-b border-gray-800 pb-2 text-[11px]">
+                            <div className="flex items-center justify-between text-gray-400 border-b border-gray-800 pb-2 text-[0.6875rem]">
                                 <span>Terminal setup</span>
                                 <button
                                     onClick={() =>
@@ -302,7 +302,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                         <span className="font-medium text-gray-800 dark:text-gray-200">Laravel RBAC Starter Template</span>
                     </div>
 
-                    <div className="flex items-center gap-3 font-mono text-[11px]">
+                    <div className="flex items-center gap-3 font-mono text-[0.6875rem]">
                         <span>PHP {phpVersion || '8.4'}</span>
                         <span>·</span>
                         <span>Laravel {laravelVersion || '12'}</span>

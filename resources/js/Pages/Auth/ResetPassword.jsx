@@ -41,7 +41,7 @@ export default function ResetPassword({ token, email, invalidReason = null }) {
 
                     <Link
                         href={route('password.request')}
-                        className="mt-5 inline-flex items-center justify-center rounded-lg bg-[#5B5FC7] px-4 py-2 text-xs font-semibold text-white hover:bg-[#484CB8] transition"
+                        className="mt-5 inline-flex items-center justify-center rounded-lg bg-accent px-4 py-2 text-xs font-semibold text-white hover:bg-accent-hover transition"
                     >
                         Request a new link
                     </Link>
@@ -97,7 +97,7 @@ export default function ResetPassword({ token, email, invalidReason = null }) {
 
             <Link
                 href={route('login')}
-                className="mt-4 block text-center text-[11px] font-medium text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
+                className="mt-4 block text-center text-[0.6875rem] font-medium text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
             >
                 Back to sign in
             </Link>

@@ -22,7 +22,7 @@ export default function Edit({ mustVerifyEmail, status }) {
             <Head title="Profile Settings" />
 
             <div className="space-y-6 max-w-4xl">
-                <div className="bg-white dark:bg-[#15151A] p-6 sm:p-8 rounded-xl border border-[#E8E8EC] dark:border-[#26262D] shadow-gumloop-card">
+                <div className="bg-surface p-6 sm:p-8 rounded-xl border border-line shadow-gumloop-card">
                     <UpdateProfileInformationForm
                         mustVerifyEmail={mustVerifyEmail}
                         status={status}
@@ -30,11 +30,11 @@ export default function Edit({ mustVerifyEmail, status }) {
                     />
                 </div>
 
-                <div className="bg-white dark:bg-[#15151A] p-6 sm:p-8 rounded-xl border border-[#E8E8EC] dark:border-[#26262D] shadow-gumloop-card">
+                <div className="bg-surface p-6 sm:p-8 rounded-xl border border-line shadow-gumloop-card">
                     <UpdatePasswordForm className="max-w-xl" />
                 </div>
 
-                <div className="bg-white dark:bg-[#15151A] p-6 sm:p-8 rounded-xl border border-[#E8E8EC] dark:border-[#26262D] shadow-gumloop-card">
+                <div className="bg-surface p-6 sm:p-8 rounded-xl border border-line shadow-gumloop-card">
                     <DeleteUserForm className="max-w-xl" />
                 </div>
             </div>

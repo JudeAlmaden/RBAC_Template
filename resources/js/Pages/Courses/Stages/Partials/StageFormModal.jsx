@@ -44,7 +44,7 @@ export const SECTION_TYPE_DETAILS = {
     custom: {
         label: 'Custom',
         desc: 'Modular stage with custom configuration',
-        badge: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 border border-gray-200 dark:border-gray-700',
+        badge: 'bg-gray-100 text-gray-700 dark:bg-raised dark:text-gray-300 border border-gray-200 dark:border-line',
     },
 };
 
@@ -85,23 +85,23 @@ export default function StageFormModal({
 
     return (
         <Modal show={show} onClose={handleClose} maxWidth="lg">
-            <div className="flex flex-col max-h-[90vh] bg-white dark:bg-[#15151A] text-gray-900 dark:text-gray-100">
+            <div className="flex flex-col max-h-[90vh] bg-surface text-gray-900 dark:text-gray-100">
 
                 {/* Sticky header */}
-                <div className="flex items-center justify-between px-6 py-4 border-b border-[#E8E8EC] dark:border-[#26262D] shrink-0">
+                <div className="flex items-center justify-between px-6 py-4 border-b border-line shrink-0">
                     <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-lg bg-[#5B5FC7]/10 dark:bg-[#5B5FC7]/20 flex items-center justify-center">
+                        <div className="w-8 h-8 rounded-lg bg-accent/10 dark:bg-accent/20 flex items-center justify-center">
                             {isEdit ? (
-                                <Pencil className="w-4 h-4 text-[#5B5FC7] dark:text-[#8A8DE2]" />
+                                <Pencil className="w-4 h-4 text-accent-light" />
                             ) : (
-                                <Layers className="w-4 h-4 text-[#5B5FC7] dark:text-[#8A8DE2]" />
+                                <Layers className="w-4 h-4 text-accent-light" />
                             )}
                         </div>
                         <div>
                             <h2 className="text-sm font-semibold">
                                 {isEdit ? 'Edit Learning Stage' : 'Add Pedagogical Stage'}
                             </h2>
-                            <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                            <p className="text-[0.6875rem] text-gray-500 dark:text-gray-400">
                                 Configure the learning stage type, layout container, and guidelines
                             </p>
                         </div>
@@ -109,7 +109,7 @@ export default function StageFormModal({
                     <button
                         type="button"
                         onClick={handleClose}
-                        className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1C1C24] transition"
+                        className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-raised dark:hover:bg-raised transition"
                     >
                         <X className="w-4 h-4" />
                     </button>
@@ -137,8 +137,8 @@ export default function StageFormModal({
                                         }}
                                         className={`p-2.5 rounded-lg border text-left transition flex flex-col justify-between ${
                                             isSelected
-                                                ? 'border-[#5B5FC7] bg-[#5B5FC7]/10 dark:bg-[#5B5FC7]/20 ring-1 ring-[#5B5FC7]'
-                                                : 'border-[#E8E8EC] dark:border-[#26262D] hover:bg-gray-50 dark:hover:bg-[#1C1C24]'
+                                                ? 'border-accent bg-accent/10 dark:bg-accent/20 ring-1 ring-accent'
+                                                : 'border-line hover:bg-raised dark:hover:bg-raised'
                                         }`}
                                     >
                                         <div className="flex items-center justify-between">
@@ -146,10 +146,10 @@ export default function StageFormModal({
                                                 {details.label}
                                             </span>
                                             {isSelected && (
-                                                <span className="w-2 h-2 rounded-full bg-[#5B5FC7]" />
+                                                <span className="w-2 h-2 rounded-full bg-accent" />
                                             )}
                                         </div>
-                                        <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">
+                                        <p className="text-[0.625rem] text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">
                                             {details.desc}
                                         </p>
                                     </button>
@@ -182,7 +182,7 @@ export default function StageFormModal({
                             rows={3}
                             value={data.instructions || ''}
                             onChange={(e) => setData('instructions', e.target.value)}
-                            className="mt-1 block w-full rounded-md border-gray-300 dark:border-[#26262D] dark:bg-[#1C1C24] dark:text-white shadow-xs focus:border-[#5B5FC7] focus:ring-[#5B5FC7] text-xs"
+                            className="mt-1 block w-full rounded-md border-gray-300 dark:border-line dark:bg-raised dark:text-white shadow-xs focus:border-accent focus:ring-accent text-xs"
                             placeholder="Provide step-by-step guidance or learning objectives for this specific stage..."
                         />
                         <InputError message={errors.instructions} className="mt-1" />
@@ -195,11 +195,11 @@ export default function StageFormModal({
                                 type="checkbox"
                                 checked={!!data.is_required}
                                 onChange={(e) => setData('is_required', e.target.checked)}
-                                className="rounded border-gray-300 dark:border-[#26262D] text-[#5B5FC7] shadow-xs focus:ring-[#5B5FC7]"
+                                className="rounded border-gray-300 dark:border-line text-accent shadow-xs focus:ring-accent"
                             />
                             <div className="text-xs">
                                 <span className="font-semibold text-gray-900 dark:text-white">Required for completion</span>
-                                <p className="text-[10px] text-gray-400">Must be finished to complete lesson</p>
+                                <p className="text-[0.625rem] text-gray-400">Must be finished to complete lesson</p>
                             </div>
                         </label>
 
@@ -208,29 +208,29 @@ export default function StageFormModal({
                                 type="checkbox"
                                 checked={!!data.is_published}
                                 onChange={(e) => setData('is_published', e.target.checked)}
-                                className="rounded border-gray-300 dark:border-[#26262D] text-[#5B5FC7] shadow-xs focus:ring-[#5B5FC7]"
+                                className="rounded border-gray-300 dark:border-line text-accent shadow-xs focus:ring-accent"
                             />
                             <div className="text-xs">
                                 <span className="font-semibold text-gray-900 dark:text-white">Publish stage immediately</span>
-                                <p className="text-[10px] text-gray-400">Visible to learners right away</p>
+                                <p className="text-[0.625rem] text-gray-400">Visible to learners right away</p>
                             </div>
                         </label>
                     </div>
                 </div>{/* end scrollable body */}
 
                 {/* Sticky footer */}
-                <div className="flex justify-end gap-2 px-6 py-4 border-t border-[#E8E8EC] dark:border-[#26262D] shrink-0">
+                <div className="flex justify-end gap-2 px-6 py-4 border-t border-line shrink-0">
                     <button
                         type="button"
                         onClick={handleClose}
-                        className="px-3.5 py-2 rounded-lg border border-[#E8E8EC] dark:border-[#26262D] hover:bg-gray-50 dark:hover:bg-[#1C1C24] text-xs font-semibold text-gray-700 dark:text-gray-300 transition"
+                        className="px-3.5 py-2 rounded-lg border border-line hover:bg-raised dark:hover:bg-raised text-xs font-semibold text-gray-700 dark:text-gray-300 transition"
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
                         disabled={processing}
-                        className="px-4 py-2 rounded-lg bg-[#5B5FC7] hover:bg-[#484CB8] text-white text-xs font-semibold shadow-xs disabled:opacity-50 transition"
+                        className="px-4 py-2 rounded-lg bg-accent hover:bg-accent-hover text-white text-xs font-semibold shadow-xs disabled:opacity-50 transition"
                     >
                         {processing ? 'Saving...' : isEdit ? 'Update Stage' : 'Create Stage'}
                     </button>

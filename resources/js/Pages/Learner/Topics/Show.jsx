@@ -44,7 +44,7 @@ function ListBlock({ title, items = [], ordered = false, checklist = false }) {
     return (
         <div className="space-y-4">
             {title && (
-                <h4 className="text-sm font-black uppercase tracking-widest text-[#94A3B8] dark:text-white/40">
+                <h4 className="text-sm font-black uppercase tracking-widest text-faint dark:text-white/40">
                     {title}
                 </h4>
             )}
@@ -52,16 +52,16 @@ function ListBlock({ title, items = [], ordered = false, checklist = false }) {
                 {items.map((item, index) => (
                     <li
                         key={index}
-                        className="flex items-start gap-3 text-sm text-[#475569] dark:text-white/70 leading-relaxed"
+                        className="flex items-start gap-3 text-sm text-muted dark:text-white/70 leading-relaxed"
                     >
                         {checklist ? (
-                            <span className="mt-1 w-4 h-4 rounded border border-[#CBD5E1] dark:border-white/20 shrink-0" />
+                            <span className="mt-1 w-4 h-4 rounded border border-line-strong dark:border-white/20 shrink-0" />
                         ) : ordered ? (
-                            <span className="mt-0.5 w-5 h-5 rounded-lg bg-[#5B5FC7]/10 dark:bg-[#5B5FC7]/20 text-[10px] font-black text-[#5B5FC7] dark:text-[#8A8DE2] flex items-center justify-center shrink-0 border border-[#5B5FC7]/30">
+                            <span className="mt-0.5 w-5 h-5 rounded-lg bg-accent/10 dark:bg-accent/20 text-[0.625rem] font-black text-accent-light flex items-center justify-center shrink-0 border border-accent/30">
                                 {index + 1}
                             </span>
                         ) : (
-                            <span className="mt-2 w-1.5 h-1.5 rounded-full bg-[#5B5FC7] shrink-0 shadow-[0_0_5px_rgba(91,95,199,0.5)]" />
+                            <span className="mt-2 w-1.5 h-1.5 rounded-full bg-accent shrink-0 shadow-[0_0_5px_rgba(91,95,199,0.5)]" />
                         )}
                         <span>{item}</span>
                     </li>
@@ -82,16 +82,16 @@ function BlockRenderer({ block }) {
                 const size = content.level === 3 ? 'text-xl' : content.level === 4 ? 'text-lg' : 'text-3xl';
                 return (
                     <div className="mb-6">
-                        <Tag className={`${size} font-black text-[#1F2937] dark:text-white tracking-tight`}>
+                        <Tag className={`${size} font-black text-ink dark:text-white tracking-tight`}>
                             {content.text}
                         </Tag>
-                        <div className="h-1 w-12 bg-[#5B5FC7] rounded-full mt-2" />
+                        <div className="h-1 w-12 bg-accent rounded-full mt-2" />
                     </div>
                 );
             }
             if (variant === 'objectives' || variant === 'checklist' || variant === 'steps') {
                 return (
-                    <div className="p-6 rounded-3xl bg-[#F7F9FC] dark:bg-white/5 border border-[#E2E8F0] dark:border-white/10">
+                    <div className="p-6 rounded-3xl bg-sunken dark:bg-white/5 border border-line-strong dark:border-white/10">
                         <ListBlock
                             title={content.title}
                             items={content.items}
@@ -102,30 +102,30 @@ function BlockRenderer({ block }) {
                 );
             }
             if (variant === 'divider') {
-                return <hr className="border-[#E2E8F0] dark:border-white/5 my-8" />;
+                return <hr className="border-line-strong dark:border-white/5 my-8" />;
             }
             if (variant === 'table') {
                 const headers = content.headers || [];
                 const rows = content.rows || [];
                 return (
-                    <div className="overflow-hidden rounded-2xl border border-[#E2E8F0] dark:border-white/10 bg-[#F7F9FC] dark:bg-white/5">
+                    <div className="overflow-hidden rounded-2xl border border-line-strong dark:border-white/10 bg-sunken dark:bg-white/5">
                         <table className="w-full text-xs text-left">
                             {headers.length > 0 && (
-                                <thead className="bg-white dark:bg-white/5 border-b border-[#E2E8F0] dark:border-white/10">
+                                <thead className="bg-surface dark:bg-white/5 border-b border-line-strong dark:border-white/10">
                                     <tr>
                                         {headers.map((header, index) => (
-                                            <th key={index} className="px-4 py-3 font-black uppercase tracking-widest text-[#94A3B8] dark:text-white/40">
+                                            <th key={index} className="px-4 py-3 font-black uppercase tracking-widest text-faint dark:text-white/40">
                                                 {header}
                                             </th>
                                         ))}
                                     </tr>
                                 </thead>
                             )}
-                            <tbody className="divide-y divide-[#E2E8F0] dark:divide-white/5">
+                            <tbody className="divide-y divide-line-strong dark:divide-white/5">
                                 {rows.map((row, rowIndex) => (
                                     <tr key={rowIndex}>
                                         {row.map((cell, cellIndex) => (
-                                            <td key={cellIndex} className="px-4 py-3 text-[#475569] dark:text-white/70">
+                                            <td key={cellIndex} className="px-4 py-3 text-muted dark:text-white/70">
                                                 {cell}
                                             </td>
                                         ))}
@@ -137,7 +137,7 @@ function BlockRenderer({ block }) {
                 );
             }
             return (
-                <p className="text-base leading-relaxed text-[#475569] dark:text-white/60 whitespace-pre-line mb-6">
+                <p className="text-base leading-relaxed text-muted dark:text-white/60 whitespace-pre-line mb-6">
                     {content.text}
                 </p>
             );
@@ -146,15 +146,15 @@ function BlockRenderer({ block }) {
             if (variant === 'accordion') {
                 const items = content.items || [];
                 return (
-                    <div className="divide-y divide-[#E2E8F0] dark:divide-white/5 overflow-hidden rounded-2xl border border-[#E2E8F0] dark:border-white/10 bg-[#F7F9FC] dark:bg-white/5">
+                    <div className="divide-y divide-line-strong dark:divide-white/5 overflow-hidden rounded-2xl border border-line-strong dark:border-white/10 bg-sunken dark:bg-white/5">
                         {items.map((item, index) => (
                             <div key={index} className="px-6 py-4">
-                                <div className="text-sm font-bold text-[#1F2937] dark:text-white flex items-center justify-between gap-4">
+                                <div className="text-sm font-bold text-ink dark:text-white flex items-center justify-between gap-4">
                                     {item.title}
-                                    <ChevronDown className="w-4 h-4 text-[#94A3B8] dark:text-white/20" />
+                                    <ChevronDown className="w-4 h-4 text-faint dark:text-white/20" />
                                 </div>
                                 {item.text && (
-                                    <p className="mt-2 text-sm text-[#475569] dark:text-white/50 leading-relaxed">
+                                    <p className="mt-2 text-sm text-muted dark:text-white/50 leading-relaxed">
                                         {item.text}
                                     </p>
                                 )}
@@ -167,12 +167,12 @@ function BlockRenderer({ block }) {
             const Icon = tone.Icon;
             return (
                 <div className={`flex gap-4 rounded-3xl border p-6 ${tone.wrap}`}>
-                    <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 border border-[#E2E8F0] dark:border-white/10 ${tone.wrap}`}>
+                    <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 border border-line-strong dark:border-white/10 ${tone.wrap}`}>
                         <Icon className={`w-5 h-5 ${tone.title}`} />
                     </div>
                     <div className="space-y-2">
                         {content.title && <h4 className={`text-sm font-black uppercase tracking-widest ${tone.title}`}>{content.title}</h4>}
-                        <p className="text-sm leading-relaxed text-[#475569] dark:text-white/70">
+                        <p className="text-sm leading-relaxed text-muted dark:text-white/70">
                             {content.text}
                         </p>
                     </div>
@@ -183,7 +183,7 @@ function BlockRenderer({ block }) {
             return (
                 <div className="space-y-4 mb-8">
                     {content.url && (
-                        <div className="aspect-video w-full overflow-hidden rounded-3xl bg-black border border-[#E2E8F0] dark:border-white/10 shadow-2xl">
+                        <div className="aspect-video w-full overflow-hidden rounded-3xl bg-black border border-line-strong dark:border-white/10 shadow-2xl">
                             <iframe
                                 src={content.url}
                                 title={content.title || 'Video'}
@@ -193,7 +193,7 @@ function BlockRenderer({ block }) {
                         </div>
                     )}
                     {content.caption && (
-                        <p className="text-xs text-center text-[#94A3B8] dark:text-white/40 italic">{content.caption}</p>
+                        <p className="text-xs text-center text-faint dark:text-white/40 italic">{content.caption}</p>
                     )}
                 </div>
             );
@@ -201,14 +201,14 @@ function BlockRenderer({ block }) {
         case 'code':
             const isTerminal = variant === 'terminal';
             return (
-                <div className={`overflow-hidden rounded-2xl border ${isTerminal ? 'border-[#E2E8F0] dark:border-white/10 bg-black' : 'border-[#E2E8F0] dark:border-white/10 bg-[#0F172A]'} mb-6 shadow-2xl`}>
+                <div className={`overflow-hidden rounded-2xl border ${isTerminal ? 'border-line-strong dark:border-white/10 bg-black' : 'border-line-strong dark:border-white/10 bg-[#0F172A]'} mb-6 shadow-2xl`}>
                     <div className="flex items-center justify-between px-4 py-2 border-b border-white/10 bg-white/5">
                         <div className="flex items-center gap-1.5">
                             <div className="w-2.5 h-2.5 rounded-full bg-red-500/20 border border-red-500/40" />
                             <div className="w-2.5 h-2.5 rounded-full bg-amber-500/20 border border-amber-500/40" />
                             <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/20 border border-emerald-500/40" />
                         </div>
-                        <span className="text-[10px] font-black uppercase tracking-widest text-white/20">
+                        <span className="text-[0.625rem] font-black uppercase tracking-widest text-white/20">
                             {content.language || 'text'}
                         </span>
                     </div>
@@ -225,10 +225,10 @@ function BlockRenderer({ block }) {
                         <img
                             src={content.url}
                             alt={content.alt || ''}
-                            className="w-full rounded-3xl border border-[#E2E8F0] dark:border-white/10 shadow-2xl"
+                            className="w-full rounded-3xl border border-line-strong dark:border-white/10 shadow-2xl"
                         />
                         {content.caption && (
-                            <figcaption className="text-center text-xs text-[#94A3B8] dark:text-white/40 italic">
+                            <figcaption className="text-center text-xs text-faint dark:text-white/40 italic">
                                 {content.caption}
                             </figcaption>
                         )}
@@ -240,14 +240,14 @@ function BlockRenderer({ block }) {
                     href={content.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-4 p-4 rounded-2xl border border-[#E2E8F0] dark:border-white/10 bg-[#F7F9FC] dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 transition-all group mb-6"
+                    className="flex items-center gap-4 p-4 rounded-2xl border border-line-strong dark:border-white/10 bg-sunken dark:bg-white/5 hover:bg-surface dark:hover:bg-white/10 transition-all group mb-6"
                 >
-                    <div className="w-10 h-10 rounded-xl bg-white dark:bg-white/5 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                        <Globe className="w-5 h-5 text-[#4A91CC]" />
+                    <div className="w-10 h-10 rounded-xl bg-surface dark:bg-white/5 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                        <Globe className="w-5 h-5 text-accent" />
                     </div>
                     <div className="min-w-0">
-                        <p className="text-sm font-bold text-[#1F2937] dark:text-white truncate">{content.title || 'Open Link'}</p>
-                        <p className="text-xs text-[#94A3B8] dark:text-white/30 truncate">{content.url}</p>
+                        <p className="text-sm font-bold text-ink dark:text-white truncate">{content.title || 'Open Link'}</p>
+                        <p className="text-xs text-faint dark:text-white/30 truncate">{content.url}</p>
                     </div>
                 </a>
             );
@@ -312,13 +312,13 @@ function stagePages(section) {
 function StageIntroPage({ title, stageIndex, totalStages }) {
     return (
         <div className="max-w-3xl mx-auto py-20 sm:py-32 text-center">
-            <p className="text-[11px] font-black uppercase tracking-[0.3em] text-[#5B5FC7] dark:text-[#8A8DE2]">
+            <p className="text-[0.6875rem] font-black uppercase tracking-[0.3em] text-accent-light">
                 Stage {stageIndex} of {totalStages}
             </p>
-            <h1 className="mt-5 text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-[#1F2937] dark:text-white">
+            <h1 className="mt-5 text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-ink dark:text-white">
                 {title}
             </h1>
-            <div className="h-1 w-20 bg-[#5B5FC7] rounded-full mt-6 mx-auto" />
+            <div className="h-1 w-20 bg-accent rounded-full mt-6 mx-auto" />
         </div>
     );
 }
@@ -403,7 +403,7 @@ export default function Show({ course, module, topic }) {
                         <PageRenderer page={currentPage} />
                     )
                 ) : (
-                    <div className="flex flex-col items-center justify-center py-24 text-[#94A3B8] dark:text-white/20">
+                    <div className="flex flex-col items-center justify-center py-24 text-faint dark:text-white/20">
                         <FileText className="w-16 h-16 mb-4 opacity-10" />
                         <p className="text-sm font-bold uppercase tracking-widest">No content on this page</p>
                     </div>

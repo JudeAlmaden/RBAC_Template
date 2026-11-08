@@ -108,13 +108,13 @@ export default function UserRowActions({
         <div
             id={`user-menu-portal-${user.id}`}
             style={menuStyle}
-            className="bg-white dark:bg-[#1E1E26] border border-[#E8E8EC] dark:border-[#2E2E38] rounded-xl shadow-2xl overflow-hidden py-1 animate-in fade-in zoom-in-95 duration-75"
+            className="bg-surface dark:bg-raised border border-line rounded-xl shadow-2xl overflow-hidden py-1 animate-in fade-in zoom-in-95 duration-75"
         >
             {/* View Profile */}
             <Link
                 href={route('users.show', user.id)}
                 onClick={() => setOpen(false)}
-                className="w-full flex items-center gap-3 px-4 py-2 text-xs text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#28282E] transition text-left"
+                className="w-full flex items-center gap-3 px-4 py-2 text-xs text-gray-700 dark:text-gray-300 hover:bg-raised dark:hover:bg-raised transition text-left"
             >
                 <Eye className="w-3.5 h-3.5 text-gray-400" />
                 View Profile & Audit
@@ -124,7 +124,7 @@ export default function UserRowActions({
             {user.can.update && (
                 <button
                     onClick={() => act(onEdit)}
-                    className="w-full flex items-center gap-3 px-4 py-2 text-xs text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#28282E] transition text-left"
+                    className="w-full flex items-center gap-3 px-4 py-2 text-xs text-gray-700 dark:text-gray-300 hover:bg-raised dark:hover:bg-raised transition text-left"
                 >
                     <Edit2 className="w-3.5 h-3.5 text-gray-400" />
                     Edit account
@@ -159,7 +159,7 @@ export default function UserRowActions({
             {user.can.promoteSuperAdmin && (
                 <button
                     onClick={() => act(onPromote)}
-                    className="w-full flex items-center gap-3 px-4 py-2 text-xs text-[#5B5FC7] dark:text-[#8A8DE2] hover:bg-[#5B5FC7]/5 dark:hover:bg-[#5B5FC7]/10 transition text-left"
+                    className="w-full flex items-center gap-3 px-4 py-2 text-xs text-accent-light hover:bg-accent/5 dark:hover:bg-accent/10 transition text-left"
                 >
                     <Award className="w-3.5 h-3.5" />
                     Promote to Super Admin
@@ -191,7 +191,7 @@ export default function UserRowActions({
             {/* Remove Account */}
             {user.can.delete && (
                 <>
-                    <div className="border-t border-[#E8E8EC] dark:border-[#2E2E38] my-1" />
+                    <div className="border-t border-line my-1" />
                     <button
                         onClick={() => act(onDelete)}
                         className="w-full flex items-center gap-3 px-4 py-2 text-xs text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition text-left"
@@ -212,8 +212,8 @@ export default function UserRowActions({
                 onClick={handleToggle}
                 className={`p-1.5 rounded-lg transition ${
                     open
-                        ? 'bg-gray-200 dark:bg-[#2A2A35] text-gray-800 dark:text-gray-100'
-                        : 'text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800'
+                        ? 'bg-gray-200 dark:bg-line text-gray-800 dark:text-gray-100'
+                        : 'text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-raised dark:hover:bg-gray-800'
                 }`}
                 title="Actions"
                 aria-expanded={open}

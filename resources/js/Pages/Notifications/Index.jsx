@@ -57,10 +57,10 @@ const SEVERITY_STYLES = {
         badge: 'bg-red-50 text-red-700 dark:bg-red-950/50 dark:text-red-300 border-red-200 dark:border-red-800/60',
     },
     info: {
-        icon: 'text-[#5B5FC7] dark:text-[#8A8DE2]',
-        dot: 'bg-[#5B5FC7]',
-        ring: 'bg-[#5B5FC7]/10 text-[#5B5FC7] dark:bg-[#5B5FC7]/20 dark:text-[#8A8DE2] border border-[#5B5FC7]/20',
-        badge: 'bg-[#5B5FC7]/10 text-[#5B5FC7] dark:bg-[#5B5FC7]/20 dark:text-[#8A8DE2] border-[#5B5FC7]/20',
+        icon: 'text-accent-light',
+        dot: 'bg-accent',
+        ring: 'bg-accent/10 text-accent dark:bg-accent/20 dark:text-accent-light border border-accent/20',
+        badge: 'bg-accent/10 text-accent dark:bg-accent/20 dark:text-accent-light border-accent/20',
     },
 };
 
@@ -144,9 +144,9 @@ export default function NotificationsIndex({ notifications, unread_count = 0, co
 
             <div className="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
                 {/* Header Card */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-[#15151A] p-6 rounded-2xl border border-[#E8E8EC] dark:border-[#26262D] shadow-sm">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-surface p-6 rounded-2xl border border-line shadow-sm">
                     <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-[#5B5FC7]/10 dark:bg-[#5B5FC7]/20 flex items-center justify-center text-[#5B5FC7] dark:text-[#8A8DE2] flex-shrink-0">
+                        <div className="w-12 h-12 rounded-xl bg-accent/10 dark:bg-accent/20 flex items-center justify-center text-accent-light flex-shrink-0">
                             <Bell className="w-6 h-6" />
                         </div>
                         <div>
@@ -155,7 +155,7 @@ export default function NotificationsIndex({ notifications, unread_count = 0, co
                                     Notifications
                                 </h1>
                                 {unread_count > 0 && (
-                                    <span className="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-[#5B5FC7] text-white">
+                                    <span className="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-accent text-white">
                                         {unread_count} unread
                                     </span>
                                 )}
@@ -171,7 +171,7 @@ export default function NotificationsIndex({ notifications, unread_count = 0, co
                         {hasUnread && (
                             <button
                                 onClick={handleMarkAllRead}
-                                className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg text-[#5B5FC7] dark:text-[#8A8DE2] bg-[#5B5FC7]/10 dark:bg-[#5B5FC7]/20 hover:bg-[#5B5FC7]/15 dark:hover:bg-[#5B5FC7]/25 transition"
+                                className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg text-accent-light bg-accent/10 dark:bg-accent/20 hover:bg-accent/15 dark:hover:bg-accent/25 transition"
                             >
                                 <CheckCheck className="w-3.5 h-3.5" />
                                 Mark all read
@@ -180,7 +180,7 @@ export default function NotificationsIndex({ notifications, unread_count = 0, co
                         {hasRead && (
                             <button
                                 onClick={handleClearRead}
-                                className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-[#1F1F26] hover:bg-gray-200 dark:hover:bg-[#282834] transition"
+                                className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-raised hover:bg-gray-200 dark:hover:bg-raised transition"
                             >
                                 <Trash2 className="w-3.5 h-3.5" />
                                 Clear read
@@ -190,10 +190,10 @@ export default function NotificationsIndex({ notifications, unread_count = 0, co
                 </div>
 
                 {/* Filter & Search Bar */}
-                <div className="bg-white dark:bg-[#15151A] p-4 rounded-2xl border border-[#E8E8EC] dark:border-[#26262D] shadow-sm space-y-3">
+                <div className="bg-surface p-4 rounded-2xl border border-line shadow-sm space-y-3">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
                         {/* Status Tabs */}
-                        <div className="flex items-center gap-1.5 bg-gray-100 dark:bg-[#1F1F26] p-1 rounded-xl">
+                        <div className="flex items-center gap-1.5 bg-gray-100 dark:bg-raised p-1 rounded-xl">
                             {[
                                 { key: 'all', label: 'All', count: counts.all },
                                 { key: 'unread', label: 'Unread', count: counts.unread },
@@ -206,17 +206,17 @@ export default function NotificationsIndex({ notifications, unread_count = 0, co
                                         onClick={() => handleTabChange(tab.key)}
                                         className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg transition ${
                                             isActive
-                                                ? 'bg-white dark:bg-[#15151A] text-gray-900 dark:text-white shadow-sm font-semibold'
+                                                ? 'bg-surface text-gray-900 dark:text-white shadow-sm font-semibold'
                                                 : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
                                         }`}
                                     >
                                         <span>{tab.label}</span>
                                         {tab.count !== undefined && (
                                             <span
-                                                className={`px-1.5 py-0.2 text-[10px] rounded-full ${
+                                                className={`px-1.5 py-0.2 text-[0.625rem] rounded-full ${
                                                     isActive
-                                                        ? 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200'
-                                                        : 'bg-gray-200/70 dark:bg-gray-800/80 text-gray-600 dark:text-gray-400'
+                                                        ? 'bg-gray-100 dark:bg-raised text-gray-800 dark:text-gray-200'
+                                                        : 'bg-gray-200/70 dark:bg-raised text-gray-600 dark:text-gray-400'
                                                 }`}
                                             >
                                                 {tab.count}
@@ -241,7 +241,7 @@ export default function NotificationsIndex({ notifications, unread_count = 0, co
                                         }
                                     }}
                                     placeholder="Search notifications…"
-                                    className="w-full pl-9 pr-8 py-1.5 text-xs rounded-xl bg-gray-50 dark:bg-[#1A1A22] border border-gray-200 dark:border-[#26262D] text-gray-900 dark:text-gray-100 focus:ring-1 focus:ring-[#5B5FC7] focus:border-[#5B5FC7]"
+                                    className="w-full pl-9 pr-8 py-1.5 text-xs rounded-xl bg-gray-50 dark:bg-raised border border-gray-200 dark:border-line text-gray-900 dark:text-gray-100 focus:ring-1 focus:ring-accent focus:border-accent"
                                 />
                                 {searchInput && (
                                     <button
@@ -255,7 +255,7 @@ export default function NotificationsIndex({ notifications, unread_count = 0, co
                             </div>
                             <button
                                 type="submit"
-                                className="px-3 py-1.5 bg-[#5B5FC7] hover:bg-[#4A4EB5] text-white text-xs font-semibold rounded-xl transition"
+                                className="px-3 py-1.5 bg-accent hover:bg-accent-hover text-white text-xs font-semibold rounded-xl transition"
                             >
                                 Search
                             </button>
@@ -263,8 +263,8 @@ export default function NotificationsIndex({ notifications, unread_count = 0, co
                     </div>
 
                     {/* Severity Filters */}
-                    <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-gray-100 dark:border-[#26262D]">
-                        <span className="text-[11px] font-medium text-gray-400 mr-1">Severity:</span>
+                    <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-gray-100 dark:border-line">
+                        <span className="text-[0.6875rem] font-medium text-gray-400 mr-1">Severity:</span>
                         {[
                             { key: '', label: 'All' },
                             { key: 'info', label: 'Info' },
@@ -279,8 +279,8 @@ export default function NotificationsIndex({ notifications, unread_count = 0, co
                                     onClick={() => handleSeverityChange(s.key)}
                                     className={`px-2.5 py-1 rounded-lg text-xs font-medium transition ${
                                         isSelected
-                                            ? 'bg-[#5B5FC7] text-white'
-                                            : 'bg-gray-100 dark:bg-[#1E1E26] text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-[#282834]'
+                                            ? 'bg-accent text-white'
+                                            : 'bg-gray-100 dark:bg-raised text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-raised'
                                     }`}
                                 >
                                     {s.label}
@@ -291,10 +291,10 @@ export default function NotificationsIndex({ notifications, unread_count = 0, co
                 </div>
 
                 {/* Notifications List Card */}
-                <div className="bg-white dark:bg-[#15151A] rounded-2xl border border-[#E8E8EC] dark:border-[#26262D] shadow-sm overflow-hidden divide-y divide-[#E8E8EC] dark:divide-[#26262D]">
+                <div className="bg-surface rounded-2xl border border-line shadow-sm overflow-hidden divide-y divide-line">
                     {items.length === 0 ? (
                         <div className="py-16 px-4 text-center">
-                            <div className="w-12 h-12 rounded-2xl bg-gray-100 dark:bg-[#1F1F26] flex items-center justify-center text-gray-400 mx-auto mb-3">
+                            <div className="w-12 h-12 rounded-2xl bg-gray-100 dark:bg-raised flex items-center justify-center text-gray-400 mx-auto mb-3">
                                 <BellOff className="w-6 h-6" />
                             </div>
                             <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200">
@@ -311,7 +311,7 @@ export default function NotificationsIndex({ notifications, unread_count = 0, co
                                         setSearchInput('');
                                         router.get(route('notifications.index'));
                                     }}
-                                    className="mt-4 px-3.5 py-1.5 text-xs font-semibold rounded-xl bg-gray-100 dark:bg-[#1F1F26] text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-[#2A2A35] transition"
+                                    className="mt-4 px-3.5 py-1.5 text-xs font-semibold rounded-xl bg-gray-100 dark:bg-raised text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-raised transition"
                                 >
                                     Clear all filters
                                 </button>
@@ -327,13 +327,13 @@ export default function NotificationsIndex({ notifications, unread_count = 0, co
                                     key={notification.id}
                                     className={`relative p-5 transition group ${
                                         !notification.is_read
-                                            ? 'bg-[#5B5FC7]/[0.025] dark:bg-[#5B5FC7]/[0.04]'
-                                            : 'hover:bg-gray-50/70 dark:hover:bg-[#1A1A22]'
+                                            ? 'bg-accent/[0.025] dark:bg-accent/[0.04]'
+                                            : 'hover:bg-raised/70 dark:hover:bg-raised'
                                     }`}
                                 >
                                     {/* Unread indicator vertical strip */}
                                     {!notification.is_read && (
-                                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#5B5FC7]" />
+                                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-accent" />
                                     )}
 
                                     <div className="flex items-start gap-4">
@@ -355,13 +355,13 @@ export default function NotificationsIndex({ notifications, unread_count = 0, co
                                                     </span>
 
                                                     {/* Severity Badge */}
-                                                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${styles.badge} uppercase tracking-wider`}>
+                                                    <span className={`text-[0.625rem] font-semibold px-2 py-0.5 rounded-full border ${styles.badge} uppercase tracking-wider`}>
                                                         {notification.severity}
                                                     </span>
 
                                                     {/* Unread Pill */}
                                                     {!notification.is_read && (
-                                                        <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-[#5B5FC7] text-white">
+                                                        <span className="text-[0.625rem] font-bold px-1.5 py-0.2 rounded bg-accent text-white">
                                                             NEW
                                                         </span>
                                                     )}
@@ -384,7 +384,7 @@ export default function NotificationsIndex({ notifications, unread_count = 0, co
                                             )}
 
                                             {/* Metadata & Actions row */}
-                                            <div className="flex flex-wrap items-center justify-between gap-3 mt-3.5 pt-2 border-t border-gray-100/80 dark:border-[#26262D]">
+                                            <div className="flex flex-wrap items-center justify-between gap-3 mt-3.5 pt-2 border-t border-gray-100/80 dark:border-line">
                                                 <div className="flex items-center gap-3 text-xs text-gray-400">
                                                     {notification.sender_name ? (
                                                         <span className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
@@ -401,7 +401,7 @@ export default function NotificationsIndex({ notifications, unread_count = 0, co
                                                     {notification.created_at_formatted && (
                                                         <>
                                                             <span className="text-gray-300 dark:text-gray-700">·</span>
-                                                            <span className="text-[11px] text-gray-400 hidden sm:inline">
+                                                            <span className="text-[0.6875rem] text-gray-400 hidden sm:inline">
                                                                 {notification.created_at_formatted}
                                                             </span>
                                                         </>
@@ -418,7 +418,7 @@ export default function NotificationsIndex({ notifications, unread_count = 0, co
                                                                     handleMarkRead(notification.id);
                                                                 }
                                                             }}
-                                                            className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold text-[#5B5FC7] dark:text-[#8A8DE2] hover:bg-[#5B5FC7]/10 dark:hover:bg-[#5B5FC7]/20 rounded-lg transition"
+                                                            className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold text-accent-light hover:bg-accent/10 dark:hover:bg-accent/20 rounded-lg transition"
                                                         >
                                                             <span>{notification.action_label || 'View'}</span>
                                                             <ExternalLink className="w-3 h-3" />
