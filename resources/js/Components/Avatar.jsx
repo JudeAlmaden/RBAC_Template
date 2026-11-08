@@ -35,7 +35,7 @@ export default function Avatar({ name = '', size = 'w-8 h-8', className = '' }) 
 
     return (
         <div
-            className={`${size} rounded-full flex items-center justify-center font-bold text-[11px] select-none flex-shrink-0 ${className}`}
+            className={`${size} rounded-full flex items-center justify-center font-bold text-[0.6875rem] select-none flex-shrink-0 ${className}`}
             style={style}
             title={name}
             aria-label={name}

@@ -38,7 +38,7 @@ export default function RoleSwitcher({ activeRole, switchableRoles = [], isPrevi
 
     return (
         <div className="relative pt-2.5 px-3 pb-0.5" ref={dropdownRef}>
-            <div className="flex items-center justify-between text-[10px] text-gray-400 dark:text-gray-500 font-semibold uppercase tracking-wider mb-1 px-1">
+            <div className="flex items-center justify-between text-[0.625rem] text-gray-400 dark:text-gray-500 font-semibold uppercase tracking-wider mb-1 px-1">
                 <span>Active Role View</span>
                 {isPreviewing && (
                     <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400 font-bold">
@@ -54,8 +54,8 @@ export default function RoleSwitcher({ activeRole, switchableRoles = [], isPrevi
                     isPreviewing
                         ? 'bg-amber-500/10 border-amber-500/40 text-amber-700 dark:text-amber-300 hover:bg-amber-500/15'
                         : activeRole
-                        ? 'bg-[#5B5FC7]/10 border-[#5B5FC7]/30 text-[#5B5FC7] dark:text-[#8A8DE2] hover:bg-[#5B5FC7]/15'
-                        : 'bg-white dark:bg-[#1A1A22] border-[#E8E8EC] dark:border-[#2A2A35] text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600 shadow-2xs'
+                        ? 'bg-accent/10 border-accent/30 text-accent-light hover:bg-accent/15'
+                        : 'bg-surface dark:bg-raised border-line text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600 shadow-2xs'
                 }`}
             >
                 <div className="flex items-center gap-2 truncate">
@@ -70,25 +70,25 @@ export default function RoleSwitcher({ activeRole, switchableRoles = [], isPrevi
             </button>
 
             {open && (
-                <div className="absolute left-3 right-3 bottom-full mb-1.5 bg-white dark:bg-[#1E1E26] border border-[#E8E8EC] dark:border-[#2E2E38] rounded-xl shadow-xl z-50 py-1 overflow-hidden animate-in fade-in zoom-in-95 duration-100 max-h-64 overflow-y-auto">
+                <div className="absolute left-3 right-3 bottom-full mb-1.5 bg-surface dark:bg-raised border border-line rounded-xl shadow-xl z-50 py-1 overflow-hidden animate-in fade-in zoom-in-95 duration-100 max-h-64 overflow-y-auto">
                     {/* Unified option */}
                     <button
                         type="button"
                         onClick={() => handleSelect(null)}
                         className={`w-full flex items-center justify-between px-3 py-2 text-xs transition text-left ${
                             !activeRole
-                                ? 'bg-gray-100 dark:bg-[#282834] font-semibold text-gray-900 dark:text-white'
-                                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-[#242430]'
+                                ? 'bg-gray-100 dark:bg-raised font-semibold text-gray-900 dark:text-white'
+                                : 'text-gray-600 dark:text-gray-400 hover:bg-raised dark:hover:bg-raised'
                         }`}
                     >
                         <div className="flex items-center gap-2">
                             <Layers className="w-3.5 h-3.5 text-gray-400" />
                             <span>Full Access View</span>
                         </div>
-                        {!activeRole && <Check className="w-3.5 h-3.5 text-[#5B5FC7]" />}
+                        {!activeRole && <Check className="w-3.5 h-3.5 text-accent" />}
                     </button>
 
-                    <div className="border-t border-[#E8E8EC] dark:border-[#2E2E38] my-1" />
+                    <div className="border-t border-line my-1" />
 
                     {/* Roles options */}
                     {switchableRoles.map((r) => {
@@ -102,30 +102,30 @@ export default function RoleSwitcher({ activeRole, switchableRoles = [], isPrevi
                                 onClick={() => handleSelect(r)}
                                 className={`w-full flex items-center justify-between px-3 py-2 text-xs transition text-left ${
                                     isSelected
-                                        ? 'bg-gray-100 dark:bg-[#282834] font-semibold text-gray-900 dark:text-white'
-                                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#242430]'
+                                        ? 'bg-gray-100 dark:bg-raised font-semibold text-gray-900 dark:text-white'
+                                        : 'text-gray-700 dark:text-gray-300 hover:bg-raised dark:hover:bg-raised'
                                 }`}
                             >
                                 <div className="flex items-center gap-2 truncate">
                                     <span
                                         className={`w-2 h-2 rounded-full shrink-0 ${
                                             r === 'super_admin'
-                                                ? 'bg-[#5B5FC7]'
+                                                ? 'bg-accent'
                                                 : r === 'admin'
                                                 ? 'bg-blue-500'
                                                 : r === 'learner' || r === 'user'
-                                                ? 'bg-[#4A91CC]'
+                                                ? 'bg-accent'
                                                 : 'bg-indigo-500'
                                         }`}
                                     />
                                     <span className="truncate">{formatRoleText(r)}</span>
                                     {isSimulated && (
-                                        <span className="px-1.5 py-0.2 rounded text-[9px] font-semibold bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-300/40">
+                                        <span className="px-1.5 py-0.2 rounded text-[0.5625rem] font-semibold bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-300/40">
                                             Preview
                                         </span>
                                     )}
                                 </div>
-                                {isSelected && <Check className="w-3.5 h-3.5 text-[#5B5FC7] shrink-0" />}
+                                {isSelected && <Check className="w-3.5 h-3.5 text-accent shrink-0" />}
                             </button>
                         );
                     })}

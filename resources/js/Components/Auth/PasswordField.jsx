@@ -24,7 +24,7 @@ export default function PasswordField({
                 <button
                     type="button"
                     onClick={() => setVisible((current) => !current)}
-                    className="inline-flex items-center gap-1 text-[11px] font-medium text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 transition"
+                    className="inline-flex items-center gap-1 text-[0.6875rem] font-medium text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 transition"
                     aria-label={visible ? 'Hide password' : 'Show password'}
                 >
                     {visible ? (
@@ -48,7 +48,7 @@ export default function PasswordField({
             />
 
             {hint && (
-                <p className="mt-1 text-[11px] text-gray-400 dark:text-gray-500">{hint}</p>
+                <p className="mt-1 text-[0.6875rem] text-gray-400 dark:text-gray-500">{hint}</p>
             )}
 
             <InputError message={error} className="mt-1" />

@@ -3,7 +3,7 @@ import React from 'react';
 export default function ApplicationLogo({ className = 'w-7 h-7', ...props }) {
     return (
         <div 
-            className={`rounded-lg bg-[#5B5FC7] text-white flex items-center justify-center flex-shrink-0 ${className}`} 
+            className={`rounded-lg bg-accent text-white flex items-center justify-center flex-shrink-0 ${className}`} 
             {...props}
         >
             {/* Template Logo Placeholder: Easily replace this SVG/icon with your brand logo */}

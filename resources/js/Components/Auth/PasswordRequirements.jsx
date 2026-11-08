@@ -20,14 +20,14 @@ export default function PasswordRequirements({ password = '', confirmation = '' 
     ];
 
     return (
-        <ul className="space-y-1.5 rounded-lg border border-[#E8E8EC] dark:border-[#26262D] bg-[#FAFAFC] dark:bg-[#121217] p-3">
+        <ul className="space-y-1.5 rounded-lg border border-line bg-raised dark:bg-sunken p-3">
             {checks.map((check) => (
-                <li key={check.id} className="flex items-center gap-2 text-[11px]">
+                <li key={check.id} className="flex items-center gap-2 text-[0.6875rem]">
                     <span
                         className={`flex h-4 w-4 items-center justify-center rounded-full ${
                             check.met
                                 ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400'
-                                : 'bg-gray-100 text-gray-400 dark:bg-[#22222A] dark:text-gray-500'
+                                : 'bg-gray-100 text-gray-400 dark:bg-raised dark:text-gray-500'
                         }`}
                     >
                         {check.met ? (

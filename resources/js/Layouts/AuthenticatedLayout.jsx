@@ -6,6 +6,7 @@ import { ToastProvider, useToast } from '@/Components/Toast';
 import NotificationPanel from '@/Components/NotificationPanel';
 import RolePreviewBanner from '@/Components/RolePreviewBanner';
 import RoleSwitcher from '@/Components/RoleSwitcher';
+import useTheme from '@/theme';
 import {
     LayoutDashboard,
     Users,
@@ -30,32 +31,6 @@ import {
     Sparkles,
     GraduationCap,
 } from 'lucide-react';
-
-/* ─── Dark mode hook ──────────────────────────────────────────────────── */
-
-function useDarkMode() {
-    const [dark, setDark] = useState(() => {
-        if (typeof window === 'undefined') return false;
-        const stored = localStorage.getItem('theme');
-        if (stored) return stored === 'dark';
-        return window.matchMedia('(prefers-color-scheme: dark)').matches;
-    });
-
-    useEffect(() => {
-        const root = document.documentElement;
-        if (dark) {
-            root.classList.add('dark');
-            root.setAttribute('data-theme', 'dark');
-            localStorage.setItem('theme', 'dark');
-        } else {
-            root.classList.remove('dark');
-            root.setAttribute('data-theme', 'light');
-            localStorage.setItem('theme', 'light');
-        }
-    }, [dark]);
-
-    return [dark, setDark];
-}
 
 /* ─── User menu popover ───────────────────────────────────────────────── */
 
@@ -88,7 +63,7 @@ function UserMenu({ user, dark, setDark, formatRole, roleContext }) {
                             <div className="text-xs font-semibold text-white truncate">
                                 {user.name}
                             </div>
-                            <div className="text-[10px] text-[#8BADC7] truncate" title={roleLabel}>
+                            <div className="text-[0.625rem] text-sidebar-ink truncate" title={roleLabel}>
                                 {roleLabel}
                             </div>
                         </div>
@@ -100,7 +75,7 @@ function UserMenu({ user, dark, setDark, formatRole, roleContext }) {
                         className={`p-1.5 rounded-lg transition flex-shrink-0 ${
                             open
                                 ? 'bg-white/15 text-white'
-                                : 'text-[#8BADC7] hover:text-white hover:bg-white/10'
+                                : 'text-sidebar-ink hover:text-white hover:bg-white/10'
                         }`}
                         title="Account menu"
                     >
@@ -110,15 +85,15 @@ function UserMenu({ user, dark, setDark, formatRole, roleContext }) {
 
                 {/* Popover panel — slides up above the card */}
                 {open && (
-                    <div className="absolute left-3 right-3 bottom-[calc(100%-8px)] mb-2 bg-[#1D2B3B] border border-[#2B3A4B] rounded-xl shadow-2xl overflow-hidden z-50">
+                    <div className="absolute left-3 right-3 bottom-[calc(100%-8px)] mb-2 bg-raised border border-line-strong rounded-xl shadow-2xl overflow-hidden z-50">
                         {/* Dark mode toggle */}
                         <button
                             onClick={() => { setDark(!dark); setOpen(false); }}
-                            className="w-full flex items-center gap-3 px-4 py-2.5 text-xs text-[#A7B5C5] hover:bg-white/5 hover:text-white transition text-left"
+                            className="w-full flex items-center gap-3 px-4 py-2.5 text-xs text-muted hover:bg-white/5 hover:text-white transition text-left"
                         >
                             {dark
-                                ? <Sun className="w-3.5 h-3.5 text-[#65A9E3]" />
-                                : <Moon className="w-3.5 h-3.5 text-[#65A9E3]" />
+                                ? <Sun className="w-3.5 h-3.5 text-accent-light" />
+                                : <Moon className="w-3.5 h-3.5 text-accent-light" />
                             }
                             {dark ? 'Light mode' : 'Dark mode'}
                         </button>
@@ -127,9 +102,9 @@ function UserMenu({ user, dark, setDark, formatRole, roleContext }) {
                         <Link
                             href={route('profile.edit')}
                             onClick={() => setOpen(false)}
-                            className="w-full flex items-center gap-3 px-4 py-2.5 text-xs text-[#A7B5C5] hover:bg-white/5 hover:text-white transition"
+                            className="w-full flex items-center gap-3 px-4 py-2.5 text-xs text-muted hover:bg-white/5 hover:text-white transition"
                         >
-                            <SlidersHorizontal className="w-3.5 h-3.5 text-[#65A9E3]" />
+                            <SlidersHorizontal className="w-3.5 h-3.5 text-accent-light" />
                             Profile Settings
                         </Link>
 
@@ -163,26 +138,26 @@ function NavItem({ item, onNavigate }) {
             onClick={onNavigate}
             className={`group flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all duration-150 ${
                 item.active
-                    ? 'bg-[#4A91CC]/20 text-white font-semibold'
-                    : 'text-[#8BADC7] hover:bg-white/5 hover:text-white font-medium'
+                    ? 'bg-accent/20 text-white font-semibold'
+                    : 'text-sidebar-ink hover:bg-white/5 hover:text-white font-medium'
             }`}
         >
             <div className="flex items-center gap-3">
                 <Icon
                     className={`w-4 h-4 shrink-0 ${
-                        item.active ? 'text-[#65A9E3]' : 'text-[#6B8FA8] group-hover:text-[#8BADC7]'
+                        item.active ? 'text-accent-light' : 'text-sidebar-faint group-hover:text-sidebar-ink'
                     }`}
                 />
                 <span className="truncate">{item.name}</span>
             </div>
             <div className="flex items-center gap-2 shrink-0">
                 {item.badge && (
-                    <span className="min-w-[18px] h-4 px-1.5 rounded-full bg-[#4A91CC] text-white text-[10px] font-bold flex items-center justify-center leading-none">
+                    <span className="min-w-[18px] h-4 px-1.5 rounded-full bg-accent text-white text-[0.625rem] font-bold flex items-center justify-center leading-none">
                         {item.badge}
                     </span>
                 )}
                 {item.active && (
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#65A9E3]" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-accent-light" />
                 )}
             </div>
         </Link>
@@ -197,7 +172,7 @@ function NavGroup({ label, items, onNavigate }) {
     return (
         <div className={label ? 'space-y-0.5' : 'space-y-0.5 pt-3'}>
             {label && (
-                <div className="px-3 pt-4 pb-1 text-[10px] font-bold uppercase tracking-widest text-[#4F6D82]">
+                <div className="px-3 pt-4 pb-1 text-[0.625rem] font-bold uppercase tracking-widest text-sidebar-faint">
                     {label}
                 </div>
             )}
@@ -223,7 +198,7 @@ function LayoutInner({ header, children, startCollapsed = false }) {
         if (typeof window === 'undefined') return false;
         return localStorage.getItem('sidebar-collapsed') === 'true';
     });
-    const [dark, setDark] = useDarkMode();
+    const [dark, setDark] = useTheme();
 
     // Remember the collapsed sidebar state across page visits and reloads.
     useEffect(() => {
@@ -345,7 +320,7 @@ function LayoutInner({ header, children, startCollapsed = false }) {
     const hasAdminNav = adminNav.some((i) => i.show);
 
     return (
-        <div className="min-h-screen bg-[#F4F7FB] dark:bg-[#0F1722] text-[#1F2937] dark:text-[#E8EEF5] font-sans antialiased flex">
+        <div className="min-h-screen bg-page text-ink font-sans antialiased flex">
             {/* MOBILE SIDEBAR BACKDROP */}
             {sidebarOpen && (
                 <div
@@ -356,7 +331,7 @@ function LayoutInner({ header, children, startCollapsed = false }) {
 
             {/* SIDEBAR */}
             <aside
-                className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#102746] dark:bg-[#0C1B2D] flex flex-col justify-between transition-transform duration-300 ${
+                className={`fixed inset-y-0 left-0 z-50 w-64 bg-sidebar flex flex-col justify-between transition-transform duration-300 ${
                     sidebarOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
                 } ${collapsed ? 'lg:-translate-x-full' : 'lg:translate-x-0'}`}
             >
@@ -366,20 +341,20 @@ function LayoutInner({ header, children, startCollapsed = false }) {
                         <Link href={route('dashboard')} className="flex items-center gap-3">
                             <ApplicationLogo className="w-8 h-8" />
                             <div className="flex flex-col leading-tight">
-                                <span className="text-[11px] font-bold uppercase tracking-widest text-[#8BADC7]">
+                                <span className="text-[0.6875rem] font-bold uppercase tracking-widest text-sidebar-ink">
                                     FusionNode
                                 </span>
                                 <span className="text-sm font-extrabold tracking-tight text-white leading-none">
                                     ACADEMY
                                 </span>
                             </div>
-                            <span className="ml-1 px-1.5 py-0.5 rounded text-[9px] font-bold tracking-widest bg-[#4A91CC]/20 text-[#65A9E3] border border-[#4A91CC]/30 uppercase">
+                            <span className="ml-1 px-1.5 py-0.5 rounded text-[0.5625rem] font-bold tracking-widest bg-accent/20 text-accent-light border border-accent/30 uppercase">
                                 NEXUS
                             </span>
                         </Link>
                         <button
                             onClick={() => setSidebarOpen(false)}
-                            className="lg:hidden p-1.5 rounded-lg text-[#8BADC7] hover:text-white hover:bg-white/10"
+                            className="lg:hidden p-1.5 rounded-lg text-sidebar-ink hover:text-white hover:bg-white/10"
                         >
                             <X className="w-5 h-5" />
                         </button>
@@ -409,12 +384,12 @@ function LayoutInner({ header, children, startCollapsed = false }) {
 
                     {/* Footer links */}
                     <div className="px-5 py-3 flex items-center justify-between border-t border-white/10">
-                        <div className="flex items-center gap-3 text-[10px] text-[#4F6D82]">
-                            <span className="hover:text-[#8BADC7] cursor-pointer transition">About</span>
-                            <span className="hover:text-[#8BADC7] cursor-pointer transition">Terms</span>
-                            <span className="hover:text-[#8BADC7] cursor-pointer transition">Privacy</span>
+                        <div className="flex items-center gap-3 text-[0.625rem] text-sidebar-faint">
+                            <span className="hover:text-sidebar-ink cursor-pointer transition">About</span>
+                            <span className="hover:text-sidebar-ink cursor-pointer transition">Terms</span>
+                            <span className="hover:text-sidebar-ink cursor-pointer transition">Privacy</span>
                         </div>
-                        <div className="flex items-center gap-1.5 text-[10px] text-[#4F6D82]">
+                        <div className="flex items-center gap-1.5 text-[0.625rem] text-sidebar-faint">
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
                             <span>Online</span>
                         </div>
@@ -430,17 +405,17 @@ function LayoutInner({ header, children, startCollapsed = false }) {
                 )}
 
                 {/* Top Bar */}
-                <header className="h-14 bg-white dark:bg-[#172331] border-b border-[#E2E8F0] dark:border-[#2B3A4B] sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6">
+                <header className="h-14 bg-surface border-b border-line-strong sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6">
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => setSidebarOpen(true)}
-                            className="lg:hidden p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-[#1D2B3B]"
+                            className="lg:hidden p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-raised"
                         >
                             <Menu className="w-5 h-5" />
                         </button>
                         <button
                             onClick={() => setCollapsed((value) => !value)}
-                            className="hidden lg:inline-flex p-2 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-[#1D2B3B] transition"
+                            className="hidden lg:inline-flex p-2 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-raised transition"
                             title={collapsed ? 'Show sidebar' : 'Hide sidebar'}
                             aria-label={collapsed ? 'Show sidebar' : 'Hide sidebar'}
                             aria-expanded={!collapsed}
@@ -453,7 +428,7 @@ function LayoutInner({ header, children, startCollapsed = false }) {
                         {/* Theme toggle */}
                         <button
                             onClick={() => setDark(!dark)}
-                            className="p-2 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-[#1D2B3B] transition"
+                            className="p-2 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-raised transition"
                             title={dark ? 'Switch to light mode' : 'Switch to dark mode'}
                         >
                             {dark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}

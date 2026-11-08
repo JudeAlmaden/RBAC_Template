@@ -14,7 +14,7 @@ export default function Pagination({ paginator, label = 'accounts' }) {
     const { current_page, last_page, from, to, total, links } = paginator;
 
     return (
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-5 py-3.5 border-t border-[#E8E8EC] dark:border-[#26262D] text-xs text-gray-500 dark:text-gray-400">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-5 py-3.5 border-t border-line text-xs text-gray-500 dark:text-gray-400">
             {/* Info */}
             <div>
                 Showing <span className="font-semibold text-gray-700 dark:text-gray-200">{from}–{to}</span> of{' '}
@@ -27,7 +27,7 @@ export default function Pagination({ paginator, label = 'accounts' }) {
                 {links[0]?.url ? (
                     <Link
                         href={links[0].url}
-                        className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-[#1F1F26] transition"
+                        className="p-1.5 rounded-lg hover:bg-raised dark:hover:bg-raised transition"
                         preserveScroll
                     >
                         <ChevronLeft className="w-4 h-4" />
@@ -53,8 +53,8 @@ export default function Pagination({ paginator, label = 'accounts' }) {
                             preserveScroll
                             className={`w-7 h-7 flex items-center justify-center rounded-lg font-medium transition ${
                                 link.active
-                                    ? 'bg-[#5B5FC7] text-white'
-                                    : 'hover:bg-gray-100 dark:hover:bg-[#1F1F26] text-gray-700 dark:text-gray-300'
+                                    ? 'bg-accent text-white'
+                                    : 'hover:bg-raised dark:hover:bg-raised text-gray-700 dark:text-gray-300'
                             }`}
                         >
                             {label}
@@ -73,7 +73,7 @@ export default function Pagination({ paginator, label = 'accounts' }) {
                 {links[links.length - 1]?.url ? (
                     <Link
                         href={links[links.length - 1].url}
-                        className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-[#1F1F26] transition"
+                        className="p-1.5 rounded-lg hover:bg-raised dark:hover:bg-raised transition"
                         preserveScroll
                     >
                         <ChevronRight className="w-4 h-4" />

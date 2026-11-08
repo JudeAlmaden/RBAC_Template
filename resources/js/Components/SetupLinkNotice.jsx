@@ -43,7 +43,7 @@ export default function SetupLinkNotice() {
                             ? 'Setup link emailed'
                             : 'Mail is not configured — share this link manually'}
                     </p>
-                    <p className="mt-0.5 text-[11px] text-gray-500 dark:text-gray-400">
+                    <p className="mt-0.5 text-[0.6875rem] text-gray-500 dark:text-gray-400">
                         Single use, expires in 72 hours. Setting a password invalidates it.
                     </p>
 
@@ -52,13 +52,13 @@ export default function SetupLinkNotice() {
                             readOnly
                             value={link}
                             onFocus={(event) => event.target.select()}
-                            className="w-full rounded-lg border border-[#E8E8EC] dark:border-[#26262D] bg-white dark:bg-[#15151A] px-2.5 py-1.5 text-[11px] text-gray-700 dark:text-gray-300"
+                            className="w-full rounded-lg border border-line bg-surface px-2.5 py-1.5 text-[0.6875rem] text-gray-700 dark:text-gray-300"
                         />
 
                         <button
                             type="button"
                             onClick={copy}
-                            className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-[#5B5FC7] px-2.5 py-1.5 text-[11px] font-semibold text-white hover:bg-[#484CB8] transition"
+                            className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-accent px-2.5 py-1.5 text-[0.6875rem] font-semibold text-white hover:bg-accent-hover transition"
                         >
                             {copied ? (
                                 <Check className="h-3 w-3" />

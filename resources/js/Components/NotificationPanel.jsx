@@ -46,9 +46,9 @@ const SEVERITY_STYLES = {
         ring:   'bg-red-50 dark:bg-red-950/40',
     },
     info: {
-        icon:   'text-[#5B5FC7]',
-        dot:    'bg-[#5B5FC7]',
-        ring:   'bg-[#5B5FC7]/10 dark:bg-[#5B5FC7]/20',
+        icon:   'text-accent',
+        dot:    'bg-accent',
+        ring:   'bg-accent/10 dark:bg-accent/20',
     },
 };
 
@@ -66,9 +66,9 @@ function NotificationRow({ notification, onRead, onDismiss }) {
     return (
         <div className={`relative flex gap-3 px-4 py-3.5 transition group ${
             !notification.is_read
-                ? 'bg-[#5B5FC7]/[0.03] dark:bg-[#5B5FC7]/[0.06]'
+                ? 'bg-accent/[0.03] dark:bg-accent/[0.06]'
                 : ''
-        } hover:bg-gray-50 dark:hover:bg-[#1E1E26]`}>
+        } hover:bg-raised dark:hover:bg-raised`}>
 
             {/* Unread dot */}
             {!notification.is_read && (
@@ -94,22 +94,22 @@ function NotificationRow({ notification, onRead, onDismiss }) {
                         {notification.title}
                     </div>
                     {notification.body && (
-                        <div className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5 leading-relaxed line-clamp-2">
+                        <div className="text-[0.6875rem] text-gray-500 dark:text-gray-400 mt-0.5 leading-relaxed line-clamp-2">
                             {notification.body}
                         </div>
                     )}
                     <div className="flex items-center gap-2 mt-1.5">
-                        <span className="text-[10px] text-gray-400">{notification.created_at}</span>
+                        <span className="text-[0.625rem] text-gray-400">{notification.created_at}</span>
                         {notification.sender_name && (
                             <>
-                                <span className="text-[10px] text-gray-300 dark:text-gray-600">·</span>
-                                <span className="text-[10px] text-gray-400">{notification.sender_name}</span>
+                                <span className="text-[0.625rem] text-gray-300 dark:text-gray-600">·</span>
+                                <span className="text-[0.625rem] text-gray-400">{notification.sender_name}</span>
                             </>
                         )}
                         {notification.action_url && notification.action_label && (
                             <>
-                                <span className="text-[10px] text-gray-300 dark:text-gray-600">·</span>
-                                <span className="text-[10px] text-[#5B5FC7] dark:text-[#8A8DE2] flex items-center gap-0.5">
+                                <span className="text-[0.625rem] text-gray-300 dark:text-gray-600">·</span>
+                                <span className="text-[0.625rem] text-accent-light flex items-center gap-0.5">
                                     {notification.action_label}
                                     <ExternalLink className="w-2.5 h-2.5" />
                                 </span>
@@ -198,14 +198,14 @@ export default function NotificationPanel() {
                 onClick={() => setOpen((o) => !o)}
                 className={`relative p-2 rounded-lg transition ${
                     open
-                        ? 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200'
-                        : 'text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800'
+                        ? 'bg-gray-100 dark:bg-raised text-gray-700 dark:text-gray-200'
+                        : 'text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-raised dark:hover:bg-gray-800'
                 }`}
                 title="Notifications"
             >
                 <Bell className="w-4 h-4" />
                 {unreadCount > 0 && (
-                    <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full bg-[#5B5FC7] text-white text-[9px] font-bold flex items-center justify-center leading-none">
+                    <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full bg-accent text-white text-[0.5625rem] font-bold flex items-center justify-center leading-none">
                         {unreadCount > 99 ? '99+' : unreadCount}
                     </span>
                 )}
@@ -215,15 +215,15 @@ export default function NotificationPanel() {
             {open && (
                 <div
                     ref={panelRef}
-                    className="absolute right-0 top-full mt-2 w-96 max-w-[calc(100vw-2rem)] bg-white dark:bg-[#15151A] border border-[#E8E8EC] dark:border-[#26262D] rounded-xl shadow-2xl z-50 overflow-hidden flex flex-col"
+                    className="absolute right-0 top-full mt-2 w-96 max-w-[calc(100vw-2rem)] bg-surface border border-line rounded-xl shadow-2xl z-50 overflow-hidden flex flex-col"
                     style={{ maxHeight: 'min(560px, calc(100vh - 100px))' }}
                 >
                     {/* Header */}
-                    <div className="flex items-center justify-between px-4 py-3 border-b border-[#E8E8EC] dark:border-[#26262D] flex-shrink-0">
+                    <div className="flex items-center justify-between px-4 py-3 border-b border-line flex-shrink-0">
                         <div className="flex items-center gap-2">
                             <span className="text-sm font-bold text-gray-900 dark:text-white">Notifications</span>
                             {unreadCount > 0 && (
-                                <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-[#5B5FC7]/10 text-[#5B5FC7] dark:bg-[#5B5FC7]/20 dark:text-[#8A8DE2]">
+                                <span className="text-[0.625rem] font-semibold px-1.5 py-0.5 rounded-full bg-accent/10 text-accent dark:bg-accent/20 dark:text-accent-light">
                                     {unreadCount} unread
                                 </span>
                             )}
@@ -232,7 +232,7 @@ export default function NotificationPanel() {
                             {hasUnread && (
                                 <button
                                     onClick={handleReadAll}
-                                    className="flex items-center gap-1.5 px-2.5 py-1.5 text-[11px] font-medium text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
+                                    className="flex items-center gap-1.5 px-2.5 py-1.5 text-[0.6875rem] font-medium text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-100 hover:bg-raised dark:hover:bg-gray-800 rounded-lg transition"
                                     title="Mark all as read"
                                 >
                                     <CheckCheck className="w-3.5 h-3.5" />
@@ -241,7 +241,7 @@ export default function NotificationPanel() {
                             )}
                             <button
                                 onClick={() => setOpen(false)}
-                                className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+                                className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-raised dark:hover:bg-gray-800 transition"
                             >
                                 <X className="w-4 h-4" />
                             </button>
@@ -249,7 +249,7 @@ export default function NotificationPanel() {
                     </div>
 
                     {/* List */}
-                    <div className="overflow-y-auto flex-1 divide-y divide-[#F0F0F4] dark:divide-[#26262D]">
+                    <div className="overflow-y-auto flex-1 divide-y divide-line">
                         {loading ? (
                             <div className="py-12 text-center text-xs text-gray-400">
                                 Loading…
@@ -272,11 +272,11 @@ export default function NotificationPanel() {
                     </div>
 
                     {/* Footer / View All */}
-                    <div className="p-2.5 border-t border-[#E8E8EC] dark:border-[#26262D] bg-gray-50/70 dark:bg-[#1A1A22] text-center flex-shrink-0">
+                    <div className="p-2.5 border-t border-line bg-gray-50/70 dark:bg-raised text-center flex-shrink-0">
                         <Link
                             href={route('notifications.index')}
                             onClick={() => setOpen(false)}
-                            className="text-xs font-semibold text-[#5B5FC7] dark:text-[#8A8DE2] hover:text-[#4A4EB5] dark:hover:text-[#9B9EE8] inline-flex items-center gap-1.5 transition"
+                            className="text-xs font-semibold text-accent-light hover:text-accent-hover dark:hover:text-accent-light inline-flex items-center gap-1.5 transition"
                         >
                             View all notifications
                             <ArrowRight className="w-3.5 h-3.5" />

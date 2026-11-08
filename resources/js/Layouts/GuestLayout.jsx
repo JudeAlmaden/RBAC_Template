@@ -8,7 +8,7 @@ export default function GuestLayout({ children }) {
     const { flash } = usePage().props;
 
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-[#FBFBFC] dark:bg-[#0D0D12] text-[#111111] dark:text-[#F8F9FD] p-4 sm:p-6 font-sans antialiased">
+        <div className="flex min-h-screen flex-col items-center justify-center bg-surface dark:bg-page text-ink p-4 sm:p-6 font-sans antialiased">
             <div className="mb-6 flex flex-col items-center">
                 <Link href="/" className="flex items-center gap-2.5">
                     <ApplicationLogo className="w-8 h-8" />
@@ -18,7 +18,7 @@ export default function GuestLayout({ children }) {
                 </Link>
             </div>
 
-            <div className="w-full sm:max-w-md bg-white dark:bg-[#15151A] p-6 sm:p-8 rounded-xl border border-[#E8E8EC] dark:border-[#26262D] shadow-gumloop-card">
+            <div className="w-full sm:max-w-md bg-surface p-6 sm:p-8 rounded-xl border border-line shadow-gumloop-card">
                 {flash?.error && (
                     <div className="mb-4 flex items-start gap-2 rounded-lg border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950/30 p-3 text-xs text-red-700 dark:text-red-300">
                         <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />

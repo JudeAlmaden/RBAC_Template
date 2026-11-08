@@ -15,7 +15,7 @@ const ICONS = {
     success: { Icon: CheckCircle2, color: 'text-emerald-500' },
     error:   { Icon: AlertCircle,  color: 'text-red-500' },
     warning: { Icon: AlertTriangle, color: 'text-amber-500' },
-    info:    { Icon: Info,          color: 'text-[#5B5FC7]' },
+    info:    { Icon: Info,          color: 'text-accent' },
 };
 
 function ToastItem({ toast, onDismiss }) {
@@ -37,7 +37,7 @@ function ToastItem({ toast, onDismiss }) {
 
     return (
         <div
-            className={`flex items-start gap-3 w-80 max-w-full bg-white dark:bg-[#1E1E26] border border-[#E8E8EC] dark:border-[#2E2E38] rounded-xl shadow-lg p-4 transition-all duration-300 ${
+            className={`flex items-start gap-3 w-80 max-w-full bg-surface dark:bg-raised border border-line rounded-xl shadow-lg p-4 transition-all duration-300 ${
                 visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
             }`}
         >

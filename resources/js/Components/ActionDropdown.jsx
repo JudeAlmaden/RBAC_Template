@@ -86,7 +86,7 @@ export default function ActionDropdown({
                     ref={btnRef}
                     type="button"
                     onClick={handleToggle}
-                    className="p-1.5 rounded-md text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-[#26262D] transition focus:outline-hidden"
+                    className="p-1.5 rounded-md text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-raised dark:hover:bg-raised transition focus:outline-hidden"
                     title="More actions"
                 >
                     <MoreHorizontal className="w-4 h-4" />
@@ -99,7 +99,7 @@ export default function ActionDropdown({
                         ref={menuRef}
                         style={menuStyle}
                         onClick={() => setOpen(false)}
-                        className="rounded-lg bg-white dark:bg-[#1C1C24] border border-[#E8E8EC] dark:border-[#26262D] shadow-lg py-1 text-xs z-50 animate-in fade-in zoom-in-95 duration-100"
+                        className="rounded-lg bg-surface dark:bg-raised border border-line shadow-lg py-1 text-xs z-50 animate-in fade-in zoom-in-95 duration-100"
                     >
                         {children}
                     </div>,

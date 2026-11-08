@@ -28,7 +28,7 @@ export default function RolePreviewBanner({ activeRole, onExit }) {
 
             <button
                 onClick={handleExit}
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-white text-gray-900 hover:bg-gray-100 font-semibold text-[11px] shadow-xs transition cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-surface text-gray-900 hover:bg-raised font-semibold text-[0.6875rem] shadow-xs transition cursor-pointer"
             >
                 <span>Exit Preview</span>
                 <X className="w-3 h-3 text-gray-500" />

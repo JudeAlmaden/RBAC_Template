@@ -15,7 +15,7 @@ export default function Breadcrumbs({ items = [], backHref, className = '' }) {
             {backHref && (
                 <Link
                     href={backHref}
-                    className="p-1 rounded-md border border-gray-200 dark:border-[#26262D] bg-white dark:bg-[#15151A] text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition shrink-0"
+                    className="p-1 rounded-md border border-gray-200 dark:border-line bg-surface text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition shrink-0"
                     title="Go back"
                 >
                     <ArrowLeft className="w-3.5 h-3.5" />

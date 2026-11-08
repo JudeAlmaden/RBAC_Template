@@ -12,7 +12,7 @@ const ACTION_STYLES = {
     demoted:      'bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300 border-amber-200 dark:border-amber-800/50',
     transferred:  'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800/50',
     activated:    'bg-teal-50 text-teal-700 dark:bg-teal-950/40 dark:text-teal-300 border-teal-200 dark:border-teal-800/50',
-    deactivated:  'bg-gray-100 text-gray-600 dark:bg-[#202028] dark:text-gray-400 border-gray-200 dark:border-[#2C2C38]',
+    deactivated:  'bg-gray-100 text-gray-600 dark:bg-raised dark:text-gray-400 border-gray-200 dark:border-line',
 };
 
 const ACTION_OPTIONS = [
@@ -32,7 +32,7 @@ function getActionStyle(action) {
     for (const [k, v] of Object.entries(ACTION_STYLES)) {
         if (key.includes(k)) return v;
     }
-    return 'bg-gray-100 text-gray-600 dark:bg-[#202028] dark:text-gray-400 border-gray-200 dark:border-[#2C2C38]';
+    return 'bg-gray-100 text-gray-600 dark:bg-raised dark:text-gray-400 border-gray-200 dark:border-line';
 }
 
 function formatAction(action) {
@@ -127,7 +127,7 @@ export default function ActivityLogTable({
     /* ── Toolbar ─────────────────────────────────────────────────────────── */
 
     const toolbar = logRouteKey ? (
-        <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 px-4 py-3 border-b border-[#E8E8EC] dark:border-[#26262D] bg-[#FAFAFC] dark:bg-[#1C1C24]">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2.5 px-4 py-3 border-b border-line bg-raised">
             {/* Search input + button */}
             <div className="flex items-center gap-1.5 flex-1 min-w-0 sm:max-w-xs">
                 <div className="relative flex-1">
@@ -138,7 +138,7 @@ export default function ActivityLogTable({
                         onChange={(e) => setSearch(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && submitSearch()}
                         placeholder="Search by name or subject…"
-                        className="w-full pl-8 pr-8 py-1.5 text-xs bg-white dark:bg-[#15151A] border border-[#E8E8EC] dark:border-[#26262D] rounded-lg text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:ring-2 focus:ring-[#5B5FC7] focus:outline-none transition"
+                        className="w-full pl-8 pr-8 py-1.5 text-xs bg-surface border border-line rounded-lg text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:ring-2 focus:ring-accent focus:outline-none transition"
                     />
                     {search && (
                         <button onClick={() => { setSearch(''); fireFilter({ log_search: '', log_action: actionFilter, log_page: 1 }); }} className="absolute right-2.5 top-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition">
@@ -149,7 +149,7 @@ export default function ActivityLogTable({
                 <button
                     type="button"
                     onClick={submitSearch}
-                    className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#5B5FC7] hover:bg-[#484CB8] text-white transition shrink-0"
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium bg-accent hover:bg-accent-hover text-white transition shrink-0"
                 >
                     <Search className="w-3 h-3" />
                     Search
@@ -165,10 +165,10 @@ export default function ActivityLogTable({
                             key={opt.value}
                             type="button"
                             onClick={() => setActionFilter(opt.value)}
-                            className={`px-2.5 py-1 rounded-full text-[11px] font-medium transition border ${
+                            className={`px-2.5 py-1 rounded-full text-[0.6875rem] font-medium transition border ${
                                 active
-                                    ? 'bg-[#5B5FC7] border-[#5B5FC7] text-white shadow-sm'
-                                    : 'bg-white dark:bg-[#15151A] border-[#E8E8EC] dark:border-[#26262D] text-gray-600 dark:text-gray-400 hover:border-[#5B5FC7]/50 hover:text-[#5B5FC7] dark:hover:text-[#8A8DE2]'
+                                    ? 'bg-accent border-accent text-white shadow-sm'
+                                    : 'bg-surface border-line text-gray-600 dark:text-gray-400 hover:border-accent/50 hover:text-accent-light'
                             }`}
                         >
                             {opt.label}
@@ -182,7 +182,7 @@ export default function ActivityLogTable({
                 <button
                     type="button"
                     onClick={clearFilters}
-                    className="flex items-center gap-1 text-[11px] text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition whitespace-nowrap"
+                    className="flex items-center gap-1 text-[0.6875rem] text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition whitespace-nowrap"
                 >
                     <X className="w-3 h-3" /> Clear
                 </button>
@@ -197,13 +197,13 @@ export default function ActivityLogTable({
             <div>
                 {toolbar}
                 <div className="flex flex-col items-center justify-center py-16 text-center">
-                    <div className="w-12 h-12 rounded-xl bg-gray-100 dark:bg-[#202028] flex items-center justify-center mb-3">
+                    <div className="w-12 h-12 rounded-xl bg-gray-100 dark:bg-raised flex items-center justify-center mb-3">
                         <History className="w-6 h-6 text-gray-400 dark:text-gray-500" />
                     </div>
                     {hasFilters ? (
                         <>
                             <p className="text-sm font-medium text-gray-500 dark:text-gray-400">No matching activity records</p>
-                            <button onClick={clearFilters} className="mt-2 text-xs text-[#5B5FC7] hover:underline">Clear filters</button>
+                            <button onClick={clearFilters} className="mt-2 text-xs text-accent hover:underline">Clear filters</button>
                         </>
                     ) : (
                         <>
@@ -225,7 +225,7 @@ export default function ActivityLogTable({
             <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse text-xs">
                     <thead>
-                        <tr className="border-b border-[#E8E8EC] dark:border-[#26262D] bg-[#FAFAFC] dark:bg-[#1C1C24] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-[10px]">
+                        <tr className="border-b border-line bg-raised font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider text-[0.625rem]">
                             <th className="py-3 px-5 w-[22%]">Timestamp</th>
                             <th className="py-3 px-5 w-[20%]">Performed By</th>
                             <th className="py-3 px-5 w-[14%]">Action</th>
@@ -233,22 +233,22 @@ export default function ActivityLogTable({
                             <th className="py-3 px-5">Details</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#E8E8EC] dark:divide-[#26262D] text-gray-700 dark:text-gray-300">
+                    <tbody className="divide-y divide-line text-gray-700 dark:text-gray-300">
                         {logList.map((log) => {
                             const meta = formatMeta(log.metadata);
                             return (
-                                <tr key={log.id} className="hover:bg-gray-50/60 dark:hover:bg-[#1C1C24]/50 transition">
+                                <tr key={log.id} className="hover:bg-raised/60 dark:hover:bg-raised/50 transition">
                                     {/* Timestamp */}
                                     <td className="py-3.5 px-5 whitespace-nowrap">
                                         <div className="text-xs text-gray-700 dark:text-gray-300 font-medium">{log.created_at_human}</div>
-                                        <div className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5">{log.created_at_date}</div>
+                                        <div className="text-[0.6875rem] text-gray-400 dark:text-gray-500 mt-0.5">{log.created_at_date}</div>
                                     </td>
 
                                     {/* Actor */}
                                     <td className="py-3.5 px-5">
                                         <div className="flex items-center gap-2">
-                                            <div className="w-6 h-6 rounded-full bg-[#5B5FC7]/10 dark:bg-[#5B5FC7]/20 flex items-center justify-center shrink-0">
-                                                <User2 className="w-3.5 h-3.5 text-[#5B5FC7] dark:text-[#8A8DE2]" />
+                                            <div className="w-6 h-6 rounded-full bg-accent/10 dark:bg-accent/20 flex items-center justify-center shrink-0">
+                                                <User2 className="w-3.5 h-3.5 text-accent-light" />
                                             </div>
                                             <span className="font-medium text-gray-800 dark:text-gray-200 truncate max-w-[120px]">
                                                 {log.actor_name ?? <span className="text-gray-400 italic">Deleted User</span>}
@@ -258,7 +258,7 @@ export default function ActivityLogTable({
 
                                     {/* Action Badge */}
                                     <td className="py-3.5 px-5 whitespace-nowrap">
-                                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold border ${getActionStyle(log.action)}`}>
+                                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[0.6875rem] font-semibold border ${getActionStyle(log.action)}`}>
                                             <Activity className="w-2.5 h-2.5 opacity-70" />
                                             {formatAction(log.action)}
                                         </span>
@@ -270,7 +270,7 @@ export default function ActivityLogTable({
                                             <div>
                                                 <div className="font-medium text-gray-800 dark:text-gray-200 truncate max-w-[140px]">{log.subject_name}</div>
                                                 {log.subject_type && (
-                                                    <div className="text-[11px] text-gray-400 mt-0.5">{log.subject_type}</div>
+                                                    <div className="text-[0.6875rem] text-gray-400 mt-0.5">{log.subject_type}</div>
                                                 )}
                                             </div>
                                         ) : (
@@ -279,7 +279,7 @@ export default function ActivityLogTable({
                                     </td>
 
                                     {/* Metadata */}
-                                    <td className="py-3.5 px-5 text-[11px] text-gray-500 dark:text-gray-400">
+                                    <td className="py-3.5 px-5 text-[0.6875rem] text-gray-500 dark:text-gray-400">
                                         {meta ?? <span className="text-gray-300 dark:text-gray-600">—</span>}
                                     </td>
                                 </tr>
@@ -290,7 +290,7 @@ export default function ActivityLogTable({
             </div>
 
             {/* Pagination footer */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-5 py-3.5 border-t border-[#E8E8EC] dark:border-[#26262D] text-xs text-gray-500 dark:text-gray-400">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-5 py-3.5 border-t border-line text-xs text-gray-500 dark:text-gray-400">
                 <div>
                     {total > 0 ? (
                         <>
@@ -316,7 +316,7 @@ export default function ActivityLogTable({
                             className={`p-1.5 rounded-lg transition ${
                                 !prevUrl
                                     ? 'opacity-30 cursor-not-allowed'
-                                    : 'hover:bg-gray-100 dark:hover:bg-[#1F1F26] text-gray-700 dark:text-gray-300'
+                                    : 'hover:bg-raised dark:hover:bg-raised text-gray-700 dark:text-gray-300'
                             }`}
                             title="Previous page"
                         >
@@ -335,8 +335,8 @@ export default function ActivityLogTable({
                                     onClick={() => goToPage(link.url)}
                                     className={`w-7 h-7 flex items-center justify-center rounded-lg font-medium transition ${
                                         isActive
-                                            ? 'bg-[#5B5FC7] text-white'
-                                            : 'hover:bg-gray-100 dark:hover:bg-[#1F1F26] text-gray-700 dark:text-gray-300'
+                                            ? 'bg-accent text-white'
+                                            : 'hover:bg-raised dark:hover:bg-raised text-gray-700 dark:text-gray-300'
                                     }`}
                                 >
                                     {link.label}
@@ -352,7 +352,7 @@ export default function ActivityLogTable({
                             className={`p-1.5 rounded-lg transition ${
                                 !nextUrl
                                     ? 'opacity-30 cursor-not-allowed'
-                                    : 'hover:bg-gray-100 dark:hover:bg-[#1F1F26] text-gray-700 dark:text-gray-300'
+                                    : 'hover:bg-raised dark:hover:bg-raised text-gray-700 dark:text-gray-300'
                             }`}
                             title="Next page"
                         >
