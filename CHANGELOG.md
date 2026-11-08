@@ -5,11 +5,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ---
 
-## [Unreleased] - 2026-11-06
+## [Unreleased] - 2026-11-08
 
-Everything here is new: the stage screen became the authoring workspace, learners got their own reading surface, and access moved from role names to permissions.
+Everything here is new: onboarding and password recovery were rebuilt around signed setup links, the stage screen became the authoring workspace, learners got their own reading surface, access moved from role names to permissions, and the whole interface now themes from one set of semantic colour tokens.
 
 ### Added
+- **Signed Setup-Link Onboarding** — New accounts are created without a password; the invitee receives a signed, 72-hour link to `onboarding.show`, chooses their own password and is signed in. `OnboardingController`, `SetupLink` and the `Onboarding/Show` page back the flow, and administrators can re-issue the link from the account page.
+- **Admin Password Resets** — `UserController` can send the same signed setup link to any account, so an administrator can force a reset without knowing or setting a password.
+- **Shared Password Policy** — `PasswordPolicy`, plus `PasswordField`, `PasswordRequirements` and `SetupProgress`, apply the minimum-length and confirmation rules consistently across onboarding, reset and profile screens.
+- **Inertia-Aware Rate Limiting** — `RateLimitRequests` wraps Laravel's throttle middleware so Inertia requests get a flash toast and `Retry-After` instead of a 429 error modal; `login`, `password-reset`, `onboarding` and `web` limiters are wired in `bootstrap/app.php`.
+- **Force Password Change** — Accounts flagged `must_change_password` are routed to profile settings with a persistent banner until they set a new password.
 - **Single-Page Stage Editor** — The stage screen (`/topics/{topic}/stages/{stage}`) is now the authoring workspace itself: slide rail, layout canvas and inspector share one surface, with Preview, Discard, Save and a `⋯` delete action living in the stage header.
 - **Slide Builder** — Slides (container pages) can be added, duplicated, reordered and deleted, each with its own title, layout (`single_column`, `split_two_column`, `cinema_focus`, `tabbed_stepper`) and per-layout droppable slots.
 - **Component Palette** — Text, Media, Code and Embed presets (heading, paragraph, note/warning callout, objectives, checklist, steps, accordion, table, image, video, audio, code, terminal, download, embed) that map onto existing `content_blocks` rows and their display variants; components are dropped into a slot and edited in the inspector.
@@ -21,6 +26,10 @@ Everything here is new: the stage screen became the authoring workspace, learner
 - **Grouped Sidebar Navigation** — Dashboard, LEARN, MANAGE (permission-gated) and ACCOUNT groups; notifications left the sidebar and remain available from the top-bar bell.
 
 ### Changed
+- **Semantic Theme Tokens** — Every surface, line, text, accent and scrollbar colour is now a CSS variable in `resources/css/app.css` for light and dark, exposed through `tailwind.config.js` as `bg-surface`, `border-line`, `text-muted`, `text-accent`, `bg-sidebar` and friends, with opacity modifiers preserved.
+- **Theme-Token Migration** — All components, layouts and pages use those semantic classes instead of literal hex values and paired `dark:` overrides; the duplicated `useDarkMode`/`useColorMode` hooks inside the authenticated and guest layouts are replaced by the shared `useTheme`.
+- **Global UI Density** — `html { font-size: 87.5% }` sets a 14px base so rem-based spacing and type densify the interface like browser zoom without overflowing the viewport, and themed scrollbars replace the OS grey on both axes.
+- **Top Bar Alignment** — The top bar is `h-16`, matching the sidebar brand strip so their bottom borders meet.
 - **Stage Authoring Unified** — The separate `/stages/{stage}/builder` page is folded into the stage page, so stage metadata and its slides are edited and saved in one place.
 - **Module Accordions Collapsed by Default** — The course curriculum screen no longer expands every module when it loads.
 - **Sidebar Scrolls Independently** — The navigation scrolls within the sidebar with a thin themed scrollbar instead of scrolling with the page.
@@ -30,15 +39,19 @@ Everything here is new: the stage screen became the authoring workspace, learner
 - `StagePagesList.jsx` and `StagePageModal.jsx`, superseded by the slide rail and inspector.
 
 ### Fixed
+- Dark mode no longer flashes the light canvas on reload or first navigation, because the stored colour mode is applied before first paint.
+- Scrollbars follow the active theme instead of staying dark grey in light mode.
 - Repaired 93 `.jsx` files damaged by a search-and-replace that removed every lowercase `d`, restoring the build and pages.
 - Sidebar navigation no longer drags the page scroll with it.
 - Breadcrumb and stage header no longer duplicate the stage title now that the header edits it in place.
 
 ### Technical
 - New: `app/Http/Controllers/StageBuilderController.php`; `resources/js/Pages/Courses/Stages/Builder/` (`registry.js`, `operations.js`, `Canvas`, `SlideRail`, `Inspector`, `BlockPalette`, `BlockCanvasItem`, `LayoutRenderer`, `blockEditors`, `blockRenderers`, `StageBuilder`); `resources/js/Layouts/LearnerTopicLayout.jsx`; `resources/js/Pages/Learner/{Courses,Modules,Topics}/Show.jsx`; `.agents/Documentation/COURSE_MAKER_PLAN.md`
-- Modified: `routes/web.php`, `TopicSectionController`, `TopicController`, `ModuleController`, `CourseController`, `SectionPageController`, `AdminDashboardController`, `DashboardController`, `RoleController`, `HandleInertiaRequests`, `User`, `ContentBlock`, `DatabaseSeeder`, `AuthenticatedLayout.jsx`, `Courses/Show.jsx`, `Courses/Stages/Show.jsx`, `app.css`, `tailwind.config.js`, `package.json`, `package-lock.json`
+- New: `resources/js/theme.js`; `app/Support/SetupLink.php`, `PasswordPolicy.php`; `app/Http/Controllers/OnboardingController.php`; `app/Http/Middleware/RateLimitRequests.php`; `app/Notifications/AccountInvitation.php`; `resources/js/Pages/Onboarding/Show.jsx`; `resources/js/Components/SetupLinkNotice.jsx`, `Components/Auth/{PasswordField,PasswordRequirements,SetupProgress}.jsx`
+- Modified: `routes/web.php`, `routes/auth.php`, `bootstrap/app.php`, `TopicSectionController`, `TopicController`, `ModuleController`, `CourseController`, `SectionPageController`, `AdminDashboardController`, `DashboardController`, `RoleController`, `HandleInertiaRequests`, `User`, `ContentBlock`, `DatabaseSeeder`, `app.blade.php`, `app.css`, `tailwind.config.js`, `theme.js`, `package.json`, `package-lock.json`
+- Modified: 4 layouts, 24 shared components and 55 pages migrated to the semantic theme classes (`AuthenticatedLayout`, `GuestLayout`, `SetupLayout`, `LearnerTopicLayout`, `Users/*`, `Courses/*`, `Learner/*`, `Auth/*`, `Dashboard`, `Welcome`)
 - Deleted: `resources/js/Pages/Courses/Stages/Builder/Index.jsx`, `resources/js/Pages/Courses/Stages/Partials/StagePagesList.jsx`, `resources/js/Pages/Courses/Stages/Partials/StagePageModal.jsx`
-- Tests: 10 tests / 73 assertions passing (`TopicSectionCrudTest`); `npm run build` clean
+- Tests: 123 passing / 571 assertions; Pint clean (116 files); `npm run build` clean
 
 ---
 
