@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   THEME CONFIGURATION
+   Customize your application themes here.
+   Colors can be Hex (#5B5FC7), RGB, or HSL.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+    /* ─── Default Brand Palette ─── */
+    --brand-primary: #5B5FC7;
+    --brand-hover: #484CB8;
+    --brand-accent: #8A8DE2;
+
+    /* ─── Base Surfaces & Canvas (Light) ─── */
+    --bg-page: #FBFBFC;
+    --bg-card: #FFFFFF;
+    --bg-surface: #FAFAFC;
+    --bg-surface-raised: #FFFFFF;
+    --bg-hover: #F3F4F6;
+    --bg-muted: #F3F4F6;
+
+    /* ─── Borders (Light) ─── */
+    --border-subtle: #E8E8EC;
+    --border-strong: #D1D5DB;
+
+    /* ─── Typography (Light) ─── */
+    --text-main: #111111;
+    --text-muted: #6B7280;
+    --text-subtle: #9CA3AF;
+}
+
+/* ─── Default Theme Dark Mode ─── */
+.dark {
+    /* ─── Brand in Dark Mode ─── */
+    --brand-primary: #5B5FC7;
+    --brand-hover: #6E72D6;
+    --brand-accent: #8A8DE2;
+
+    /* ─── Base Surfaces & Canvas (Dark) ─── */
+    --bg-page: #0D0D12;
+    --bg-card: #15151A;
+    --bg-surface: #1C1C24;
+    --bg-surface-raised: #1E1E26;
+    --bg-hover: #22222B;
+    --bg-muted: #22222C;
+
+    /* ─── Borders (Dark) ─── */
+    --border-subtle: #26262D;
+    --border-strong: #34343E;
+
+    /* ─── Typography (Dark) ─── */
+    --text-main: #F8F9FD;
+    --text-muted: #9CA3AF;
+    --text-subtle: #6B7280;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CUSTOM THEME PRESETS (Scalable Theme System)
+   To add a new theme, simply copy one of the blocks below and set your colors.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─── Emerald Theme ─── */
+[data-theme="emerald"] {
+    --brand-primary: #059669;
+    --brand-hover: #047857;
+    --brand-accent: #34D399;
+}
+[data-theme="emerald"].dark {
+    --brand-primary: #10B981;
+    --brand-hover: #059669;
+    --brand-accent: #6EE7B7;
+    --bg-page: #061A14;
+    --bg-card: #0B2920;
+    --bg-surface: #103B2E;
+    --bg-surface-raised: #144435;
+    --bg-hover: #174C3C;
+    --bg-muted: #174C3C;
+    --border-subtle: #1A5442;
+    --border-strong: #26735B;
+}
+
+/* ─── Ocean Theme ─── */
+[data-theme="ocean"] {
+    --brand-primary: #2563EB;
+    --brand-hover: #1D4ED8;
+    --brand-accent: #60A5FA;
+}
+[data-theme="ocean"].dark {
+    --brand-primary: #3B82F6;
+    --brand-hover: #2563EB;
+    --brand-accent: #93C5FD;
+    --bg-page: #091220;
+    --bg-card: #0E1D33;
+    --bg-surface: #142745;
+    --bg-surface-raised: #193156;
+    --bg-hover: #1F3B66;
+    --bg-muted: #1F3B66;
+    --border-subtle: #1E3A5F;
+    --border-strong: #2B4E7C;
+}
+
+/* ─── Sunset Theme ─── */
+[data-theme="sunset"] {
+    --brand-primary: #E11D48;
+    --brand-hover: #BE123C;
+    --brand-accent: #FB7185;
+}
+[data-theme="sunset"].dark {
+    --brand-primary: #F43F5E;
+    --brand-hover: #E11D48;
+    --brand-accent: #FDA4AF;
+    --bg-page: #1A0B10;
+    --bg-card: #281018;
+    --bg-surface: #381622;
+    --bg-surface-raised: #451B2A;
+    --bg-hover: #522032;
+    --bg-muted: #522032;
+    --border-subtle: #4D1F30;
+    --border-strong: #692A42;
+}

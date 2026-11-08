@@ -1,0 +1,169 @@
+import React from 'react';
+import Modal from '@/Components/Modal';
+import InputLabel from '@/Components/InputLabel';
+import TextInput from '@/Components/TextInput';
+import InputError from '@/Components/InputError';
+import PrimaryButton from '@/Components/PrimaryButton';
+import SecondaryButton from '@/Components/SecondaryButton';
+import { Shield, Check } from 'lucide-react';
+
+export default function CreateUserModal({
+    show,
+    onClose,
+    form,
+    onSubmit,
+    meta,
+    availableRoles,
+    formatRoleText,
+}) {
+    const selectableRoles = [
+        ...(meta.canCreateAdmin ? [{ name: 'admin', label: 'Administrator', description: 'Administrative privileges and management' }] : []),
+        ...(meta.canAssignRoles || meta.canCreateAdmin
+            ? availableRoles
+                .filter((r) => !['super_admin', 'admin', 'user'].includes(r.name))
+                .map((r) => ({
+                    name: r.name,
+                    label: formatRoleText(r.name),
+                    description: 'Custom defined role permissions',
+                }))
+            : []
+        ),
+    ];
+
+    const currentRoles = Array.isArray(form.data.roles)
+        ? form.data.roles.filter((r) => r !== 'user')
+        : [];
+
+    const toggleRole = (roleName) => {
+        if (!meta.canAssignRoles && !meta.canCreateAdmin) return;
+        if (currentRoles.includes(roleName)) {
+            form.setData('roles', currentRoles.filter((r) => r !== roleName));
+        } else {
+            form.setData('roles', [...currentRoles, roleName]);
+        }
+    };
+
+    const roleError = form.errors.roles || form.errors.role || (
+        Object.keys(form.errors).find((k) => k.startsWith('roles.'))
+            ? form.errors[Object.keys(form.errors).find((k) => k.startsWith('roles.'))]
+            : null
+    );
+
+    return (
+        <Modal show={show} onClose={onClose}>
+            <form onSubmit={onSubmit} className="p-6">
+                <h3 className="text-base font-bold text-gray-900 dark:text-white mb-1">
+                    Create New Account
+                </h3>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-5">
+                    Provision credentials and optionally assign elevated or app roles
+                </p>
+
+                <div className="space-y-4">
+                    <div>
+                        <InputLabel htmlFor="create-name" value="Full Name" />
+                        <TextInput
+                            id="create-name"
+                            value={form.data.name}
+                            onChange={(e) => form.setData('name', e.target.value)}
+                            className="mt-1 block w-full text-xs"
+                            required
+                        />
+                        <InputError message={form.errors.name} className="mt-1" />
+                    </div>
+
+                    <div>
+                        <InputLabel htmlFor="create-email" value="Email Address" />
+                        <TextInput
+                            id="create-email"
+                            type="email"
+                            value={form.data.email}
+                            onChange={(e) => form.setData('email', e.target.value)}
+                            className="mt-1 block w-full text-xs"
+                            required
+                        />
+                        <InputError message={form.errors.email} className="mt-1" />
+                    </div>
+
+                    <div>
+                        <InputLabel htmlFor="create-password" value="Initial Password (optional)" />
+                        <TextInput
+                            id="create-password"
+                            type="password"
+                            value={form.data.password}
+                            onChange={(e) => form.setData('password', e.target.value)}
+                            className="mt-1 block w-full text-xs"
+                            placeholder="Leave blank to send a setup link"
+                            autoComplete="new-password"
+                        />
+                        <p className="mt-1 text-[10px] text-body-subtle">
+                            With no password, the account holder receives a signed link to choose their own.
+                        </p>
+                        <InputError message={form.errors.password} className="mt-1" />
+                    </div>
+
+                    {(meta.canAssignRoles || meta.canCreateAdmin) && selectableRoles.length > 0 && (
+                        <div>
+                            <div className="flex items-center justify-between mb-1.5">
+                                <InputLabel value="Elevated & App Roles" />
+                                <span className="text-[11px] text-gray-400">
+                                    {currentRoles.length === 0 ? 'None (Standard User)' : `${currentRoles.length} selected`}
+                                </span>
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto p-1 border border-line rounded-lg bg-canvas-surface">
+                                {selectableRoles.map((role) => {
+                                    const isSelected = currentRoles.includes(role.name);
+
+                                    return (
+                                        <div
+                                            key={role.name}
+                                            onClick={() => toggleRole(role.name)}
+                                            className={`flex items-start gap-2.5 p-2.5 rounded-md border text-xs cursor-pointer transition select-none ${
+                                                isSelected
+                                                    ? 'bg-canvas-card border-brand shadow-xs'
+                                                    : 'bg-canvas-card/60 border-line hover:border-line-strong'
+                                            } ${(!meta.canAssignRoles && !meta.canCreateAdmin) ? 'opacity-60 cursor-not-allowed' : ''}`}
+                                        >
+                                            <div
+                                                className={`mt-0.5 w-4 h-4 rounded flex items-center justify-center border transition shrink-0 ${
+                                                    isSelected
+                                                        ? 'bg-brand border-brand text-white'
+                                                        : 'border-line bg-canvas-card'
+                                                }`}
+                                            >
+                                                {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
+                                            </div>
+                                            <div className="min-w-0 flex-1">
+                                                <div className="font-semibold text-body-main flex items-center gap-1.5">
+                                                    <span>{role.label}</span>
+                                                    {role.name === 'admin' && (
+                                                        <Shield className="w-3 h-3 text-blue-500 shrink-0" />
+                                                    )}
+                                                </div>
+                                                <p className="text-[10px] text-body-subtle truncate">
+                                                    {role.description}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                            <InputError message={roleError} className="mt-1" />
+                        </div>
+                    )}
+                </div>
+
+                <div className="mt-6 flex justify-end gap-2.5">
+                    <SecondaryButton onClick={onClose}>Cancel</SecondaryButton>
+                    <PrimaryButton
+                        disabled={form.processing}
+                        className="!bg-brand hover:!bg-brand-hover"
+                    >
+                        Create Account
+                    </PrimaryButton>
+                </div>
+            </form>
+        </Modal>
+    );
+}

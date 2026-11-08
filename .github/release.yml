@@ -1,0 +1,28 @@
+changelog:
+  exclude:
+    labels:
+      - ignore-for-release
+      - skip-changelog
+    authors:
+      - dependabot[bot]
+  categories:
+    - title: '🚀 Features & Enhancements'
+      labels:
+        - feature
+        - enhancement
+    - title: '🔒 Security & Access Control'
+      labels:
+        - security
+        - rbac
+    - title: '🐛 Bug Fixes'
+      labels:
+        - bug
+        - fix
+    - title: '📝 Documentation & Tests'
+      labels:
+        - documentation
+        - tests
+    - title: '🧹 Maintenance & Dependencies'
+      labels:
+        - dependencies
+        - chore
